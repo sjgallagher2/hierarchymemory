@@ -2,7 +2,7 @@
 %Sam Gallagher
 %12 Feb 2016
 %
-%This function updates the synapses input to. Updates permanences, and
+%This function updates the synapses input to it. Updates permanences, and
 %if their permanences are above the given threshold, t, the connected value
 %'c' is set to 'true'
 

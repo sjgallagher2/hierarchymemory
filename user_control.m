@@ -22,9 +22,15 @@
 %LearningRadius             edit box
 %
 %The output is a 15 element vector with the above order.
+%
+%Constraints:
+%The input radius must be > nDendrites
 
-function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius] = user_control()
+function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius] = user_control(input_size)
     f = figure('Visible','off','color','white','Position',[360,500,600,300]);
+    
+    input_size = input_size(1);
+    
     
     %min and max values for sliders
     minOverlapDutyMin = 0;
@@ -60,7 +66,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     nCols = 30; %30% of input space
     desiredLocalActivity = 5;
     Neighborhood = 20;
-    inputRadius = 50;
+    inputRadius = 0.01*nDendrites*input_size;
     boostInc = 0.5;
     minActiveDuty = 0.1;
     minOverlapDuty = 0.1;
@@ -113,9 +119,9 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     handleminactivecurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,90,50,15],'Visible','on','String',num2str(minActiveDuty),'Callback',@minactiveeditcallback);
     handleminoverlapcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,60,50,15],'Visible','on','String',num2str(minOverlapDuty),'Callback',@minoverlapeditcallback);
     handleminsegcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,30,50,15],'Visible','on','String',num2str(minSegOverlap));
-    handledesiredlocalcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,270,50,15],'Visible','on','String',num2str(desiredLocalActivity));
-    handleneighborhoodcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,240,50,15],'Visible','on','String',num2str(Neighborhood));
-    handleinputradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,210,50,15],'Visible','on','String',num2str(inputRadius));
+    handledesiredlocalcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,270,50,15],'Visible','on','String',num2str(desiredLocalActivity),'Callback',@desiredlocaleditcallback);
+    handleneighborhoodcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,240,50,15],'Visible','on','String',num2str(Neighborhood),'Callback',@neighborhoodeditcallback);
+    handleinputradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,210,50,15],'Visible','on','String',num2str(inputRadius), 'Callback',@inputradiuseditcallback);
     handlecellscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,180,50,15],'Visible','on','String',num2str(nCells));
     handlesegscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,150,50,15],'Visible','on','String',num2str(nSegs));
     handlelearningradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,120,50,15],'Visible','on','String',num2str(LearningRadius));
@@ -187,11 +193,35 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
         %set the editbox to the slider value
         num = get(nDendrites_slidehandle,'Value');
         set(handledendritecurrentvalue,'String',num2str(num));
+        
+        num = str2num( get(handledendritecurrentvalue,'String') );
+        nDendrites = input_size*num*0.01;
+        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        if inputRadius < nDendrites
+            %error: the column must be able to find enough potential
+            %connections to the input, so either the number of dendrites or the
+            %input radius must increase
+            error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
+            waitfor(error);
+            inputRadius = nDendrites;
+            set(handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+        end
     end
     function dendriteeditcallback(hObject,eventdata)
         %set the slider value to the editbox
         num = get(handledendritecurrentvalue,'String');
         set(nDendrites_slidehandle,'Value',str2double(num));
+        nDendrites = input_size*num*0.01;
+        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        if inputRadius < nDendrites
+            %error: the column must be able to find enough potential
+            %connections to the input, so either the number of dendrites or the
+            %input radius must increase
+            error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
+            waitfor(error);
+            inputRadius = nDendrites;
+            set(handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+        end
     end
 
     %Callbacks for nCols
@@ -241,17 +271,45 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
         num = get(handleminoverlapcurrentvalue,'String');
         set(minOverlapDuty_slidehandle,'Value',str2double(num));
     end
+
+    function desiredlocaleditcallback(hObject,eventdata)
+        desiredLocalActivity = str2double( get(handledesiredlocalcurrentvalue, 'String') );
+        if desiredLocalActivity > Neighborhood
+            error = msgbox('Error: Desired local activity is too large. The desired local activity should be less than the size of the neighborhood. A maximum desired local activity equal to the neighborhood size has been selected. This is not recommended.','Error','warn');
+            waitfor(error);
+            desiredLocalActivity = Neighborhood;
+        end
+    end
+
+    function neighborhoodeditcallback(hObject,eventdata)
+        Neighborhood = str2double( get(handleneighborhoodcurrentvalue,'String') );
+    end
+
+    function inputradiuseditcallback(hObject,eventdata)
+        num = get(handledendritecurrentvalue,'String');
+        nDendrites = input_size*str2double(num)*0.01;
+        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        if inputRadius < nDendrites
+            %error: the column must be able to find enough potential
+            %connections to the input, so either the number of dendrites or the
+            %input radius must increase
+            error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
+            waitfor(error);
+            inputRadius = nDendrites;
+            set(handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+        end
+    end
     
     %Callback for the apply button
     function applycallback(hObject,eventdata)
         synThreshold = str2double(get(handlepermcurrentvalue,'String'));
         synInc = str2double(get(handleinccurrentvalue,'String'));
         synDec = str2double(get(handledeccurrentvalue,'String'));
-        nDendrites = str2double(get(handledendritecurrentvalue,'String'));
-        nCols = str2double(get(handlecolcurrentvalue,'String'));
+        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
+        nCols = 0.01*str2double(get(handlecolcurrentvalue,'String'));
         boostInc = str2double(get(handleboostinccurrentvalue,'String'));
-        minActiveDuty = str2double(get(handleminactivecurrentvalue,'String'));
-        minOverlapDuty = str2double(get(handleminoverlapcurrentvalue,'String'));
+        minActiveDuty = 0.01*str2double(get(handleminactivecurrentvalue,'String'));
+        minOverlapDuty = 0.01*str2double(get(handleminoverlapcurrentvalue,'String'));
         minSegOverlap = str2double(get(handleminsegcurrentvalue,'String'));
         desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
         Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));

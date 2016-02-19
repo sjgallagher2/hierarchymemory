@@ -6,7 +6,7 @@
 %algorithm designed either in matlab or elsewhere. The output is saved in a
 %file with the extension .htm
 
-function input = generate_input()
-    input = randi(2,100,10)-1;
+function input = generate_input(t, n)
+    input = randi(2,n,t)-1;
     save input.htm input -ascii;
 end
