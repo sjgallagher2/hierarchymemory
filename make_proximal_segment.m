@@ -3,20 +3,16 @@
 %12 Feb 2016
 %
 %This function generates a proximal dendrite segment connected to input locations
-%between 1 and dat_length, where dat_length is the length of the input array.
-%The dendrite_ratio variable controls the ratio of input length to connections
-%to the input e.g. 50% would be 0.5. i_radius determines how far from the
-%random center, col_center, the connection can be. Output, seg, is a list of indices.
+%i_radius determines how far from the random center, col_center, 
+%the connection can be. Output, seg, is a list of indices.
 
-function seg = make_proximal_segment(dendrite_ratio, i_radius, dat_length, col_center,syn_thresh)
+function seg = make_proximal_segment(n_dendrites, i_radius, dat_length, col_center,syn_thresh)
    
     %maxLoc is the maximum location number we can set as an indice in
     %the final segment. minLoc is the minimum. The index must be
     %between 0 and dat_length.
     maxLoc = min(col_center+i_radius, dat_length);
     minLoc = max(col_center-i_radius, 1);
-    
-    n_dendrites = floor(dendrite_ratio*dat_length); %how many dendrites we can have.
     
     seg = zeros(n_dendrites,3); %the segment has locations, synapses perm, and synapse connection (0 or 1)
     
