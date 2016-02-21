@@ -10,6 +10,7 @@
 function winners = inhibit_cols(neighborhood, desiredLocalActivity)
     
     winners = ones(1,desiredLocalActivity);
+    
     %Find the max values, assuming there are multiple
     for i = 1:desiredLocalActivity
         vec = find(max(neighborhood) == neighborhood);
