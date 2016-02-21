@@ -6,23 +6,29 @@
 %highlighted in yellow, the active connected synapses in red, and inactive
 %connected synapses in grey.
 
-function column_visualizer(input, columns, nCols)
+function column_visualizer(input, columns, nCols, time)
+    %% Define a struct to hold data easily
     columnControl.c = 1;
     columnControl.data = columns;
     columnControl.n = nCols;
     columnControl.in = input;
-    visualVec = transpose(input(:,1));
-    testColumn = columns(:,:,columnControl.c);
-    fprintf('C: %d \n',columnControl.c)
+    columnControl.t = time;
+    columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
     
-    visual = create_visual(visualVec,testColumn,input);
-
+    %% Create the image
+    visualVec = transpose(input(:,columnControl.t));
+    testColumn = columns(:,:,columnControl.c);
+    
+    visual = create_visual(visualVec,testColumn,input, columnControl.t);
+    
+    %% Display the image, handle application data
     myMap = [[1,1,1];[0,0,0];[1,0,0];[0.5,0.5,0.5];[1,1,0]];
     
-    handle.fig = figure;
+    handle.fig = figure('position',[100, 50, 600,500]);
     colormap(myMap);
     hold on;
     handle.img = image(visual)
+    title(columnControl.title);
     
     setappdata(handle.fig,'c',columnControl);
     setappdata(handle.fig,'vec',visualVec);
@@ -30,14 +36,14 @@ function column_visualizer(input, columns, nCols)
     set(handle.fig,'KeyPressFcn',@Keypress_callback);
     guidata(handle.fig, handle);
     
-    
- function v = create_visual(visualVec, testColumn, input)
+%% Create an image matrix from the data
+ function v = create_visual(visualVec, testColumn, input, time)
     testColumnSize = size(testColumn);
     data_size = size(input);
 
     for iter = 1:testColumnSize(1)
         if testColumn(iter,3) == 1
-            if input(testColumn(iter,1),1) > 0
+            if input(testColumn(iter,1),time) > 0
                 %because of duplicates, changing 1's to 2's changes overlap
                 visualVec(testColumn(iter,1)) = 2;
             elseif input(testColumn(iter,1),1) == 0
@@ -47,7 +53,6 @@ function column_visualizer(input, columns, nCols)
     end
 
     v = vec2mat(visualVec,ceil( sqrt(data_size(1) ) ) )+1;
-    
  function Keypress_callback(hObject, evt)
      switch evt.Key
         case 'rightarrow'
@@ -60,7 +65,7 @@ function column_visualizer(input, columns, nCols)
      end
      updateCol(hObject,inc);
      
- function updateCol(hObject, inc)
+ function updateCol(hObject, inc, time)
     handle = guidata(hObject);
     columnControl = getappdata(handle.fig, 'c');
     visualVec = getappdata(handle.fig,'vec');
@@ -73,9 +78,9 @@ function column_visualizer(input, columns, nCols)
         columnControl.c = columnControl.c + inc;
     end
     
-    fprintf('C: %d \n',columnControl.c)
-    
     testColumn = columnControl.data(:,:,columnControl.c);
-    visual = create_visual(visualVec,testColumn, columnControl.in);
+    visual = create_visual(visualVec,testColumn, columnControl.in, columnControl.t);
+    columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
+    title(columnControl.title);
     set(handle.img,'CData',visual);
     setappdata(handle.fig,'c',columnControl);
