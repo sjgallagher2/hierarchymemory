@@ -9,15 +9,15 @@
 function column_visualizer(input, columns, nCols, time)
     %% Define a struct to hold data easily
     columnControl.c = 1;
-    columnControl.data = columns;
     columnControl.n = nCols;
     columnControl.in = input;
     columnControl.t = time;
+    columnControl.d = columns;
     columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
     
     %% Create the image
     visualVec = transpose(input(:,columnControl.t));
-    testColumn = columns(:,:,columnControl.c);
+    testColumn = columnControl.d(columnControl.c);
     
     visual = create_visual(visualVec,testColumn,input, columnControl.t);
     
@@ -38,16 +38,16 @@ function column_visualizer(input, columns, nCols, time)
     
 %% Create an image matrix from the data
  function v = create_visual(visualVec, testColumn, input, time)
-    testColumnSize = size(testColumn);
+    testColumnSize = numel(testColumn.locations);
     data_size = size(input);
 
-    for iter = 1:testColumnSize(1)
-        if testColumn(iter,3) == 1
-            if input(testColumn(iter,1),time) > 0
+    for iter = 1:testColumnSize
+        if testColumn.synCon(iter) == 1
+            if input(testColumn.locations(iter),time) > 0
                 %because of duplicates, changing 1's to 2's changes overlap
-                visualVec(testColumn(iter,1)) = 2;
-            elseif input(testColumn(iter,1),1) == 0
-                visualVec(testColumn(iter,1)) = 3;
+                visualVec(testColumn.locations(iter)) = 2;
+            elseif input(testColumn.locations(iter)) == 0
+                visualVec(testColumn.locations(iter)) = 3;
             end
         end
     end
@@ -78,7 +78,7 @@ function column_visualizer(input, columns, nCols, time)
         columnControl.c = columnControl.c + inc;
     end
     
-    testColumn = columnControl.data(:,:,columnControl.c);
+    testColumn = columnControl.d(columnControl.c);
     visual = create_visual(visualVec,testColumn, columnControl.in, columnControl.t);
     columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
     title(columnControl.title);

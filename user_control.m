@@ -39,7 +39,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     minActiveDutyMin = 0;
     minActiveDutyMax = 100;
     
-    boostIncMin = 0.1;
+    boostIncMin = 0.01;
     boostIncMax = 20;
     
     nColsMin = 0.1;
@@ -304,7 +304,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     function applycallback(hObject,eventdata)
         synThreshold = str2double(get(handlepermcurrentvalue,'String'));
         synInc = str2double(get(handleinccurrentvalue,'String'));
-        synDec = str2double(get(handledeccurrentvalue,'String'));
+        synDec = -1*str2double(get(handledeccurrentvalue,'String'));
         nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
         nCols = 0.01*str2double(get(handlecolcurrentvalue,'String'));
         boostInc = str2double(get(handleboostinccurrentvalue,'String'));

@@ -15,8 +15,8 @@ function show_active_columns(nCols,active_columns,tMax)
     
     %% Create the image
     activevisual = ones(1,nCols);
-    for iter = active_columns(:,hActive.t)
-        activevisual(iter) = 2;
+    for iter = hActive.a(:,hActive.t)
+        activevisual(1,iter) = 2;
     end
         
     activevisual = vec2mat(activevisual,ceil( sqrt(nCols ) ) );
