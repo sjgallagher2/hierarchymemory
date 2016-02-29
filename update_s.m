@@ -6,14 +6,17 @@
 %if their permanences are above the given threshold, t, the connected value
 %'c' is set to 'true'
 
-function s = update_s(s_in,t,inc)
-    s = s_in; %we'll work with s
-    
-    s(1) = s(1)+inc;
-    if s(1) >= t
-        s(2) = 1;
-    elseif s(1) <= t
-        s(2) = 0;
+function [s_perm s_con] = update_s(in_perm,in_con,th,inc)
+    in_perm = in_perm + inc;
+    if in_perm > th
+        in_con = 1;
+    elseif in_perm < th
+        in_con = 0;
+    elseif in_perm < 0
+        in_perm = 0;
+    elseif in_perm > 1
+        in_perm = 1;
     end
-    
+    s_perm = in_perm;
+    s_con = in_con;
 end
