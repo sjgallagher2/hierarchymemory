@@ -72,7 +72,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     minOverlapDuty = 0.1;
     nCells = 3;
     nSegs = 12;
-    LearningRadius = 40;
+    LearningRadius = ceil(0.01*nDendrites*input_size/nCells);
     
     %slider handles
     perm_slidehandle = uicontrol('Style','slider','Position',[10,270,100,15],'Min',threshMin,'Max',threshMax,'Callback',@permslidecallback,'Value',synThreshold);
@@ -122,9 +122,9 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     handledesiredlocalcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,270,50,15],'Visible','on','String',num2str(desiredLocalActivity),'Callback',@desiredlocaleditcallback);
     handleneighborhoodcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,240,50,15],'Visible','on','String',num2str(Neighborhood),'Callback',@neighborhoodeditcallback);
     handleinputradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,210,50,15],'Visible','on','String',num2str(inputRadius), 'Callback',@inputradiuseditcallback);
-    handlecellscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,180,50,15],'Visible','on','String',num2str(nCells));
+    handlecellscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,180,50,15],'Visible','on','String',num2str(nCells),'Callback',@ncellseditcallback);
     handlesegscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,150,50,15],'Visible','on','String',num2str(nSegs));
-    handlelearningradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,120,50,15],'Visible','on','String',num2str(LearningRadius));
+    handlelearningradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,120,50,15],'Visible','on','String',num2str(LearningRadius),'Callback',@learningradiuseditcallback);
     
     
     %Label box handles
@@ -247,6 +247,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
         num = get(handleboostinccurrentvalue,'String');
         set(boostInc_slidehandle,'Value',str2double(num));
     end
+        
 
     %Callbacks for minActiveDutyCycle
     function minactiveslidecallback(hObject,eventdata)
@@ -286,8 +287,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     end
 
     function inputradiuseditcallback(hObject,eventdata)
-        num = get(handledendritecurrentvalue,'String');
-        nDendrites = input_size*str2double(num)*0.01;
+        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
         inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
         if inputRadius < nDendrites
             %error: the column must be able to find enough potential
@@ -296,7 +296,34 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
             inputRadius = nDendrites;
-            set(handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+            set( handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+        end
+    end
+    
+    %Callback for LearningRadius
+    function learningradiuseditcallback(hObject,eventdata)
+        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
+        LearningRadius = str2double( get(handlelearningradiuscurrentvalue,'String') );
+        nCells = str2double( get(handlecellscurrentvalue,'String') );
+        
+        if LearningRadius*nCells < nDendrites*input_size
+            error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the learning radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
+            waitfor(error);
+            LearningRadius = ceil(nDendrites*input_size/nCells);
+            set( handlelearningradiuscurrentvalue,'String',num2str(LearningRadius) );
+        end
+    end
+
+    function ncellseditcallback(hObject,eventdata)
+        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
+        LearningRadius = str2double( get(handlelearningradiuscurrentvalue,'String') );
+        nCells = str2double( get(handlecellscurrentvalue,'String') );
+        
+        if LearningRadius*nCells < nDendrites*input_size
+            error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the learning radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
+            waitfor(error);
+            LearningRadius = ceil(nDendrites*input_size/nCells);
+            set( handlelearningradiuscurrentvalue,'String',num2str(LearningRadius) );
         end
     end
     

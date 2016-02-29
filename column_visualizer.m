@@ -40,7 +40,8 @@ function column_visualizer(input, columns, nCols, time)
  function v = create_visual(visualVec, testColumn, input, time)
     testColumnSize = numel(testColumn.locations);
     data_size = size(input);
-
+    visualVec(testColumn.center) = 4;
+    
     for iter = 1:testColumnSize
         if testColumn.synCon(iter) == 1
             if input(testColumn.locations(iter),time) > 0

@@ -12,6 +12,11 @@ function [inLoc,perm,con] = make_proximal_segment(n_dendrites, i_radius, dat_len
     %maxLoc is the maximum location number we can set as an indice in
     %the final segment. minLoc is the minimum. The index must be
     %between 0 and dat_length.
+    
+    %Seed the random generator
+    rng('shuffle');
+    
+    %Set bounds
     maxLoc = min(col_center+i_radius, dat_length);
     minLoc = max(col_center-i_radius, 1);
     inLoc = [];
