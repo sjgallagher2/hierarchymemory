@@ -6,27 +6,35 @@
 %right arrow buttons for control.
 
 function show_active_columns(nCols,active_columns,tMax)
+    
     myMap = [[0,0,0];[1,1,0]];
     hActive.n = nCols;
     hActive.a = active_columns;
     hActive.t = 1;
     hActive.tMax = tMax;
     hActive.title = ['t = ' num2str(hActive.t)];
-    
+
     %% Create the image
-    activevisual = ones(1,nCols);
-    for iter = hActive.a(:,hActive.t)
-        activevisual(1,iter) = 2;
+    if max(active_columns) ~= 0
+        activevisual = ones(1,nCols);
+        for iter = transpose(hActive.a(:,hActive.t))
+            if iter ~= 0
+                activevisual(1,iter) = 2;
+            end
+        end
+    else
+        activevisual = ones(1,nCols);
     end
-        
     activevisual = vec2mat(activevisual,ceil( sqrt(nCols ) ) );
-    
+
     %% Display the image
     h.fig = figure;
     colormap(myMap);
     hold on;
     title(hActive.title);
-    h.img = image(activevisual)
+    h.fig.MenuBar = 'none';
+
+    h.img = image(activevisual);
     setappdata(h.fig,'active_handle',hActive);
     set(h.fig,'KeyPressFcn',@Keypress_callback);
     guidata(h.fig, h);
@@ -55,9 +63,15 @@ function updateActive(hObject, inc)
         hActive.t = hActive.t+inc;
     end
     
-    activevisual = ones(1,hActive.n);
-    for iter = hActive.a(:,hActive.t)
-        activevisual(iter) = 2;
+    if max(hActive.a) ~= 0
+        activevisual = ones(1,hActive.n);
+        for iter = transpose(hActive.a(:,hActive.t))
+            if iter ~= 0
+                activevisual(1,iter) = 2;
+            end
+        end
+    else
+        activevisual = ones(1,hActive.n);
     end
     activevisual = vec2mat(activevisual,ceil( sqrt( hActive.n ) ) );
     

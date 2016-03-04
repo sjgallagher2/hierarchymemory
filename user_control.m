@@ -26,7 +26,7 @@
 %Constraints:
 %The input radius must be > nDendrites
 
-function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius] = user_control(input_size)
+function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius,minOverlap] = user_control(input_size)
     f = figure('Visible','off','color','white','Position',[360,500,600,300]);
     
     input_size = input_size(1);
@@ -73,6 +73,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     nCells = 3;
     nSegs = 12;
     LearningRadius = ceil(0.01*nDendrites*input_size/nCells);
+    minOverlap = 2;
     
     %slider handles
     perm_slidehandle = uicontrol('Style','slider','Position',[10,270,100,15],'Min',threshMin,'Max',threshMax,'Callback',@permslidecallback,'Value',synThreshold);
@@ -125,27 +126,46 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     handlecellscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,180,50,15],'Visible','on','String',num2str(nCells),'Callback',@ncellseditcallback);
     handlesegscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,150,50,15],'Visible','on','String',num2str(nSegs));
     handlelearningradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,120,50,15],'Visible','on','String',num2str(LearningRadius),'Callback',@learningradiuseditcallback);
-    
+    handleminocurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',...
+        [320,90,50,15],'String',num2str(minOverlap));
     
     %Label box handles
-    handlepermLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,270,100,15],'String','Synapse Threshold');
-    handleIncLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,240,100,15],'String','Synapse Inc');
-    handleDecLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,210,100,15],'String','Synapse Dec');
-    handlenDendriteLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,180,100,15],'String','N of Dendrites(%)');
-    handlenColsLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,150,100,15],'String','N of Cols (%)');
-    handleboostIncLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,120,100,15],'String','Boost Inc');
-    handleminActiveLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,90,100,15],'String','Min Active Duty(%)');
-    handleminOverlapLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,60,100,15],'String','Min Overlap Duty(%)');
-    handleminSegLabel = uicontrol('Style','text','BackgroundColor','white','Position',[170,30,120,15],'String','Minimum Seg Overlap');
-    handledesiredLocalLabel = uicontrol('Style','text','BackgroundColor','white','Position',[370,270,130,15],'String','Desired Local Activity');
-    handleNeighbordhoodLabel = uicontrol('Style','text','BackgroundColor','white','Position',[370,240,100,15],'String','Neighborhood');
-    handleinputRadiusLabel = uicontrol('Style','text','BackgroundColor','white','Position',[380,210,150,15],'String','Input Radius (col to input map)');
-    handlenCellsLabel = uicontrol('Style','text','BackgroundColor','white','Position',[385,180,50,15],'String','N of Cells');
-    handlenSegsLabel = uicontrol('Style','text','BackgroundColor','white','Position',[380,150,100,15],'String','N of Segs per Cell');
-    handleLearningRadiusLabel = uicontrol('Style','text','BackgroundColor','white','Position',[385,120,140,15],'String','Learning Radius (cell to cols)');
+    handlepermLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,270,100,15],'String','Synapse Threshold');
+    handleIncLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,240,100,15],'String','Synapse Inc');
+    handleDecLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,210,100,15],'String','Synapse Dec');
+    handlenDendriteLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,180,100,15],'String','N of Dendrites(%)');
+    handlenColsLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,150,100,15],'String','N of Cols (%)');
+    handleboostIncLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,120,100,15],'String','Boost Inc');
+    handleminActiveLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,90,100,15],'String','Min Active Duty(%)');
+    handleminOverlapLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,60,100,15],'String','Min Overlap Duty(%)');
+    handleminSegLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[170,30,120,15],'String','Minimum Seg Overlap');
+    handledesiredLocalLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[370,270,130,15],'String','Desired Local Activity');
+    handleNeighbordhoodLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[370,240,100,15],'String','Neighborhood');
+    handleinputRadiusLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[380,210,150,15],'String','Input Radius (col to input map)');
+    handlenCellsLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[385,180,50,15],'String','N of Cells');
+    handlenSegsLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[380,150,100,15],'String','N of Segs per Cell');
+    handleLearningRadiusLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[385,120,140,15],'String','Learning Radius (cell to cols)');
+    handleMinoLabel = uicontrol('Style','text','BackgroundColor','white',...
+        'Position',[385,90,140,15],'String','Minimum Overlap for Columns');
     
     %make an APPLY button
-    handleapply = uicontrol('Style','pushbutton','String','Apply','Position',[420,20,70,20],'Callback',@applycallback);
+    handleapply = uicontrol('Style','pushbutton','String','Apply','Position',...
+        [420,20,70,20],'Callback',@applycallback);
     
     %Finalize the box on display
     set(f,'Name','Properties')
@@ -344,6 +364,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
         nCells = str2double(get(handlecellscurrentvalue,'String'));
         nSegs = str2double(get(handlesegscurrentvalue,'String'));
         LearningRadius = str2double(get(handlelearningradiuscurrentvalue,'String'));
+        minOverlap = str2double(get(handleminocurrentvalue,'String'));
         
         delete(f);
     end
