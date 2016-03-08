@@ -54,7 +54,4 @@ function in = generate_input()
     end
 
     waitfor(f);
-    if numel(in) > 2
-        region(in);
-    end
 end

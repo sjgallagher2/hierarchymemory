@@ -196,36 +196,13 @@ function output = region(dInput)
         %For active columns, check if cells were predictive, set them
         %active
         %If none were predictive, bursting occurs
-        
         for i = 1:n.active
-            columns(i).burst = true;
-            
-            if t == 1
-                for j = 1:n.cellpercol
-                    loc = getcell_loc(j,activeColumns(i),n);
-                    mycell = cells( loc );
+            for j = 1:n.cellpercol
+                mycell = getcell(j,activeColumns(i),n,cells);
+                if mycell.state == 2
                     mycell.state = 1;
-                    cells(loc) = mycell;
-                end
-                
-            else
-                for j = 1:n.cellpercol
-                    loc = getcell_loc(j,activeColumns(i),n);
-                    mycell = cells( loc );
-                    if mycell.state(t-1) == 2
-                        mycell.state(t) = 1;
-                        columns(i).burst = true;
-                    end
-                    cells( loc ) = mycell;
-                end
-                if columns(i).burst == true
-                    for j = 1:n.cellpercol
-                        loc = getcell_loc(j,activeColumns(i),n)
-                        mycell = cells( loc );
-                        mycell.state(t) = 1;
-                        cells( loc ) = mycell;
-                    end
-                end
+                elseif mycell.state == 0
+                    columns(i).burst = true
             end
         end
         
