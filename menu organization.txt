@@ -1,0 +1,29 @@
+    File ->
+       New...->
+           New Data->
+               Import data file
+               Create random data
+           New drawing
+	   Open...
+       Save memory
+       Close
+    Properties ->
+       Edit hierarchy
+       Files...
+       Training settings
+    Edit ->
+       Clear memory
+       Chart predictions over time
+       Debug
+	Run ->
+		Run...
+    View ->   
+       Color scheme
+       Column states
+       Cell states
+       Output
+    Help ->
+       HTM White Paper (Web)
+       CLA Theory Tutorial
+       CLA Program Tutorial
+       About

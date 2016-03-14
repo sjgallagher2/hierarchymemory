@@ -11,14 +11,20 @@ function winners = inhibit_cols(neighborhood, desiredLocalActivity)
     
     winners = ones(1,desiredLocalActivity);
     
-    %Find the max values, assuming there are multiple
-    for i = 1:desiredLocalActivity
-        vec = find(max(neighborhood) == neighborhood);
-        for j = 1:numel( vec )
-            winners(1,i) =  vec(j);
-            i = max(1,i-1);
+    if max(neighborhood) == 0 %If the whole neighborhood fell under minOverlap, winners is a -1
+        winners = [];
+        winners = -1;
+    else
+        %Find the max values, assuming there are multiple
+        i = 1;
+        while i < desiredLocalActivity
+            vec = find(max(neighborhood) == neighborhood);
+            for j = 1:numel( vec )
+                winners(1,i) =  vec(j);
+                i = min(desiredLocalActivity,i+1);
+            end
+            neighborhood(vec) = 0; %replace previous maximums with 0
+            i=i+1;
         end
-        neighborhood(vec) = 0; %replace previous maximums with 0
     end
-    
 end

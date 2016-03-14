@@ -256,7 +256,7 @@ function [columns,activeColumns,cells,output] = region(dInput,inputConfig,id)
         
     end
     
-    %% Create output
+    %% reate output
     
     if n.cols > 0   %If columns were created
         %Make output

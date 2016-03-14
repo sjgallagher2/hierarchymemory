@@ -16,7 +16,7 @@ function column_visualizer(input, columns, nCols, time)
     columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
     
     %% Create the image
-    visualVec = transpose(input(:,columnControl.t));
+    visualVec = transpose(input(:,columnControl.t)); %Send a row vector of the input
     testColumn = columnControl.d(columnControl.c);
     
     visual = create_visual(visualVec,testColumn,input, columnControl.t);
@@ -27,8 +27,9 @@ function column_visualizer(input, columns, nCols, time)
     handle.fig = figure('position',[100, 50, 600,500]);
     colormap(myMap);
     hold on;
-    handle.img = image(visual)
+    handle.img = image(visual);
     title(columnControl.title);
+    handle.fig.MenuBar = 'none';
     
     setappdata(handle.fig,'c',columnControl);
     setappdata(handle.fig,'vec',visualVec);
@@ -54,6 +55,8 @@ function column_visualizer(input, columns, nCols, time)
     end
 
     v = vec2mat(visualVec,ceil( sqrt(data_size(1) ) ) )+1;
+    v = rot90(v,3);  %Temporary solution for improperly formatted image
+    v = fliplr(v);
  function Keypress_callback(hObject, evt)
      switch evt.Key
         case 'rightarrow'

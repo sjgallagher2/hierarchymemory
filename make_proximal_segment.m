@@ -6,7 +6,7 @@
 %i_radius determines how far from the random center, col_center, 
 %the connection can be. Output, seg, is a list of indices.
 %The return is a 3 x nDendrite matrix
-
+    
 function [inLoc,perm,con] = make_proximal_segment(n_dendrites, i_radius, dat_length, col_center,syn_thresh)
    
     %maxLoc is the maximum location number we can set as an indice in

@@ -7,7 +7,7 @@
 %so it can be active or inactive, depending on the overlap of the segment,
 %but this will be implemented elsewhere. 
 
-function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius, syn_thresh, n_dendrites, n_cols, n_cells,cell_col, c)
+function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius, syn_thresh, n, cell_col, c)
     %learning_radius is the max distance a cell can connect to, in terms of
     %columns. 
     %dendrite_ratio is the ratio of the number of columsn to the number of
@@ -21,7 +21,7 @@ function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius
     rng('shuffle');
     
     %Set locations bounds
-    maxLoc = min(cell_col+learning_radius, n_cols);
+    maxLoc = min(cell_col+learning_radius, n.cols);
     minLoc = max(cell_col-learning_radius, 1);
     
     %the segment has locations, synapses perm, and synapse connection (0 or 1)
@@ -30,13 +30,13 @@ function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius
     segPerms = [];
     segCons = [];
     
-    if n_dendrites <= (maxLoc-minLoc)*n_cells
-        for iter = 1:n_dendrites %Make a dendrite seg(iter) for all dendrites
+    if n.dendrites <= (maxLoc-minLoc)*n.cells
+        for iter = 1:n.dendrites %Make a dendrite seg(iter) for all dendrites
             %first select a random col, then a random cell in that col
             segColumns(iter) = randi([minLoc, maxLoc],1);
             
             %then select a cell in that column
-            segCells(iter) = randi([1,n_cells],1);
+            segCells(iter) = randi([1,n.cells],1);
             
             %then update synapses for each
             [ segPerms(iter) segCons(iter) ] = update_s(0, 0, syn_thresh, mod(rand(),0.05)+syn_thresh-0.03);
