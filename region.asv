@@ -5,15 +5,32 @@
 %This function manages a region that is given an input. The input must
 %consist of all data to-be-input in columns, with each column representing
 %a time step. Random inputs can be generated to test functionality with the
-%generate_input.m file. Output is an OR of the active and predictive cells.
+%generate_input.m file. 
+%
+%Output is an OR of the active and predictive cells,
+%and the n structure (number of columns, cells, etc), the columns
+%structure, and the cells structure
 
-function output = region(dInput)
-    %% To begin, run the user_control panel
-    [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius,minOverlap] = user_control(size(dInput));
+function [columns,activeColumns,cells,output] = region(dInput,inputConfig,id)
+    %% To begin, get our data straight.
+    synThreshold = inputConfig(1);
+    synInc = inputConfig(2);
+    synDec = inputConfig(3);
+    nDendrites = inputConfig(4); % percentage
+    minSegOverlap = inputConfig(5);
+    n.cols = inputConfig(6); % percentage
+    desiredLocalActivity = inputConfig(7);
+    Neighborhood = inputConfig(8);
+    inputRadius = inputConfig(9);
+    boostInc = inputConfig(10);
+    minActiveDuty = inputConfig(11); % percentage
+    minOverlapDuty = inputConfig(12); % percentage
+    nCells = inputConfig(13);
+    nSegs = inputConfig(14);
+    LearningRadius = inputConfig(15);
+    minOverlap = inputConfig(16);
     
-    %Getting our data straight.
     data_size = size(dInput);
-    nCols = floor(nCols*data_size(1));
     
     segment.locations = [];
     segment.perm = [];
@@ -35,10 +52,12 @@ function output = region(dInput)
     col.oDuty = 1.0;
     col.burst = false;
     
-    n.dendrites = floor(nDendrites*data_size(1));
-    n.cols = nCols;
+    n.data = data_size(1);
+    n.time = data_size(2);
+    n.dendrites = floor(nDendrites*n.data);
+    n.cols = floor(n.cols*data_size(1));
     n.cellpercol = nCells;
-    n.cells = nCells*nCols;
+    n.cells = nCells*n.cols;
     n.segments = nSegs;
     n.neighborhood = Neighborhood;
     n.hoods = ceil(n.cols/n.neighborhood);
@@ -50,19 +69,21 @@ function output = region(dInput)
             %cell states: 0 is inactive, 1 is active, 2 is predicting
     cell.tempFlag = false; %This is true when the changes are temporary, false when they are permanent
     
+    temporal_memory_on = false;
+    
     %% Generate columns and proximal segments 
     columns = [];
     
     for iter = 1:n.cols
         %To select a center, we need to
-        %account for the fact that nCols < data_size. We can multiply each
-        %column center then, by the inverse of nCols. For
+        %account for the fact that n.cols < data_size. We can multiply each
+        %column center then, by the inverse of n.cols. For
         %example, with 100 input bits and 30 columns, column 1 will have
         %its center at position 1/30th of the way into the input, at
         %100*(1/30), and taking the floor.
         
-        col.center = floor(data_size(1)*(iter/nCols));
-        [col.locations col.perm col.synCon] = make_proximal_segment(n.dendrites,inputRadius, data_size(1), col.center,synThreshold);
+        col.center = floor(n.data*(iter/n.cols));
+        [col.locations col.perm col.synCon] = make_proximal_segment(n.dendrites,inputRadius, n.data, col.center,synThreshold);
         
         columns = [columns col];
     end
@@ -80,8 +101,7 @@ function output = region(dInput)
         end
     end
     
-    
-    activeColumns = zeros(desiredLocalActivity*n.hoods,data_size(2));
+    activeColumns = zeros(desiredLocalActivity*n.hoods,n.time);
     
     %% Now we'll go into a time-step loop
     for t = 1:data_size(2)
@@ -196,30 +216,62 @@ function output = region(dInput)
         %For active columns, check if cells were predictive, set them
         %active
         %If none were predictive, bursting occurs
-        for i = 1:n.active
-            for j = 1:n.cellpercol
-                mycell = getcell(j,activeColumns(i),n,cells);
-                if mycell.state == 2
-                    mycell.state = 1;
-                elseif mycell.state == 0
-                    columns(i).burst = true
+        if temporal_memory_on == true
+            
+            for i = 1:n.active
+                columns(i).burst = true;
+
+                if t == 1
+                    for j = 1:n.cellpercol
+                        loc = getcell_loc(j,activeColumns(i),n);
+                        mycell = cells( loc );
+                        mycell.state = 1;
+                        cells(loc) = mycell;
+                    end
+
+                else
+                    for j = 1:n.cellpercol
+                        loc = getcell_loc(j,activeColumns(i),n);
+                        mycell = cells( loc );
+                        t
+                        if mycell.state(t-1) == 2
+                            mycell.state(t) = 1;
+                            columns(i).burst = true;
+                        end
+                        cells( loc ) = mycell;
+                    end
+                    if columns(i).burst == true
+                        for j = 1:n.cellpercol
+                            loc = getcell_loc(j,activeColumns(i),n);
+                            mycell = cells( loc );
+                            mycell.state(t) = 1;
+                            cells( loc ) = mycell;
+                        end
+                    end
+                end
+                %select learning cell
+
             end
         end
         
     end
     
-    %% Visualize our data
-    column_visualizer(dInput, columns, n.cols,1);
-    show_active_columns(n.cols,activeColumns,data_size(2));
+    %% reate output
     
-    output = [];
-    for i = 1:n.cols
-        if columns(i).active == true
-            output = [output 1];
-        else
-            output = [output 0];
+    if n.cols > 0   %If columns were created
+        %Make output
+        output = [];
+        for i = 1:n.cols
+            if columns(i).active == true
+                output = [output 1];
+            else
+                output = [output 0];
+            end
         end
+        output = fliplr(output);
+        output = output';
+    else
+        %if there are no columns, the output is a -1
+        output = -1;
     end
-    output = fliplr(output);
-    output = output';
 end

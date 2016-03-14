@@ -10,7 +10,7 @@ function in = generate_input()
     f = figure('Visible','off','Position',[500,300,280,180]);
     
     hInputSzEdit = uicontrol('style','edit','String','12','position',[180,100,30,20]);
-    hTimeSzEdit = uicontrol('style','edit','String','3','position',[180,140,30,20]);
+    hTimeSzEdit = uicontrol('style','edit','String','1','position',[180,140,30,20]);
     hInputSzText = uicontrol('style','text','String','What size image will you be making? (n x n)' ...
         ,'position',[10,100,140,26]);
     hTimeSzText = uicontrol('style','text','String','How many time frames?','position',[20,140,140,20]);

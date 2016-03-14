@@ -5,36 +5,46 @@
 %This module visualizes the active columns over time, using the left and
 %right arrow buttons for control.
 
-function show_active_columns(nCols,active_columns,tMax)
+function show_active_columns(n,active_columns,tInitial)
     
     myMap = [[0,0,0];[1,1,0]];
-    hActive.n = nCols;
+    hActive.n = n.cols;
     hActive.a = active_columns;
-    hActive.t = 1;
-    hActive.tMax = tMax;
-    hActive.title = ['t = ' num2str(hActive.t)];
+    hActive.t = tInitial; %Start the time at tInitial
+    hActive.tMax = n.time;
+    hActive.delT = hActive.tMax - tInitial;
+    hActive.title = ['Column array at t = ' num2str(hActive.t)];
 
     %% Create the image
     if max(active_columns) ~= 0
-        activevisual = ones(1,nCols);
+        activevisual = ones(1,hActive.n);
         for iter = transpose(hActive.a(:,hActive.t))
             if iter ~= 0
                 activevisual(1,iter) = 2;
             end
         end
     else
-        activevisual = ones(1,nCols);
+        activevisual = ones(1,hActive.n);
     end
-    activevisual = vec2mat(activevisual,ceil( sqrt(nCols ) ) );
+    activevisual = vec2mat(activevisual,ceil( sqrt(hActive.n) ) );
 
     %% Display the image
-    h.fig = figure;
+    h.fig = figure('DefaultFigureWindowStyle','docked');
     colormap(myMap);
     hold on;
     title(hActive.title);
     h.fig.MenuBar = 'none';
 
     h.img = image(activevisual);
+    hold on;
+    h.plot = subplot(1,1,1);
+    h.plot.XTick = (0:ceil(sqrt(hActive.n) )) + 0.5;
+    h.plot.YTick = (0:ceil(sqrt(hActive.n) )) + 0.5;
+    h.plot.XTickLabel = [];
+    h.plot.YTickLabel = [];
+    h.plot.XGrid = 'on';
+    h.plot.YGrid = 'on';
+    
     setappdata(h.fig,'active_handle',hActive);
     set(h.fig,'KeyPressFcn',@Keypress_callback);
     guidata(h.fig, h);
@@ -75,7 +85,7 @@ function updateActive(hObject, inc)
     end
     activevisual = vec2mat(activevisual,ceil( sqrt( hActive.n ) ) );
     
-    hActive.title = ['t = ' num2str(hActive.t)];
+    hActive.title = ['Column array at t = ' num2str(hActive.t)];
     set(h.img, 'CData', activevisual);
     title(hActive.title);
     setappdata(hObject,'active_handle',hActive);

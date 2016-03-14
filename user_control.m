@@ -26,11 +26,10 @@
 %Constraints:
 %The input radius must be > nDendrites
 
-function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius,minOverlap] = user_control(input_size)
+function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius,minOverlap] = user_control(input_size, id)
     f = figure('Visible','off','color','white','Position',[360,500,600,300]);
     
     input_size = input_size(1);
-    
     
     %min and max values for sliders
     minOverlapDutyMin = 0;
@@ -58,22 +57,25 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     decMaxValue = 0.30;
     
     %Default initial values
-    synThreshold = 0.2;
-    synInc = 0.075;
-    synDec = 0.05;
-    nDendrites = 50; %  50% of the given space
-    minSegOverlap = 10;
-    nCols = 30; %30% of input space
-    desiredLocalActivity = 5;
-    Neighborhood = 20;
-    inputRadius = 0.01*nDendrites*input_size;
-    boostInc = 0.5;
-    minActiveDuty = 0.1;
-    minOverlapDuty = 0.1;
-    nCells = 3;
-    nSegs = 12;
-    LearningRadius = ceil(0.01*nDendrites*input_size/nCells);
-    minOverlap = 2;
+    inputConfig = load('config/config.htm');
+    inputConfig = inputConfig(:,id);
+    
+    synThreshold = inputConfig(1);
+    synInc = inputConfig(2);
+    synDec = -inputConfig(3); %Negative to compensate for user
+    nDendrites = inputConfig(4)*100; %A percentage compensated for the user
+    minSegOverlap = inputConfig(5);
+    nCols = inputConfig(6)*100; %A percentage compensated for the user
+    desiredLocalActivity = inputConfig(7);
+    Neighborhood = inputConfig(8);
+    inputRadius = inputConfig(9);
+    boostInc = inputConfig(10);
+    minActiveDuty = inputConfig(11);
+    minOverlapDuty = inputConfig(12);
+    nCells = inputConfig(13);
+    nSegs = inputConfig(14);
+    LearningRadius = inputConfig(15);
+    minOverlap = inputConfig(16);
     
     %slider handles
     perm_slidehandle = uicontrol('Style','slider','Position',[10,270,100,15],'Min',threshMin,'Max',threshMax,'Callback',@permslidecallback,'Value',synThreshold);
@@ -169,6 +171,7 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     
     %Finalize the box on display
     set(f,'Name','Properties')
+    set(f,'CloseRequestFcn',@cancelcallback);
     movegui(f,'center')
     set(f,'Visible','on')
     
@@ -347,16 +350,36 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
         end
     end
     
-    %Callback for the apply button
-    function applycallback(hObject,eventdata)
+    function cancelcallback(hObject,eventdata)
         synThreshold = str2double(get(handlepermcurrentvalue,'String'));
         synInc = str2double(get(handleinccurrentvalue,'String'));
         synDec = -1*str2double(get(handledeccurrentvalue,'String'));
         nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
-        nCols = 0.01*str2double(get(handlecolcurrentvalue,'String'));
+        nCols = 0;
         boostInc = str2double(get(handleboostinccurrentvalue,'String'));
         minActiveDuty = 0.01*str2double(get(handleminactivecurrentvalue,'String'));
         minOverlapDuty = 0.01*str2double(get(handleminoverlapcurrentvalue,'String'));
+        minSegOverlap = str2double(get(handleminsegcurrentvalue,'String'));
+        desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
+        Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));
+        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        nCells = str2double(get(handlecellscurrentvalue,'String'));
+        nSegs = str2double(get(handlesegscurrentvalue,'String'));
+        LearningRadius = str2double(get(handlelearningradiuscurrentvalue,'String'));
+        minOverlap = str2double(get(handleminocurrentvalue,'String'));
+        
+        delete(f);
+    end
+    %Callback for the apply button
+    function applycallback(hObject,eventdata)
+        synThreshold = str2double(get(handlepermcurrentvalue,'String'));
+        synInc = str2double(get(handleinccurrentvalue,'String'));
+        synDec = -1*str2double(get(handledeccurrentvalue,'String')); %Reverse compensation
+        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String')); %Reverse compensation
+        nCols = 0.01*str2double(get(handlecolcurrentvalue,'String'));   %Reverse compensations
+        boostInc = str2double(get(handleboostinccurrentvalue,'String'));
+        minActiveDuty = str2double(get(handleminactivecurrentvalue,'String'));
+        minOverlapDuty = str2double(get(handleminoverlapcurrentvalue,'String'));
         minSegOverlap = str2double(get(handleminsegcurrentvalue,'String'));
         desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
         Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));

@@ -3,9 +3,7 @@
 %8 March 2016
 %
 %Returns a cell number for the given row,column location
-function mycell = getcell(varargin)
-    args = nargin;
-    if args == 
+function mycell = getcell_loc(r,c,n)
     if r > n.cellpercol
         disp('Error: cell is not within limits.');
         mycell = -1;
@@ -13,8 +11,7 @@ function mycell = getcell(varargin)
         disp('Error: cell is not within limits.');
         mycell = -1;
     else
-        index = (c-1)*n.cellpercol + r;
-        mycell = cells(index);
+        mycell = (c-1)*n.cellpercol + r;
     end
     
 end
