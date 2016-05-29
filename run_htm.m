@@ -24,7 +24,7 @@
 %The main display of the program is the input-to-be-sent, in a black and
 %white image format subplot of sorts.
 
-%% TODO: Store region state (input current state to region()?), work regions one time step at a time
+%% TODO: Store region states, create buffers for regions, for adapting higher region settings
 %% Main Program
 function run_htm()
 %% Initialize window and variables
@@ -38,6 +38,7 @@ function run_htm()
     
     n.time = 0; %Start timer at 0, go to 1 once it starts
     columns = [];
+    prediction = [];
     n.regions = 1;
     activeColumns = [];
     cells = [];
@@ -285,7 +286,7 @@ function run_htm()
     function cbRR(hObject,evt)
         %Run
         id = 1;
-        [columns, activeColumns, cells, output] = region(send,currentConfig(:,id),id);
+        [columns, activeColumns, cells, prediction, output] = region(send,currentConfig(:,id),id,columns,cells,currentConfig( :,(id+1):n.regions ) );
         hColStates.Enable = 'on';
         hCellStates.Enable = 'on';
         hRegionOut.Enable = 'on';
@@ -296,7 +297,7 @@ function run_htm()
         allN(1).time = seqTimeElapsed;
         htm_time = htm_time+allN(1).time;
         
-        %quickly update the t= text
+        %quickly update the 't=' text
         timeString = ['total time = ' num2str(htm_time) ',   seq time = ' num2str(allN(1).time)];
         hTimeText.String = timeString;
 %         for levels = 1:n.regions
@@ -314,15 +315,15 @@ function run_htm()
     end
     function cbVCoSt(hObject,evt)
         %Column states
-        column_visualizer(send, columns, allN(1).cols,1); %TODO Make these more clear about what they are for the user
-        show_active_columns(allN(1),activeColumns,1);
+        column_visualizer(send, columns, allN(1).cols,htm_time,allN(1).time); %TODO Make these more clear about what they are for the user
+        show_active_columns(allN(1),activeColumns,prediction,1,htm_time);
     end
     function cbVCeSt(hObject,evt)
         %Cell states
     end
     function cbVRO(hObject,evt)
         %Region output
-        show_active_columns(allN(1),activeColumns,allN(1).time);
+        show_active_columns(allN(1),activeColumns,prediction,allN(1).time,htm_time);
     end
 %HELP MENU CALLBACKS
     function cbHHTMWP(hObject,evt)

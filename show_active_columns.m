@@ -5,22 +5,37 @@
 %This module visualizes the active columns over time, using the left and
 %right arrow buttons for control.
 
-function show_active_columns(n,active_columns,tInitial)
+function show_active_columns(n,active_columns,pred,tInitial,htm_time)
     
-    myMap = [[0,0,0];[1,1,0]];
+    myMap = [[0,0,0];[1,1,0];[0,1,0];[0,0,1]];
     hActive.n = n.cols;
     hActive.a = active_columns;
+    hActive.pr = pred;
     hActive.t = tInitial; %Start the time at tInitial
+    hActive.htmt = htm_time;
     hActive.tMax = n.time;
     hActive.delT = hActive.tMax - tInitial;
-    hActive.title = ['Column array at t = ' num2str(hActive.t)];
+    hActive.title = ['Column array at t = ' num2str(hActive.htmt-hActive.tMax+hActive.t)];
 
     %% Create the image
     if max(active_columns) ~= 0
         activevisual = ones(1,hActive.n);
         for iter = transpose(hActive.a(:,hActive.t))
             if iter ~= 0
-                activevisual(1,iter) = 2;
+                if activevisual(1,iter) == 3
+                    activevisual(1,iter) = 4;
+                else
+                    activevisual(1,iter) = 2;
+                end
+            end
+        end
+        for iter = 1:hActive.n
+            if hActive.pr(iter,hActive.t) == 1
+                if activevisual(1,iter) == 2
+                    activevisual(1,iter) = 4;
+                else
+                    activevisual(1,iter) = 3;
+                end
             end
         end
     else
@@ -80,12 +95,21 @@ function updateActive(hObject, inc)
                 activevisual(1,iter) = 2;
             end
         end
+        for iter = 1:hActive.n
+            if hActive.pr(iter,hActive.t) == 1
+                if activevisual(1,iter) == 2
+                    activevisual(1,iter) = 4;
+                else
+                    activevisual(1,iter) = 3;
+                end
+            end
+        end
     else
         activevisual = ones(1,hActive.n);
     end
     activevisual = vec2mat(activevisual,ceil( sqrt( hActive.n ) ) );
     
-    hActive.title = ['Column array at t = ' num2str(hActive.t)];
+    hActive.title = ['Column array at t = ' num2str(hActive.htmt-hActive.tMax+hActive.t)];
     set(h.img, 'CData', activevisual);
     title(hActive.title);
     setappdata(hObject,'active_handle',hActive);
