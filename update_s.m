@@ -13,7 +13,9 @@ function [s_perm s_con] = update_s(in_perm,in_con,th,inc)
             in_con = 1;
         elseif in_perm < th
             in_con = 0;
-        elseif in_perm < 0
+        end
+        
+        if in_perm < 0
             in_perm = 0;
         elseif in_perm > 1
             in_perm = 1;
@@ -27,7 +29,8 @@ function [s_perm s_con] = update_s(in_perm,in_con,th,inc)
                 in_con(p) = 1;
             elseif in_perm(p) < th
                 in_con(p) = 0;
-            elseif in_perm(p) < 0
+            end
+            if in_perm(p) < 0
                 in_perm(p) = 0;
             elseif in_perm(p) > 1
                 in_perm(p) = 1;

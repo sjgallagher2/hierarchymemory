@@ -18,15 +18,17 @@ function activeSegment = getActiveSeg(mycell, cells,t)
             for j = 1:nSyn
                 %check if the synapses are connected
                 if mycell.segs(i).synCon(j) == 1
-                    %check if synapses is connected to an active cell
-                    if cells( mycell.segs(i).locations(j) ).state(t) == 1
+                    %check if synapses are connected to an active cell
+                    if cells( mycell.segs(i).locations(j) ).active(t) == 1
                         mycell.segs(i).overlap = mycell.segs(i).overlap+1;
                     end
                 end
             end
             %compute active segment
             if activeSegment == -1
-                activeSegment = i;
+                if mycell.segs(i).overlap > 0
+                    activeSegment = i;
+                end
             elseif mycell.segs(i).overlap > mycell.segs(activeSegment).overlap
                 activeSegment = i;
             end

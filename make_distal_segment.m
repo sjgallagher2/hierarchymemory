@@ -31,16 +31,16 @@ function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius
     
     if n.dendrites <= (maxLoc-minLoc)*n.cells
         for i = 1:n.cells
-            if cells(i).state(t-1) == 1
+            if cells(i).active(t) == 1
                 %Add cells that were previously active to the segment as long as they're
                 %within the location bounds
-                if cells(i).col > minLoc
-                    if cells(i).col < maxLoc
+                if cells(i).col >= minLoc
+                    if cells(i).col <= maxLoc
                         segLocations = [segLocations i];
 
                         %Initial permanence will be 0.15 for all (for now)
-                        segPerms = [segPerms 0.2];
-                        segCons = [segCons 1];
+                        segPerms = [segPerms 0.15];
+                        segCons = [segCons 0];
 
                         %It might be better or worse to start all at different
                         %segment permanences. Again, a range of values around

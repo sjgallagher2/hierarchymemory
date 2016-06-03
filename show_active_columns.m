@@ -3,7 +3,7 @@
 %17 February 2016
 %
 %This module visualizes the active columns over time, using the left and
-%right arrow buttons for control.
+%right arrow buttons for control. Input active_columns is a column vector, over time (rows).
 
 function show_active_columns(n,active_columns,pred,tInitial,htm_time)
     
@@ -18,31 +18,33 @@ function show_active_columns(n,active_columns,pred,tInitial,htm_time)
     hActive.title = ['Column array at t = ' num2str(hActive.htmt-hActive.tMax+hActive.t)];
 
     %% Create the image
-    if max(active_columns) ~= 0
+    if max(hActive.a) ~= 0
         activevisual = ones(1,hActive.n);
-        for iter = transpose(hActive.a(:,hActive.t))
-            if iter ~= 0
-                if activevisual(1,iter) == 3
-                    activevisual(1,iter) = 4;
+        for i = 1:numel(hActive.a(:,hActive.t))
+            if hActive.a(i,hActive.t) ~= 0
+                if activevisual( 1,hActive.a(i,hActive.t) ) == 3
+                    activevisual( 1,hActive.a(i,hActive.t) ) = 4;
                 else
-                    activevisual(1,iter) = 2;
+                    activevisual( 1,hActive.a(i,hActive.t) ) = 2;
                 end
             end
         end
-        for iter = 1:hActive.n
-            if hActive.pr(iter,hActive.t) == 1
-                if activevisual(1,iter) == 2
-                    activevisual(1,iter) = 4;
+       
+        for i = 1:hActive.n
+            if hActive.pr(i,hActive.t) == 1
+                if activevisual(1,i) == 2
+                    activevisual(1,i) = 4;
                 else
-                    activevisual(1,iter) = 3;
+                    activevisual(1,i) = 3;
                 end
             end
         end
     else
         activevisual = ones(1,hActive.n);
     end
+    
     activevisual = vec2mat(activevisual,ceil( sqrt(hActive.n) ) );
-
+    activevisual = transpose(activevisual);
     %% Display the image
     h.fig = figure('DefaultFigureWindowStyle','docked');
     colormap(myMap);
@@ -107,7 +109,10 @@ function updateActive(hObject, inc)
     else
         activevisual = ones(1,hActive.n);
     end
+    
     activevisual = vec2mat(activevisual,ceil( sqrt( hActive.n ) ) );
+    activevisual = transpose(activevisual);
+    
     
     hActive.title = ['Column array at t = ' num2str(hActive.htmt-hActive.tMax+hActive.t)];
     set(h.img, 'CData', activevisual);

@@ -2,9 +2,7 @@
 %Sam Gallager
 %12 Feb 2016
 %
-%This function generates a random input to work with an HTM CLA learning
-%algorithm designed either in matlab or elsewhere. The output is saved in a
-%file with the extension .htm
+%This UI module prompts the user for drawing details
 
 function in = generate_input()
     f = figure('Visible','off','Position',[500,300,280,180]);

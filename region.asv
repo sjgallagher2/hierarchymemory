@@ -129,12 +129,11 @@ function [columns,activeColumns,cells,prediction,output] = region(dInput,inputCo
     
     %Main loop
     if id == 1
-        waitbox = waitbar(0,'Running HTM...');
+        
     end
+    
     for t = 1:n.time
-        if id == 1
-            waitbar(t/n.time);
-        end
+        waitbar(t/n.time);
         if TM_delay > 0
 
             [columns, cells, tempPrediction, n, output,tempActiveColumns] = update_region(columns, cells, 0,dInput(:,t),n,synThreshold,...

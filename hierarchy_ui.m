@@ -169,7 +169,6 @@ function [hierarchy,inputConfig] = hierarchy_ui(nRegions,send,inputConfig, en)
     end
     function cbOkay(hObject,evt)
         delete(f);
-        hierarchy = nRegions;
         save config/config.htm inputConfig -ascii;
     end
 
