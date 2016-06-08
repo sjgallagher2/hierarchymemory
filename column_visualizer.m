@@ -4,16 +4,17 @@
 %
 %This module visualizes the given column in a grid figure. The column is
 %highlighted in yellow, the active connected synapses in red, and inactive
-%connected synapses in grey.
+%connected synapses in grey. Prediction will be shown in green.
 
-function column_visualizer(input, columns, nCols, time)
+function column_visualizer(input, columns, nCols, htm_time,seq_time)
     %% Define a struct to hold data easily
     columnControl.c = 1;
     columnControl.n = nCols;
     columnControl.in = input;
-    columnControl.t = time;
+    columnControl.t = seq_time;
+    columnControl.htmt = htm_time;
     columnControl.d = columns;
-    columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
+    columnControl.title = ['t = ', num2str(columnControl.htmt-columnControl.t+1), ',  c = ', num2str(columnControl.c)];
     
     %% Create the image
     visualVec = transpose(input(:,columnControl.t)); %Send a row vector of the input
@@ -22,7 +23,7 @@ function column_visualizer(input, columns, nCols, time)
     visual = create_visual(visualVec,testColumn,input, columnControl.t);
     
     %% Display the image, handle application data
-    myMap = [[1,1,1];[0,0,0];[1,0,0];[0.5,0.5,0.5];[1,1,0]];
+    myMap = [[1,1,1];[0,0,0];[1,0,0];[0.5,0.5,0.5];[1,1,0];[0,1,0]];
     
     handle.fig = figure('position',[100, 50, 600,500]);
     colormap(myMap);
@@ -39,7 +40,7 @@ function column_visualizer(input, columns, nCols, time)
     
 %% Create an image matrix from the data
  function v = create_visual(visualVec, testColumn, input, time)
-    testColumnSize = numel(testColumn.locations);
+    testColumnSize = numel(testColumn.locations);2
     data_size = size(input);
     visualVec(testColumn.center) = 4;
     
@@ -84,7 +85,7 @@ function column_visualizer(input, columns, nCols, time)
     
     testColumn = columnControl.d(columnControl.c);
     visual = create_visual(visualVec,testColumn, columnControl.in, columnControl.t);
-    columnControl.title = ['t = ', num2str(columnControl.t), ',  c = ', num2str(columnControl.c)];
+    columnControl.title = ['t = ', num2str(columnControl.htmt-columnControl.t+1), ',  c = ', num2str(columnControl.c)];
     title(columnControl.title);
     set(handle.img,'CData',visual);
     setappdata(handle.fig,'c',columnControl);

@@ -41,10 +41,10 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     boostIncMin = 0.01;
     boostIncMax = 20;
     
-    nColsMin = 0.1;
+    nColsMin = 0;
     nColsMax = 100;
     
-    nDendritesMin = 1; %Percentage of given space
+    nDendritesMin = 0; %Percentage of given space
     nDendritesMax = 99;
     
     threshMin = 0.01;

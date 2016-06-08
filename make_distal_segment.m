@@ -7,17 +7,17 @@
 %so it can be active or inactive, depending on the overlap of the segment,
 %but this will be implemented elsewhere. 
 
-function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius, syn_thresh, n, cell_col, c)
+function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius, syn_thresh, n, cell_col, c, cells, t)
     %learning_radius is the max distance a cell can connect to, in terms of
     %columns. 
-    %dendrite_ratio is the ratio of the number of columsn to the number of
+    %dendrite_ratio is the ratio of the number of columns to the number of
     %dendrite connection.
     %n_cols is the number of columns in the region
     %n_cells is the number of cell layers per column
     %cell_col is the column of the current cell
     %c is the cell number of the current cell
     
-    %Seed the random generator
+    %Seed the random generator (in case we use it later)
     rng('shuffle');
     
     %Set locations bounds
@@ -25,29 +25,32 @@ function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius
     minLoc = max(cell_col-learning_radius, 1);
     
     %the segment has locations, synapses perm, and synapse connection (0 or 1)
-    segColumns = [];
-    segCells = [];
+    segLocations = [];
     segPerms = [];
     segCons = [];
     
     if n.dendrites <= (maxLoc-minLoc)*n.cells
-        for iter = 1:n.dendrites %Make a dendrite seg(iter) for all dendrites
-            %first select a random col, then a random cell in that col
-            segColumns(iter) = randi([minLoc, maxLoc],1);
-            
-            %then select a cell in that column
-            segCells(iter) = randi([1,n.cells],1);
-            
-            %then update synapses for each
-            [ segPerms(iter) segCons(iter) ] = update_s(0, 0, syn_thresh, mod(rand(),0.05)+syn_thresh-0.03);
-            
-            %chances are very slim that we'll double up, but check code can
-            %go here
-            %...
-            
+        for i = 1:n.cells
+            if cells(i).active(t) == 1
+                %Add cells that were previously active to the segment as long as they're
+                %within the location bounds
+                if cells(i).col >= minLoc
+                    if cells(i).col <= maxLoc
+                        segLocations = [segLocations i];
+
+                        %Initial permanence will be 0.15 for all (for now)
+                        segPerms = [segPerms 0.15];
+                        segCons = [segCons 0];
+
+                        %It might be better or worse to start all at different
+                        %segment permanences. Again, a range of values around
+                        %the threshold
+                    end
+                end
+
+            end
         end
     else
         fprintf('Error: There are not enough cells in this radius to connect to.\n');
     end
-    segLocations = [segColumns ; segCells];
 end

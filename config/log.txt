@@ -1,0 +1,2961 @@
+Starting debugger...
+Ready.
+Time = 1
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 29 is bursting.
+Column 30 is bursting.
+Column 41 is bursting.
+Column 42 is bursting.
+Finding predictive cells...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 2
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 1 for column 55. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 56. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 67. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 68. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 3
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 81 is bursting.
+Column 82 is bursting.
+Column 93 is bursting.
+Column 94 is bursting.
+Best cell is cell 1 for column 81. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 82. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 93. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 94. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 4
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 2 for column 55. It is the learning cell.
+Adding a new segment to cell 2 in column 0 to time t-0
+Best cell is cell 2 for column 56. It is the learning cell.
+Adding a new segment to cell 2 in column 0 to time t-0
+Best cell is cell 2 for column 67. It is the learning cell.
+Adding a new segment to cell 2 in column 0 to time t-0
+Best cell is cell 2 for column 68. It is the learning cell.
+Adding a new segment to cell 2 in column 0 to time t-0
+Finding predictive cells...
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 5
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 29 is bursting.
+Column 30 is bursting.
+Column 41 is bursting.
+Column 42 is bursting.
+Best cell is cell 1 for column 29. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 30. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 41. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Best cell is cell 1 for column 42. It is the learning cell.
+Adding a new segment to cell 1 in column 0 to time t-0
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 6
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 7
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 81 is bursting.
+Column 82 is bursting.
+Column 93 is bursting.
+Column 94 is bursting.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 8
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 2 for column 55. It is the learning cell.
+Best cell is cell 2 for column 56. It is the learning cell.
+Best cell is cell 2 for column 67. It is the learning cell.
+Best cell is cell 2 for column 68. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 9
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 29 is bursting.
+Column 30 is bursting.
+Column 41 is bursting.
+Column 42 is bursting.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 10
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 11
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 81 is bursting.
+Column 82 is bursting.
+Column 93 is bursting.
+Column 94 is bursting.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 12
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 2 for column 55. It is the learning cell.
+Best cell is cell 2 for column 56. It is the learning cell.
+Best cell is cell 2 for column 67. It is the learning cell.
+Best cell is cell 2 for column 68. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 13
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 29 is bursting.
+Column 30 is bursting.
+Column 41 is bursting.
+Column 42 is bursting.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 14
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 15
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 81 is bursting.
+Column 82 is bursting.
+Column 93 is bursting.
+Column 94 is bursting.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 16
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 55 is bursting.
+Column 56 is bursting.
+Column 67 is bursting.
+Column 68 is bursting.
+Best cell is cell 2 for column 55. It is the learning cell.
+Best cell is cell 2 for column 56. It is the learning cell.
+Best cell is cell 2 for column 67. It is the learning cell.
+Best cell is cell 2 for column 68. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 17
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Column 29 is bursting.
+Column 30 is bursting.
+Column 41 is bursting.
+Column 42 is bursting.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 18
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 56. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 67. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 68. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 19
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 82. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 93. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 94. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Finding predictive cells...
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 20
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 21
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 30. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 41. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Best cell is cell 1 for column 42. It is the learning cell.
+Adding a new segment to cell 1 in column 1 to time t-1
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 22
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 23
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 24
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 25
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 26
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 27
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 28
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 29
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 30
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 31
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 32
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+    Segment 2 is active on cell 1 in column 55
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+    Segment 2 is active on cell 1 in column 56
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 33
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 34
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 35
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 36
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 37
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 38
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 39
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 40
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 41
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 42
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 43
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 44
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 45
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 46
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 47
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 48
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+    Segment 2 is active on cell 1 in column 55
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+    Segment 2 is active on cell 1 in column 56
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 49
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 50
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 51
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 52
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 53
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 54
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 55
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 56
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 57
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 58
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 59
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 60
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 61
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 62
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 63
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 64
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+    Segment 2 is active on cell 1 in column 55
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+    Segment 2 is active on cell 1 in column 56
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 65
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 66
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 67
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 68
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 69
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 70
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 71
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 72
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 73
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 74
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 75
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 76
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 77
+Spatial pooler is OFF, skipping...
+Active columns: 
+29
+30
+41
+42
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 29 is active.
+Cell 1 in column 30 is active.
+Cell 1 in column 41 is active.
+Cell 1 in column 42 is active.
+Best cell is cell 1 for column 29. It is the learning cell.
+Best cell is cell 1 for column 30. It is the learning cell.
+Best cell is cell 1 for column 41. It is the learning cell.
+Best cell is cell 1 for column 42. It is the learning cell.
+Finding predictive cells...
+Best matching segment(s) for cell 1 in column 29 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 30 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 41 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 42 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 55
+    Segment 1 is active on cell 1 in column 56
+    Segment 1 is active on cell 1 in column 67
+    Segment 1 is active on cell 1 in column 68
+    Segment 2 is active on cell 1 in column 81
+    Segment 2 is active on cell 1 in column 82
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 78
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 55 is active.
+Cell 1 in column 56 is active.
+Cell 1 in column 67 is active.
+Cell 1 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+Best matching segment(s) for cell 1 in column 55 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 56 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 67 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 68 could have been: 
+1  2
+    Segment 1 is active on cell 1 in column 81
+    Segment 1 is active on cell 1 in column 82
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 79
+Spatial pooler is OFF, skipping...
+Active columns: 
+81
+82
+93
+94
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 1 in column 81 is active.
+Cell 1 in column 82 is active.
+Cell 1 in column 93 is active.
+Cell 1 in column 94 is active.
+Best cell is cell 1 for column 81. It is the learning cell.
+Best cell is cell 1 for column 82. It is the learning cell.
+Best cell is cell 1 for column 93. It is the learning cell.
+Best cell is cell 1 for column 94. It is the learning cell.
+Finding predictive cells...
+    Segment 2 is active on cell 1 in column 29
+    Segment 2 is active on cell 1 in column 30
+    Segment 1 is active on cell 2 in column 55
+    Segment 1 is active on cell 2 in column 56
+    Segment 1 is active on cell 2 in column 67
+    Segment 1 is active on cell 2 in column 68
+Best matching segment(s) for cell 1 in column 81 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 82 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 93 could have been: 
+1  2
+Best matching segment(s) for cell 1 in column 94 could have been: 
+1  2
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+Time = 80
+Spatial pooler is OFF, skipping...
+Active columns: 
+55
+56
+67
+68
+Done.
+Starting temporal memory...
+Selecting active cells...
+Cell 2 in column 55 is active.
+Cell 2 in column 56 is active.
+Cell 2 in column 67 is active.
+Cell 2 in column 68 is active.
+Best cell is cell 1 for column 55. It is the learning cell.
+Best cell is cell 1 for column 56. It is the learning cell.
+Best cell is cell 1 for column 67. It is the learning cell.
+Best cell is cell 1 for column 68. It is the learning cell.
+Finding predictive cells...
+    Segment 1 is active on cell 1 in column 29
+    Segment 1 is active on cell 1 in column 30
+    Segment 1 is active on cell 1 in column 41
+    Segment 1 is active on cell 1 in column 42
+    Segment 2 is active on cell 1 in column 55
+Best matching segment(s) for cell 2 in column 55 could have been: 
+1
+    Segment 2 is active on cell 1 in column 56
+Best matching segment(s) for cell 2 in column 56 could have been: 
+1
+Best matching segment(s) for cell 2 in column 67 could have been: 
+1
+Best matching segment(s) for cell 2 in column 68 could have been: 
+1
+    Segment 1 is active on cell 1 in column 93
+    Segment 1 is active on cell 1 in column 94
+Updating synapses...
+Finished.
+Creating output...
+Time step complete.
+
+> save
+Saving to file log.txt ...

@@ -9,7 +9,7 @@ function mycell = getcell(varargin)
     args = nargin;
     if args == 3
         %If only 3 inputs
-        c = varargin{1};
+        c = varargin{1}; %c = cell
         n = varargin{2};
         cells = varargin{3};
         mycell = [];

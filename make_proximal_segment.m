@@ -34,9 +34,9 @@ function [inLoc,perm,con] = make_proximal_segment(n_dendrites, i_radius, dat_len
             
             %The segment is made of random numbes between minLoc and maxLoc
             inLoc(i) = randi([minLoc,maxLoc],1);
-            while any(inLoc(i) == tempseg) %make sure we haven't already assigned this position
-                inLoc(i) = randi([minLoc,maxLoc],1);
-            end
+            %while any(inLoc(i) == tempseg) %make sure we haven't already assigned this position
+             %   inLoc(i) = randi([minLoc,maxLoc],1);
+            %end
             %this next line creates the synapses, which occupy columns 2
             %and 3, the perm and connectivity, resp. Uses a random
             %distribution that centers slightly to the left of the

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Config file for HTM corical learning algorithm -->
+<config>
+	<regionsettings>
+		<region>1</region>
+		<reps>1</reps>
+		<htm_time>0</htm_time>
+		<seq_time>0</seq_time>
+		<temporal_memory>false</temporal_memory>
+		<spatial_pooler>false</spatial_pooler>
+		<TM_delay>0</TM_delay>
+	</regionsettings>
+	
+	<algorithmsettings>
+		<synThreshold>0.2</synThreshold>
+		<synInc>0.015</synInc>
+		<synDec>-0.05</synDec>
+		<dendritePercent>0.5</dendritePercent>
+		<dendrites>0</dendrites>
+		<minSegOverlap>4</minSegOverlap>
+		<columnPercent>0.3</columnPercent>
+		<columns>0</columns>
+		<cellsPerCol>3</cellsPerCol>
+		<desiredLocalActivity>2</desiredLocalActivity>
+		<Neighborhood>20</Neighborhood>
+		<inputRadius>100</inputRadius>
+		<boostInc>0.5</boostInc>
+		<minActiveDuty>0.1</minActiveDuty>
+		<minOverlapDuty>0.1</minOverlapDuty>
+		<maxSegs>1</maxSegs>
+		<LearningRadius>200</LearningRadius>
+		<minOverlap>2</minOverlap>
+	</algorithmsettings>
+	
+	<filesettings>
+		<configfile>config/config.xml</configfile>
+		<lastDir>examples/</lastDir>
+	</filesettings>
+</config>
