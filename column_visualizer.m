@@ -40,7 +40,7 @@ function column_visualizer(input, columns, nCols, htm_time,seq_time)
     
 %% Create an image matrix from the data
  function v = create_visual(visualVec, testColumn, input, time)
-    testColumnSize = numel(testColumn.locations);
+    testColumnSize = numel(testColumn.locations);2
     data_size = size(input);
     visualVec(testColumn.center) = 4;
     

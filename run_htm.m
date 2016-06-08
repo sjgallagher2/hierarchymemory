@@ -38,6 +38,7 @@ function run_htm()
     temporal_memory = false;
     spatial_pooler = false;
     TM_delay = 0;   %steps to wait before starting TM
+    reps = 1; %how many repetitions to make
     
     n.time = 0; %Start timer at 0, go to 1 once it starts
     columns = [];
@@ -75,7 +76,7 @@ function run_htm()
         mkdir config;
     end
     
-    if exist('config/config.htm') == 2
+    if exist('config/config.html') == 2
         %load up pre-existing settings
         inputConfig = load('config/config.htm');
         for j = 1:5
@@ -95,6 +96,14 @@ function run_htm()
     end
     
     %Declarations
+    %Reserving space for a debug window
+    dbg_f = [];
+    db_lines = 0;
+    db_str = [];
+    commandline = [];
+    textspace = [];
+    update_dbg = @updateDebugger;
+    
     %Create a window and menu
     h.fig = figure();
     h.fig.MenuBar = 'none';
@@ -132,6 +141,8 @@ function run_htm()
         uimenu(hEditMenu,'Label','Debug','Callback',@cbED);
     hDataMenu = uimenu(h.fig,'Label','Data');
         uimenu(hDataMenu,'Label','Import data file','Callback',@cbFNFDIDF);
+        uimenu(hDataMenu,'Label','Import data as next frame','Callback',@cbDIDANF);
+        uimenu(hDataMenu,'Label','Clear current data sequence','Callback',@cbDCCDS);
         hDataSaveDataSeq = uimenu(hDataMenu,'Label','Save current data sequence','Callback',@cbSC, 'Enable','off');%Can't save without data
         uimenu(hDataMenu,'Label','View data frames','Callback',@cbVD);
     hPropMenu = uimenu(h.fig,'Label','Properties');
@@ -204,30 +215,43 @@ function run_htm()
                 %Run the proper function
                 %Acceptable files:
                 %   jpg
-                %   png
-                %   txt
-                %   mpg?
-                %   mp3
-                %   xml
-                
-                %For now, this will open text files and store them as a
-                %vector
-                if (dataFilePath(2) ~= 0)
-                    send = load(dataFilePath);
-
+                if strcmp(dFileName(find(dFileName == '.'):end),'.jpg')
+                    waitbox = waitbar(0,'Formatting image.. (this could take a while)');
+                    imData = imread(dataFilePath);
+                    send = convert_image(imData);
+                    close(waitbox);
+                    
                     send_sz = size(send);
-                    send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz(1)) ) );
+                    send_img = vec2mat( send(:,1)+1,floor(sqrt(send_sz(1))) );
                     send_img = rot90(send_img);
                     h.img = image(send_img,'Parent',h.mainWindow);
                     hold on;
-                    h.mainWindow.XTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
-                    h.mainWindow.YTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
-                    h.mainWindow.XTickLabel = [];
-                    h.mainWindow.YTickLabel = [];
-                    h.mainWindow.XGrid = 'on';
-                    h.mainWindow.YGrid = 'on';
+                else
+                    
+                    %   png
+                    %   txt
+                    %   mpg?
+                    %   mp3
+                    %   xml
+
+                    %For now, this will open text files and store them as a
+                    %vector
+                    if (dataFilePath(2) ~= 0)
+                        send = load(dataFilePath);
+
+                        send_sz = size(send);
+                        send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz(1)) ) );
+                        send_img = rot90(send_img);
+                        h.img = image(send_img,'Parent',h.mainWindow);
+                        hold on;
+                        h.mainWindow.XTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
+                        h.mainWindow.YTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
+                        h.mainWindow.XTickLabel = [];
+                        h.mainWindow.YTickLabel = [];
+                        h.mainWindow.XGrid = 'on';
+                        h.mainWindow.YGrid = 'on';
+                    end
                 end
-                
                 if ~isempty(send)
                     hRunItem.Enable = 'off';
                     data_size = size(send);
@@ -285,16 +309,270 @@ function run_htm()
     end
     function cbED(hObject,evt)
         %Debug
+        nextline = 'Starting debugger...';
+        dbg_f = figure('color','white','Position',[30,200,600,300],'MenuBar','none');
+        dbg_f.SizeChangedFcn = @cbSizeChange;
+        db_str = {nextline,'Ready.'};
+        db_lines = 2;
+        textspace = uicontrol('Style','edit','BackgroundColor','white','Position',[0,30,600,300-31],'String',db_str,'Enable','inactive','HorizontalAlignment','left','Max',100,'Min',1);
+        commandline = uicontrol('Style','edit','BackgroundColor','white','Position',[0,0,600,30],'HorizontalAlignment','left','Callback',@cbCommandLine);
+        
+        function cbCommandLine(hObject,evt)
+            %parse
+            command = commandline.String;
+            spaces = find(command == ' ');
+            instruct = [];
+            val = [];
+            if numel(spaces) == 1
+                if spaces(1) > 0
+                    instruct = command(1:spaces(1)-1);
+                    val = command( (spaces(1)+1):end );
+                end
+            elseif numel(spaces) == 0
+                %skip val
+                instruct = command(1:end);
+            else
+                %invalid command
+            end
+            
+            %display
+            db_lines = db_lines+1;
+            db_str{db_lines} = ['> ', command];
+            textspace.String = db_str;
+            commandline.String = '';
+            
+            %perform function
+            if strcmp(instruct,'clear')
+                %reset the variables
+                db_str = {};
+                db_lines = 0;
+                textspace.String = '';
+            elseif strcmp(instruct,'watch')
+                %watch the variable if it exists
+            elseif strcmp(instruct,'config')
+                if length(val) == 1
+                    regionid = str2num(val);
+                    if regionid > 0 && regionid < 5
+                        %display the configuration of the regions with labels
+                        nextline = ['Synapse threshold: ', num2str(currentConfig(1,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Synapse increment: ', num2str(currentConfig(2,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Synapse decrement: ', num2str(currentConfig(3,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Dendrites per column: ', num2str(currentConfig(4,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Number of columns in the region: ', num2str(currentConfig(6,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Desired local activity: ', num2str(currentConfig(7,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Neighborhood size: ', num2str(currentConfig(8,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Input radius: ', num2str(currentConfig(9,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Boost increment: ', num2str(currentConfig(10,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Number of cells per column: ', num2str(currentConfig(13,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Cell learning radius: ', num2str(currentConfig(15,regionid))];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum overlap: ', num2str(currentConfig(16,regionid))];
+                        updateDebugger(nextline);
+                    end
+                else
+                    %display the configuration of the regions with labels
+                    nextline = ['Synapse thresholds: ', num2str(currentConfig(1,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Synapse increments: ', num2str(currentConfig(2,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Synapse decrements: ', num2str(currentConfig(3,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Dendrites per column: ', num2str(currentConfig(4,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Number of columns in the region: ', num2str(currentConfig(6,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Desired local activity: ', num2str(currentConfig(7,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Neighborhood size: ', num2str(currentConfig(8,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Input radius: ', num2str(currentConfig(9,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Boost increment: ', num2str(currentConfig(10,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Number of cells per column: ', num2str(currentConfig(13,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Cell learning radius: ', num2str(currentConfig(15,:))];
+                    updateDebugger(nextline);
+
+                    nextline = ['Minimum overlap: ', num2str(currentConfig(16,:))];
+                    updateDebugger(nextline);
+                end
+            elseif strcmp(instruct,'save')
+                dProjLoc = uigetdir();
+                updateDebugger('Saving to file log.txt ...');
+                if exist([dProjLoc,'\log.txt']) > 0
+                    fid = fopen([dProjLoc,'\log.txt'],'wt');
+                    fprintf(fid,'');
+                    fclose(fid);
+                end
+                savefile = fopen([dProjLoc,'\log.txt'],'a');
+                for i = 1:db_lines
+                    fprintf(savefile,[db_str{i},'\n']);
+                end
+                
+                fclose(savefile);
+                updateDebugger('Done.');
+                
+            elseif exist(instruct) == 1
+                %if this is a variable, print its value
+                updateDebugger([instruct ' = ']);
+                updateDebugger( eval(instruct) );
+            else
+                %invalid command
+            end
+            jhTextspace = findjobj(textspace);
+            jEditTextspace = jhTextspace.getComponent(0).getComponent(0);
+            jEditTextspace.setCaretPosition(jEditTextspace.getDocument.getLength);
+        end
+        function cbSizeChange(hObject,evt)
+            len = dbg_f.Position(3);
+            height = dbg_f.Position(4);
+            textspace.Position = [0,30,len,height-31];
+            commandline.Position = [0,0,len,30];
+            jhTextspace = findjobj(textspace);
+            jEditTextspace = jhTextspace.getComponent(0).getComponent(0);
+            jEditTextspace.setCaretPosition(jEditTextspace.getDocument.getLength);
+        end
     end
 %DATA MENU CALLBACKS
+    function cbDIDANF(hObject, evt)
+        %Import data file
+                
+            [dFileName dFileLoc] = uigetfile('*.*');
+            dataFilePath = [dFileLoc dFileName];
+            %Determine what type of file it is
+            %Run the proper function
+            %Acceptable files:
+            %   jpg
+            if strcmp(dFileName(find(dFileName == '.'):end),'.jpg')
+                waitbox = waitbar(0,'Formatting image.. (this could take a while)');
+                imData = imread(dataFilePath);
+                send = [send convert_image(imData)];
+                close(waitbox);
+
+                send_sz = size(send);
+                send_img = vec2mat( send(:,1)+1,floor(sqrt(send_sz(1))) );
+                send_img = rot90(send_img);
+                h.img = image(send_img,'Parent',h.mainWindow);
+                hold on;
+            else
+
+                %   png
+                %   txt
+                %   mpg?
+                %   mp3
+                %   xml
+
+                %For now, this will open text files and store them as a
+                %vector
+                if (dataFilePath(2) ~= 0)
+                    send = load(dataFilePath);
+
+                    send_sz = size(send);
+                    send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz(1)) ) );
+                    send_img = rot90(send_img);
+                    h.img = image(send_img,'Parent',h.mainWindow);
+                    hold on;
+                    h.mainWindow.XTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
+                    h.mainWindow.YTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
+                    h.mainWindow.XTickLabel = [];
+                    h.mainWindow.YTickLabel = [];
+                    h.mainWindow.XGrid = 'on';
+                    h.mainWindow.YGrid = 'on';
+                end
+            end
+            if ~isempty(send)
+                hRunItem.Enable = 'off';
+                data_size = size(send);
+                data_size = data_size(1);
+                allN(1).dendrites = floor(allN(1).dendrites*data_size);
+                allN(1).cols = floor(allN(1).cols*data_size);
+                %update percentages in currentConfig (NOT config file)
+                currentConfig(4,:) = currentConfig(4,:)*data_size;
+                currentConfig(6,:) = currentConfig(6,:)*data_size;
+                cbPTS(hObject,evt);
+                cbPEH(hObject,evt);
+            end
+    end
     function cbSC(hObject,evt)
         %Save current data sequence
         [dFileName dFileLoc] = uiputfile('*.*');
         dataFilePath = [dFileLoc dFileName];
         save(dataFilePath,'send','-ascii');
     end
+    function cbDCCDS(hObject,evt)
+        %Clear current data sequence
+        %Are you sure? dialog
+        cl_bool = questdlg('Are you sure?','Clear current data.');
+        if strcmp(cl_bool,'Yes')
+            send = []; %delete the input-to-be-sent
+            hRunItem.Enable = 'off';
+            h.img = image(ones(12),'Parent',h.mainWindow);
+            hold on;
+            %quickly update the 't=' text
+            timeString = ['total time = ' num2str(htm_time) ',   seq time = 0'];
+            hTimeText.String = timeString;
+        end
+    end
+        
     function cbVD(hObject,evt)
         %View data frames
+        show_input_sequence(allN(1),send);
     end
 %PROPERTIES MENU CALLBACKS
     function cbPEH(hObject,evt)
@@ -354,7 +632,6 @@ function run_htm()
                 end
             end 
         end
-
     end
     function cbPF(hObject,evt)
         %Files...
@@ -366,23 +643,22 @@ function run_htm()
 
     function cbPTS(hObject,evt)
         %Training settings
-        [temporal_memory,spatial_pooler,TM_delay] = train_settings(temporal_memory,spatial_pooler,TM_delay);
+        [temporal_memory,spatial_pooler,TM_delay, reps] = train_settings(temporal_memory,spatial_pooler,TM_delay, reps);
     end
 %RUN MENU CALLBACKS
     function cbRR(hObject,evt)
         %Run
         id = 1;
         %show a wait screen
-        [columns, activeColumns, cells, prediction, output] = region(send,currentConfig(:,id),id,columns,cells,hierarchy_regions,currentConfig( :,(id+1):hierarchy_regions ),temporal_memory,spatial_pooler,TM_delay );
+        [columns, activeColumns, cells, prediction, output] = region(send,currentConfig(:,id),id,columns,cells,hierarchy_regions,currentConfig( :,(id+1):hierarchy_regions ),temporal_memory,spatial_pooler,TM_delay,update_dbg,reps);
         hColStates.Enable = 'on';
         hCellStates.Enable = 'on';
         hRegionOut.Enable = 'on';
 
         %update time information
-        seqTimeElapsed = size(send);
-        seqTimeElapsed = seqTimeElapsed(2);
+        seqTimeElapsed = size(send,2);
         allN(1).time = seqTimeElapsed;
-        htm_time = htm_time+allN(1).time;
+        htm_time = htm_time+allN(1).time*reps;
 
         %quickly update the 't=' text
         timeString = ['total time = ' num2str(htm_time) ',   seq time = ' num2str(allN(1).time)];
@@ -396,7 +672,7 @@ function run_htm()
     function cbVCoSt(hObject,evt)
         %Column states
         if spatial_pooler
-            column_visualizer(send, activeColumns, allN(1).cols,htm_time,allN(1).time); %TODO Make these more clear about what they are for the user
+            column_visualizer(send, columns, allN(1).cols,htm_time,allN(1).time,reps); %TODO Make these more clear about what they are for the user
         end
     end
     function cbVCeSt(hObject,evt)
@@ -422,5 +698,39 @@ function run_htm()
             ,'White Paper by Numenta. Last updated: 2 June 2016'];
         a = dialog('Position',[300,300,300,250],'Name','About');
         hAboutDialog = uicontrol('Parent',a,'Style','text','String',about_string,'Position',[10,50,280,150],'FontSize',15,'BackgroundColor',[0.9,1,1]);
+    end
+    function updateDebugger(nextline)
+        if isstr(nextline)
+            db_lines = db_lines+1;
+            db_str{db_lines} = nextline;
+            textspace.String = db_str;
+        elseif isnumeric(nextline)
+                
+            if iscolumn(nextline)
+                nextline = nextline';
+                nextline = num2str(nextline);
+                db_lines = db_lines+1;
+                db_str{db_lines} = nextline;
+                textspace.String = db_str;
+            elseif isrow(nextline)
+                nextline = num2str(nextline);
+                db_lines = db_lines+1;
+                db_str{db_lines} = nextline;
+                textspace.String = db_str;
+            elseif ismatrix(nextline)
+                matsize = size(nextline);
+                mat_height = matsize(1);
+                
+                for i = 1:mat_height
+                    updateDebugger(nextline(i,:));
+                end
+            end
+        elseif isstruct(nextline)
+            %Try to print the structure out properly...
+        else
+            db_lines = db_lines+1;
+            db_str{db_lines} = 'Unknown data type, display unsuccessful.';
+            textspace.String = db_str;
+        end
     end
 end

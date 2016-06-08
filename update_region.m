@@ -8,18 +8,18 @@
 %structure, the active columns list, a list of segment structures, and the region output
 %Runs through a time-step of the CLA using a given
 
-%% TODO: Add "active" as a separate part of cell structure, update ALL functions using "state"
+%% TODO: Complete debug implementation
 
 function [columns, cells, prediction,n, output,activeColumns] = update_region(columns,cells,segments,data,n,synThreshold,...
     synInc,synDec,minSegOverlap,desiredLocalActivity,boostInc, minActiveDuty, ...
-    minOverlapDuty, minOverlap, LearningRadius,segment,t,queue,temporal_memory,spatial_pooler)
+    minOverlapDuty, minOverlap, LearningRadius,segment,t,queue,temporal_memory,spatial_pooler,dbg)
 
-    %fprintf('Time = %d \n',t)
+    dbg(['Time = ',num2str(t)]);
     if spatial_pooler == true
-        %fprintf('Starting spatial pooler...\n')
+        dbg('Starting spatial pooler...');
         %For each timestep, find overlaps for the columns and reset
         %activity and sums
-        %fprintf('Calculating overlaps...\n')
+        dbg('Calculating overlaps...');
         for c = 1:n.cols
             columns(c).active = 0;
             columns(c).overlap = compute_overlap(data,columns(c),minOverlap);
@@ -39,7 +39,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %causes columns to be evaluated more than once, but this may not be
         %a bad thing, as long as a column is not selected to 'win' more
         %than once.
-        %fprintf('Selecting active columns...\n')
+        dbg('Selecting active columns...');
         for iter = 0:n.hoods-1
             start = n.neighborhood*(iter)+1;
             stop = min(start+(n.neighborhood-1),n.cols); %make sure it doesn't go over the max ncols
@@ -78,7 +78,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %This loop checks if a synapse is connected, and updates it
         %based on whether or not it is, for every position in the
         %column c
-        %fprintf('Updating synapses...\n')
+        dbg('Updating synapses...');
         for c = 1:n.cols
             if columns(c).active
                 for i = 1:n.dendrites
@@ -119,10 +119,12 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
             activeColumns(1:nActive,1) = w;
         end
         n.active = nActive;
-        %fprintf('Done.\n\n')
+        dbg('Active columns: ');
+        dbg(activeColumns(:,1));
+        dbg('Done.');
     else
         %If NO spatial pooler
-        %fprintf('Spatial pooler is OFF, skipping...\n')
+        dbg('Spatial pooler is OFF, skipping...');
         n.active = 0;
         activeColumns = [];
         for i = 1:n.data
@@ -135,6 +137,11 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
             end
         end
         activeColumns = activeColumns';
+        dbg('Active columns: ');
+        for j = 1:n.active
+            dbg(num2str(activeColumns(j)));
+        end
+        dbg('Done.');
     end
     %% Now Update our cells for the temporal memory
 
@@ -147,7 +154,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
     %Finally, update synapses
     
     if temporal_memory == true
-        
+        dbg('Starting temporal memory...');
         for i = 1:n.cols
             for j = 1:n.cellpercol
                 c_loc = getcell_loc(j,i,n);
@@ -157,8 +164,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                 cells(c_loc) = mycell;
             end
         end
-        %fprintf('Starting temporal memory...\n')
-        %fprintf('Selecting active cells...\n')
+        dbg('Selecting active cells...');
         for i = 1:n.cols %for ALL columns, active and inactive
             celloutput = [];
             columns(i).burst = false;
@@ -198,7 +204,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                             mycell.state(t) = 1;
                             mycell.active(t) = 1;
                             columns(i).active_cell = j;
-                            %fprintf('>Cell %d in column %d is active at time %d.\n',mycell.layer, mycell.col,t)
+                            dbg(['Cell ',num2str(mycell.layer),' in column ',num2str(mycell.col),' is active.']);
                             if mycell.learn(t-1) == true
                                 columns(i).learning_cell = j;
                             
@@ -222,7 +228,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                 end
                 if columns(i).active_cell == -1
                     %burst
-                    %fprintf('\n>Column %d is bursting.\n',i)
+                    dbg(['Column ',num2str(i),' is bursting.']);
                     for j = 1:n.cellpercol
                         loc = getcell_loc(j,i,n);
                         mycell = cells( loc );
@@ -246,7 +252,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                         [columns(i).learning_cell, fewestSegs] = getBestMatchingCell(i,cells,n,t);
                         loc = getcell_loc(columns(i).learning_cell, i, n);
                         mycell = cells( loc );
-                        %fprintf('Best cell is cell %d for column %d\n',mycell.layer,mycell.col)
+                        dbg(['Best cell is cell ',num2str(mycell.layer),' for column ',num2str(mycell.col),'. It is the learning cell.']);
                         mycell.mknewseg = fewestSegs; %fewestSegs is a boolean indicating whether or not 
                         % the best cell was found. We only select by fewest
                         % number of segments if no cell had a segment that
@@ -261,12 +267,9 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                         %This learning cell was selected because it was
                         %next in order, had the fewest segments, or had a
                         %well matched segment
-
-                        %fprintf('>Cell %d in column %d chosen as learning cell.\n',mycell.layer,mycell.col)
-                        %mycell.mknewseg = true;
                         
                         if mycell.mknewseg == true
-%                         fprintf('Adding a new segment to cell %d in column %d to time t-%d\n',mycell.layer,mycell.col,(mycell.nseg+1));
+                            dbg(['Adding a new segment to cell ', num2str(mycell.layer),' in column ', num2str(mycell.nseg),' to time t-', num2str(mycell.nseg)]);
                             mycell.segs = [mycell.segs, segment]; %add a blank segment
                             %label its index and cell
                             mycell.nseg = mycell.nseg + 1;
@@ -305,14 +308,13 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %   step and could have predicted if it had strong enough synapses.
         
         %Check cells segments, set active segment
-%      fprintf('\nFinding predictive cells (t=%d)...\n',t)
+        dbg('Finding predictive cells...');
         for i = 1:n.cells
             activeSeg = getActiveSeg(cells(i), cells,t);
             if activeSeg > 0
                 cells(i).segs(activeSeg).active = 1;
                 cells(i).state(t) = 2;
-%              fprintf('>Segment %d is active on cell %d in column %d.\n',activeSeg,cells(i).layer,cells(i).col)
-%              fprintf('>Cell %d in column %d is predicting itself to be active next...\n',cells(i).layer,cells(i).col)
+                dbg(['    Segment ',num2str(activeSeg),' is active on cell ', num2str(cells(i).layer),' in column ', num2str(cells(i).col)]);
                 if cells(i).learn(t) == true
                     %if the cell is learning, copy it to the queue
                     queue = [queue, cells(i).segs(activeSeg)];
@@ -322,8 +324,9 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
             if cells(i).active(t) == true
                 bestSeg = getBestMatchingSeg(cells(i),cells,t);
                 if numel(bestSeg) > 0
- %                 g = sprintf('%d, ',bestSeg);
-%                  fprintf('>Best matching segments could have been segments %s for cell %d in col %d \n',g,cells(i).layer,cells(i).col)
+                    dbg(['Best matching segment(s) for cell ',num2str(cells(i).layer), ' in column ',num2str(cells(i).col), ' could have been: ']);
+                    dbg(bestSeg);
+                    
                     queue = [queue, cells(i).segs(bestSeg)];
                 end
             end
@@ -338,7 +341,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %computationally expensive.
         %This uses the queue of segments
         if t > 1
-            %fprintf('Updating synapses...\n')
+            dbg('Updating synapses...');
             if ~( isempty(queue) )
                 for i = 1:n.cells
                     if cells(i).learn(t) == true
@@ -369,13 +372,13 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                 end
             end
         end
-        %fprintf('Finished. \n\n')
+        dbg('Finished.');
     else
         %If NO temporal memory
-        %fprintf('Temporal memory is OFF, skipping...\n')
+        dbg('Temporal memory is OFF, skipping...');
     end
     %% Create output
-    %fprintf('Creating output...\n')
+    dbg('Creating output...');
     if n.cols > 0   %If columns were created
         %Make output, make sure to OR with the cells predicting
         output = [];
@@ -409,5 +412,6 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         output = -1;
     end
     segments = [];
-    %fprintf('Complete.\n\n')
+    dbg('Time step complete.');
+    dbg('');
 end

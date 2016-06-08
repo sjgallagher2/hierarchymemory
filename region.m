@@ -11,7 +11,7 @@
 %and the n structure (number of columns, cells, etc), the columns
 %structure, and the cells structure
 
-function [columns,activeColumns,cells,prediction,output] = region(dInput,inputConfig,id,columns,cells,nRegions,nextConfig, temporal_memory, spatial_pooler,TM_delay)
+function [columns,activeColumns,cells,prediction,output] = region(dInput,inputConfig,id,columns,cells,nRegions,nextConfig, temporal_memory, spatial_pooler,TM_delay,dbg,reps)
     %% To begin, get our data straight.
     synThreshold = inputConfig(1);
     synInc = inputConfig(2);
@@ -89,8 +89,9 @@ function [columns,activeColumns,cells,prediction,output] = region(dInput,inputCo
         if isempty(columns)
 
             columns = [];
-
+            waitbox = waitbar(0,'Initializing columns...');
             for iter = 1:n.cols
+                waitbar(iter/n.cols);
                 %To select a center, we need to
                 %account for the fact that n.cols < data_size. We can multiply each
                 %column center then, by the inverse of n.cols. For
@@ -103,6 +104,7 @@ function [columns,activeColumns,cells,prediction,output] = region(dInput,inputCo
 
                 columns = [columns col];
             end
+            close(waitbox);
         end
     else
         for iter = 1:n.cols
@@ -131,40 +133,41 @@ function [columns,activeColumns,cells,prediction,output] = region(dInput,inputCo
     if id == 1
         waitbox = waitbar(0,'Running HTM...');
     end
-    for t = 1:n.time
-        if id == 1
-            waitbar(t/n.time);
-        end
-        if TM_delay > 0
-
-            [columns, cells, tempPrediction, n, output,tempActiveColumns] = update_region(columns, cells, 0,dInput(:,t),n,synThreshold,...
-                synInc,synDec,minSegOverlap,desiredLocalActivity,boostInc, minActiveDuty, ...
-                minOverlapDuty, minOverlap,LearningRadius,segment,t,queue, false, spatial_pooler);
-            activeColumns(1:n.active,t) = tempActiveColumns;
-            prediction(1:n.cols,t) = tempPrediction;
-            %send the information on to the next region if it exists
-            if numel(nextConfig(1,:)) > 1
-                %output, inputConfig, id, columns, cells, nRegions, nextConfig,
-                %temporal, spatial, delay
-                [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,nextConfig(:,(id+1):nRegions),spatial_pooler,temporal_memory, TM_delay);
-            elseif numel(nextConfig(1,:)) == 1
-                [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,[],spatial_pooler,temporal_memory,TM_delay);
+    for R = 1:reps
+        for t = 1:n.time
+            if id == 1
+                waitbar((t+n.time*R-1)/(n.time*reps));
             end
-            TM_delay = TM_delay-1;
-        else
-            [columns, cells, tempPrediction, n, output,tempActiveColumns] = update_region(columns, cells, 0,dInput(:,t),n,synThreshold,...
-                synInc,synDec,minSegOverlap,desiredLocalActivity,boostInc, minActiveDuty, ...
-                minOverlapDuty, minOverlap,LearningRadius,segment,t,queue, temporal_memory, spatial_pooler);
-            activeColumns(1:n.active,t) = tempActiveColumns;
-            prediction(1:n.cols,t) = tempPrediction;
-            %send the information on to the next region if it exists
-            if numel(nextConfig(1,:)) > 1
-                [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,nextConfig(:,(id+1):nRegions),spatial_pooler,temporal_memory,TM_delay);
-            elseif numel(nextConfig(1,:)) == 1
-                [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,[],spatial_pooler,temporal_memory,TM_delay);
-            end
+            if TM_delay > 0
+                [columns, cells, tempPrediction, n, output,tempActiveColumns] = update_region(columns, cells, 0,dInput(:,t),n,synThreshold,...
+                    synInc,synDec,minSegOverlap,desiredLocalActivity,boostInc, minActiveDuty, ...
+                    minOverlapDuty, minOverlap,LearningRadius,segment,t,queue, false, spatial_pooler);
+                activeColumns(1:n.active,t) = tempActiveColumns;
+                prediction(1:n.cols,t) = tempPrediction;
+                %send the information on to the next region if it exists
+    %             if numel(nextConfig(1,:)) > 1
+    %                 %output, inputConfig, id, columns, cells, nRegions, nextConfig,
+    %                 %temporal, spatial, delay
+    %                 [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,nextConfig(:,(id+1):nRegions),spatial_pooler,temporal_memory, TM_delay);
+    %             elseif numel(nextConfig(1,:)) == 1
+    %                 [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,[],spatial_pooler,temporal_memory,TM_delay);
+    %             end
+                TM_delay = TM_delay-1;
+            else
+                [columns, cells, tempPrediction, n, output,tempActiveColumns] = update_region(columns, cells, 0,dInput(:,t),n,synThreshold,...
+                    synInc,synDec,minSegOverlap,desiredLocalActivity,boostInc, minActiveDuty, ...
+                    minOverlapDuty, minOverlap,LearningRadius,segment,t,queue, temporal_memory, spatial_pooler,dbg);
+                activeColumns(1:n.active,t) = tempActiveColumns;
+                prediction(1:n.cols,t) = tempPrediction;
+                %send the information on to the next region if it exists
+                if numel(nextConfig(1,:)) > 1
+                    [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,nextConfig(:,(id+1):nRegions),spatial_pooler,temporal_memory,TM_delay,dbg);
+                elseif numel(nextConfig(1,:)) == 1
+                    [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,[],spatial_pooler,temporal_memory,TM_delay,dbg);
+                end
 
-            TM_delay = TM_delay-1;
+                TM_delay = TM_delay-1;
+            end
         end
     end
     close(waitbox);

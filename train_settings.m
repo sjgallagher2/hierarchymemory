@@ -12,23 +12,24 @@
 %
 %REMOVE, ADD TO TAB IN OTHER SETTINGS
 
-function [temporal_memory, spatial_pooler, tmdelay] = train_settings(tm,sp,tmd)
-    f = figure('Visible','off','Position',[500,300,280,180]);
+function [temporal_memory, spatial_pooler, tmdelay, rep] = train_settings(tm,sp,tmd,reps)
+    f = figure('Visible','off','Position',[500,300,280,200]);
     
-    hTM = uicontrol('style','checkbox','position',[30,140,15,15],'value',tm,'Callback',@tmCB);
-    hSP = uicontrol('style','checkbox','position',[30,100,15,15],'value',sp);
-    hTMdelay = uicontrol('style','edit','position',[24,65,30,20],'String',num2str(tmd));
+    hTM = uicontrol('style','checkbox','position',[30,170,15,15],'value',tm,'Callback',@tmCB);
+    hSP = uicontrol('style','checkbox','position',[30,130,15,15],'value',sp,'Callback',@tmCB);
+    hTMdelay = uicontrol('style','edit','position',[24,95,30,20],'String',num2str(tmd));
+    hRep = uicontrol('style','edit','position',[24,60,30,20],'String',num2str(reps));
     
-    hTMtext = uicontrol('style','text','position',[60,140,150,20],'String','Run temporal memory');
-    hSPtext = uicontrol('style','text','position',[60,100,150,20],'String','Run spatial pooler');
-    hTMdelay_text = uicontrol('style','text','position',[80,65,150,20],'String','Temporal memory delay (steps)');
+    hTMtext = uicontrol('style','text','position',[60,170,150,20],'String','Run temporal memory');
+    hSPtext = uicontrol('style','text','position',[60,130,150,20],'String','Run spatial pooler');
+    hTMdelay_text = uicontrol('style','text','position',[80,95,150,20],'String','Temporal memory delay (steps)');
+    hRepText = uicontrol('style','text','position',[80,60,150,20],'String','Reptitions of data sequence');
     
     hOkayButton = uicontrol('style','pushbutton','String','Okay','position',[90,10,40,20],'Callback',@okayCB);
     hCancelButton = uicontrol('style','pushbutton','String','Cancel','position',[140,10,40,20],'Callback',@cancelCB);
     
     if ~tm
-        hTMdelay.Visible = 'off';
-        hTMdelay_text.Visible = 'off';
+        hTMdelay.Enable = 'off';
     end
     
     f.Name = 'Training settings';
@@ -46,6 +47,7 @@ function [temporal_memory, spatial_pooler, tmdelay] = train_settings(tm,sp,tmd)
             spatial_pooler = false;
         end
         tmdelay = floor( str2num(get(hTMdelay,'string')) );
+        rep = floor( str2num(get(hRep,'string')) );
         
         close();
     end
@@ -57,12 +59,12 @@ function [temporal_memory, spatial_pooler, tmdelay] = train_settings(tm,sp,tmd)
     end
     function tmCB(hObject,evt)
         i = get(hTM,'Value');
+        j = get(hSP,'Value');
         if i == 0
-            hTMdelay_text.Visible = 'off';
-            hTMdelay.Visible = 'off';
-        else
-            hTMdelay_text.Visible = 'on';
-            hTMdelay.Visible = 'on';
+            hTMdelay.Enable = 'off';
+        end
+        if j == 1 && i ==1
+            hTMdelay.Enable = 'on';
         end
     end
     waitfor(f);

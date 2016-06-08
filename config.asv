@@ -1,0 +1,94 @@
+%config.m
+%Sam Gallagher
+%8 June 2016
+%
+%A configuration class containing all configurations for a given region
+
+classdef config
+    properties
+        %region settings
+        region
+        reps
+        htm_time
+        seq_time
+        temporal_memory
+        spatial_pooler
+        TM_delay
+        
+        %SP and TM settings
+        synTreshold
+        synInc
+        synDec
+        nDendrites                          %percentage
+        minSegOverlap
+        columns                              %percentage
+        cellsPerCol
+        desiredLocalActivity
+        Neighborhood
+        inputRadius
+        boostInc
+        minActiveDuty                      %percentage
+        minOverlapDuty                   %percentage
+        maxSegs
+        LearningRadius
+        minOverlap
+        
+        %Config settings
+        percentSet = false;
+        
+    end
+    methods
+        function settings = formatConfigVector(obj)
+            settings = [];
+            settings(1) = obj.region;
+            settings(2) = obj.reps;
+            settings(3) = obj.htm_time;
+            settings(4) = obj.seq_time;
+            settings(5) = obj.temporal_memory;
+            settings(6) = obj.spatial_pooler;
+            settings(7) = obj.TM_delay;
+            settings(8) = obj.synTreshold;
+            settings(9) = obj.synInc;
+            settings(10) = obj.synDec;
+            settings(11) = obj.nDendrites;
+            settings(12) = obj.minSegOverlap;
+            settings(13) = obj.columns;
+            settings(14) = obj.cellsPerCol;
+            settings(15) = obj.desiredLocalActivity;
+            settings(16) = obj.Neighborhood;
+            settings(17) = obj.inputRadius;
+            settings(18) = obj.boostInc;
+            settings(19) = obj.minActiveDuty;
+            settings(20) = obj.minOverlapDuty;
+            settings(21) = obj.maxSegs;
+            settings(22) = obj.LearningRadius;
+            settings(23) = obj.minOverlap;
+        end
+        function setToDefault(obj)
+            %sets SP and TM settings to default values
+            obj.synTreshold = 0.2;
+            obj.synInc = 0.075;
+            obj.synDec = -0.05;
+            obj.nDendrites = 0.5;
+            obj.minSegOverlap = 10;
+            obj.columns = 0.3;
+            obj.cellsPerCol =3;
+            obj.desiredLocalActivity = 
+            obj.Neighborhood = 
+            obj.inputRadius = 
+            obj.boostInc = 
+            obj.minActiveDuty = 
+            obj.minOverlapDuty = 
+            obj.maxSegs = 
+            obj.LearningRadius = 
+            obj.minOverlap = 
+        end
+        function updateConfigPercentages(obj,data_size)
+            
+        end
+        function readFormattedConfig(obj,settings)
+            %take in a column vector in order which contains the config
+            %data. Typically comes from a file
+        end
+    end
+end
