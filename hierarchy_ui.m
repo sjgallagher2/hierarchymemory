@@ -3,16 +3,16 @@
 %9 March 2016
 %
 %This is the user interface for controlling the hierarchy
+%Input is the number of active regions, the array of region configs, and an
+%enable
 
-function [hierarchy,inputConfig] = hierarchy_ui(nRegions,send,inputConfig, en)
+function [hierarchy,c] = hierarchy_ui(nRegions,c, en)
     f = figure();
     f.Visible = 'off';
     f.MenuBar = 'none';
     
-    hierarchy = nRegions;
-    
-    data_size = size(send);
-    data_size = data_size(1);
+    hierarchy = nRegions; %hierarchy is the output number of regions,
+    %nRegions is the number of regions we started with
     
     hHierarchyLayers = uicontrol('style','popup','String',{'1','2','3','4','5'}, 'Position',[80,350,100,50],'Callback',@cbHLay);
     hHierarchyLabel = uicontrol('style','text','String','Hierarchy Layers ','Position',[20,353,50,50]);
@@ -46,12 +46,15 @@ function [hierarchy,inputConfig] = hierarchy_ui(nRegions,send,inputConfig, en)
         hLayerFive.Visible = 'on';
     end
     
+    hLayerTwo.Enable = 'off';
+    hLayerThree.Enable = 'off'; %these turn on once you set the others
+    hLayerFour.Enable = 'off';
+    hLayerFive.Enable = 'off';
+    
     if en == false
         hLayerOne.Enable = 'off';
-        hLayerTwo.Enable = 'off';
-        hLayerThree.Enable = 'off';
-        hLayerFour.Enable = 'off';
-        hLayerFive.Enable = 'off';
+    else
+        hLayerOne.Enable = 'on';
     end
     f.Visible = 'on';
     set(f,'CloseRequestFcn',@cbCancel);
@@ -95,81 +98,47 @@ function [hierarchy,inputConfig] = hierarchy_ui(nRegions,send,inputConfig, en)
             hLayerFive.Visible = 'on';
             
             hierarchy = 5;
-            
         end
-        
     end
     function cbOne(hObject, evt)
-        [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,...
-        Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,...
-        nSegs,LearningRadius,minOverlap] = user_control(size(send),1);
-        
-    %Create a user config vector to store all 'settings'-related stuff
-        userConfig = [synThreshold;synInc;synDec;nDendrites;minSegOverlap;nCols;desiredLocalActivity;...
-        Neighborhood;inputRadius;boostInc;minActiveDuty;minOverlapDuty;nCells;...
-        nSegs;LearningRadius;minOverlap];
-        
-        inputConfig(:,1) = userConfig;
-        
+        c(1) = user_control(c(1));
+        c(1) = updateConfigPercentages(c(1));
+        c(2).data_size = c(1).columns;
+        hLayerTwo.Enable = 'on';
     end
     function cbTwo(hObject, evt)
-        [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,...
-        Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,...
-        nSegs,LearningRadius,minOverlap] = user_control(size(send),2);
-        
-    %Create a user config vector to store all 'settings'-related stuff
-        userConfig = [synThreshold;synInc;synDec;nDendrites;minSegOverlap;nCols;desiredLocalActivity;...
-        Neighborhood;inputRadius;boostInc;minActiveDuty;minOverlapDuty;nCells;...
-        nSegs;LearningRadius;minOverlap];
-        
-        inputConfig(:,2) = userConfig;
+        c(2) = user_control(c(2));
+        c(2) = updateConfigPercentages(c(2));
+        c(3).data_size = c(2).columns;
+        hLayerThree.Enable = 'on';
+    
     end
     function cbThree(hObject, evt)
-        [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,...
-        Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,...
-        nSegs,LearningRadius,minOverlap] = user_control(size(send),3);
-        
-    %Create a user config vector to store all 'settings'-related stuff
-        userConfig = [synThreshold;synInc;synDec;nDendrites;minSegOverlap;nCols;desiredLocalActivity;...
-        Neighborhood;inputRadius;boostInc;minActiveDuty;minOverlapDuty;nCells;...
-        nSegs;LearningRadius;minOverlap];
-        
-        inputConfig(:,3) = userConfig;
+        c(3) = user_control(c(3));
+        c(3) = updateConfigPercentages(c(3));
+        c(4).data_size = c(3).columns;
+        hLayerFour.Enable = 'on';
         
     end
     function cbFour(hObject, evt)
-        [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,...
-        Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,...
-        nSegs,LearningRadius,minOverlap] = user_control(size(send),4);
-        
-    %Create a user config vector to store all 'settings'-related stuff
-        userConfig = [synThreshold;synInc;synDec;nDendrites;minSegOverlap;nCols;desiredLocalActivity;...
-        Neighborhood;inputRadius;boostInc;minActiveDuty;minOverlapDuty;nCells;...
-        nSegs;LearningRadius;minOverlap];
-        
-        inputConfig(:,4) = userConfig;
+        c(4) = user_control(c(4));
+        c(4) = updateConfigPercentages(c(4));
+        c(5).data_size = c(4).columns;
+        hLayerFive.Enable = 'on';
     end
     function cbFive(hObject, evt)
-        [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,...
-        Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,...
-        nSegs,LearningRadius,minOverlap] = user_control(size(send),5);
-        
-    %Create a user config vector to store all 'settings'-related stuff
-        userConfig = [synThreshold;synInc;synDec;nDendrites;minSegOverlap;nCols;desiredLocalActivity;...
-        Neighborhood;inputRadius;boostInc;minActiveDuty;minOverlapDuty;nCells;...
-        nSegs;LearningRadius;minOverlap]; 
-        
-        inputConfig(:,5) = userConfig;
+        c(5) = user_control(c(5));
+        c(5) = updateConfigPercentages(c(5));
     end
 
     function cbCancel(hObject,evt)
         hierarchy = nRegions;
-        inputConfig = [];
+        c = [];
         delete(f);
     end
     function cbOkay(hObject,evt)
         delete(f);
-        save config/config.htm inputConfig -ascii;
+        %Save the config updates to the XML file    TODO
     end
 
 waitfor(f);

@@ -33,66 +33,12 @@ function run_htm()
     %the output of each region, as a minimum. 
     
     send = []; %This is the data to-be-sent
-    data_size = 0;
-    htm_time = 0;
-    temporal_memory = false;
-    spatial_pooler = false;
-    TM_delay = 0;   %steps to wait before starting TM
-    reps = 1; %how many repetitions to make
     
-    n.time = 0; %Start timer at 0, go to 1 once it starts
-    columns = [];
-    prediction = [];
-    n.regions = 1;
+   %Create config files
+    region_config = [config, config, config, config, config];
     hierarchy_regions = 1;
-    activeColumns = [];
-    cells = [];
-    output = [];
-    regionConfig.synThreshold = 0;
-    regionConfig.synInc = 0;
-    regionConfig.synDec = 0;
-    n.dendrites = 0;
-    regionConfig.minSegOverlap = 0;
-    n.cols = 0;
-    regionConfig.desiredLocalActivity = 0;
-    n.neighborhood = 0;
-    regionConfig.inputRadius = 0;
-    regionConfig.boostInc = 0;
-    regionConfig.minActiveDuty = 0;
-    regionConfig.minOverlapDuty = 0;
-    n.cells = 0;
-    n.segs = 0;
-    regionConfig.LearningRadius = 0;
-    regionConfig.minOverlap = 0;
-    
-    defaultConfig = [0.2;0.075;-0.05;0.5;10;0.3;5;20;120;0.5;0.1;0.1;3;12;50;2]; %Settings according to computer readings
-    %After data is input, the percentages will need to be updated.
-    defaultConfig = [defaultConfig, defaultConfig, defaultConfig, defaultConfig, defaultConfig];
-    
-    regions = [regionConfig regionConfig regionConfig regionConfig regionConfig]; %five blank region configs
-    allN = [n n n n n]; %Each region has its own n structure
-    
-    if exist('config') ~= 7
-        mkdir config;
-    end
-    
-    if exist('config/config.html') == 2
-        %load up pre-existing settings
-        inputConfig = load('config/config.htm');
-        for j = 1:5
-            [regionConfig, n] = set_config( regionConfig,n,inputConfig(:,j));
-            regions(j) = regionConfig;
-            allN(j) = n;
-        end 
-        currentConfig = inputConfig;
-    else
-        save config/config.htm defaultConfig -ascii;
-        for j = 1:5
-            [regionConfig, n] = set_config( regionConfig,n,defaultConfig(:,j));
-            regions(j) = regionConfig;
-            allN(j) = n;
-        end
-        currentConfig = defaultConfig;
+    for r = 1:numel(region_config)
+        region_config(r) = readXMLConfig(region_config(r), 'config\\config.xml',r);
     end
     
     %Declarations
@@ -112,7 +58,8 @@ function run_htm()
     h.toolBar = subplot(4,4,[1:4]);%This just takes up space
     h.toolBar.Visible = 'off';
     %Now create a text showing the time, which will be updated
-    timeString = ['total time = ' num2str(htm_time) ',   seq length = ' num2str(allN(1).time)];
+    region_config(1).seq_time = 0;
+    timeString = ['total time = ' num2str(region_config(1).htm_time) ',   seq length = ' num2str(region_config(1).seq_time)];
     hTimeText = uicontrol(h.fig, 'Style','text','String',timeString,'Position',[20,600,350,40],'FontSize',20);
     
     %Show the current input
@@ -176,31 +123,30 @@ function run_htm()
     %NEW FILE CALLBACKS
         function cbFNFDr(hObject,evt)
             %New drawing
-            send = generate_input();
+            send = generate_input(region_config(1).data_size);
+            
             hClearMem.Enable = 'on';
             
             send_sz = size(send);
-            send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz(1)) ) );
+            send_img = vec2mat( send(:,1)+1, floor( sqrt(size(send,1)) ) );
             send_img = rot90(send_img);
             h.img = image(send_img,'Parent',h.mainWindow);
             hold on;
-            h.mainWindow.XTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
-            h.mainWindow.YTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
+            h.mainWindow.XTick = (0:floor(sqrt( size(send,1) )) )+0.5;
+            h.mainWindow.YTick = (0:floor(sqrt( size(send,1) )) )+0.5;
             h.mainWindow.XTickLabel = [];
             h.mainWindow.YTickLabel = [];
             h.mainWindow.XGrid = 'on';
             h.mainWindow.YGrid = 'on';
             
             if ~isempty(send)
-                data_size = size(send);
-                data_size = data_size(1);
-                allN(1).dendrites = floor(allN(1).dendrites*data_size);
-                %Update percentage in currentConfig (NOT file)
-                currentConfig(4,:) = currentConfig(4,:)*data_size; %Number of dendrites
-                allN(1).cols = floor(allN(1).cols*data_size);
-                %update percentages in currentConfig (NOT config file)
-                currentConfig(6,:) = currentConfig(6,:)*data_size; %Number of columns
-                hRunItem.Enable = 'off';
+                %Update percentage in configuration
+                if region_config(1).data_size == 0
+                    region_config(1).data_size = send_sz;
+                end
+                region_config(1) = updateConfigPercentages(region_config(1));
+                
+                %run the settings windows
                 cbPTS(hObject,evt);
                 cbPEH(hObject,evt);
             end
@@ -209,8 +155,13 @@ function run_htm()
             function cbFNFDIDF(hObject,evt)
                 %Import data file
                 
-                [dFileName dFileLoc] = uigetfile('*.*');
+                [dFileName dFileLoc] = uigetfile('*.*','Select data file',region_config(1).lastDir); 
                 dataFilePath = [dFileLoc dFileName];
+                input_config(1).lastDir = dataFilePath; %While perhaps I SHOULD write lastDir for all 5 config files, since it is
+                %shared... out of spite for MATLAB not having a 'static'
+                %feature, I will only use the first config file.
+                
+                
                 %Determine what type of file it is
                 %Run the proper function
                 %Acceptable files:
@@ -234,18 +185,25 @@ function run_htm()
                     %   mp3
                     %   xml
 
-                    %For now, this will open text files and store them as a
+                    %If not jpg, this will open text files and store them as a
                     %vector
                     if (dataFilePath(2) ~= 0)
                         send = load(dataFilePath);
-
-                        send_sz = size(send);
-                        send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz(1)) ) );
+                        
+                        send_sz = size(send,1);
+                        if region_config(1).data_size > 0
+                            if send_sz ~= region_config(1).data_size
+                                send = [];
+                                send_sz = 0;
+                                msgbox('Error. The data file selected does not share the same size as previous data. ','warn','Error');
+                            end
+                        end
+                        send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz) ) );
                         send_img = rot90(send_img);
                         h.img = image(send_img,'Parent',h.mainWindow);
                         hold on;
-                        h.mainWindow.XTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
-                        h.mainWindow.YTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
+                        h.mainWindow.XTick = (0:floor(sqrt( send_sz )) )+0.5;
+                        h.mainWindow.YTick = (0:floor(sqrt( send_sz )) )+0.5;
                         h.mainWindow.XTickLabel = [];
                         h.mainWindow.YTickLabel = [];
                         h.mainWindow.XGrid = 'on';
@@ -254,13 +212,9 @@ function run_htm()
                 end
                 if ~isempty(send)
                     hRunItem.Enable = 'off';
-                    data_size = size(send);
-                    data_size = data_size(1);
-                    allN(1).dendrites = floor(allN(1).dendrites*data_size);
-                    allN(1).cols = floor(allN(1).cols*data_size);
-                    %update percentages in currentConfig (NOT config file)
-                    currentConfig(4,:) = currentConfig(4,:)*data_size;
-                    currentConfig(6,:) = currentConfig(6,:)*data_size;
+                    data_size = size(send,1);
+                    region_config(1) = updateConfigPercentages(region_config(1));
+                    
                     cbPTS(hObject,evt);
                     cbPEH(hObject,evt);
                 end
@@ -271,41 +225,58 @@ function run_htm()
                 %Update this to handle spatial pooling on/off
                 if ~isempty(send)
                     hRunItem.Enable = 'off';
-                    data_size = size(send);
-                    data_size = data_size(1);
-                    allN(1).dendrites = floor(allN(1).dendrites*data_size);
-                    allN(1).cols = floor(allN(1).cols*data_size);
+                    if region_config(1).data_size == 0
+                        data_size = size(send,1);
+                    end
                     %update percentages in currentConfig (NOT config file)
-                    currentConfig(4,:) = currentConfig(4,:)*data_size;
-                    currentConfig(6,:) = currentConfig(6,:)*data_size;
+                    region_config(1).data_size = updateConfigPercentages(region_config(1));
                     cbPTS(hObject,evt);
                     cbPEH(hObject,evt);
                 end
             end
     function cbFO(hObject,evt)
         %Open
-        dProjLoc= uigetdir();
+        dProjLoc= uigetdir(region_config(1).lastDir);   %add lastDir to this
         %Open the relevant project data
+                                                                                                                %TODO
+        
     end
     function cbFSM(hObject,evt)
         %Save memory
-        dProjLoc = uigetdir();
+        dProjLoc = uigetdir(region_config(1).lastDir); 
+        
         %create a way to save all the important HTM state data
+                                                                                                                %TODO
+        
         all_out = 0;
         save([dProjLoc, '\out.htm'],'all_out','-ascii');
         save([dProjLoc, '\in.htm'],'send','-ascii');
+        for r = 1:5
+            %update the config XML file. 
+            %Note that this happens every time the hierarchy is changed
+            %right now, and it saves five times over due to lack of access.
+            %A fix is in order, once problems become apparent.
+            
+            %Also, the save function does NOT write to an XML file yet. See
+            %notes.
+            saveXML(region_config(r),region_config(1).configFile,r);
+        end
         
     end
     function cbFC(hObject,evt)
         %Close
         close(); %This is temporary
+        %prompt a "quit without saving?"
+                                                                                                                %TODO
     end
 %EDIT MENU CALLBACKS
     function cbECM(hObject,evt)
         %Clear memory
+                                                                                                                 %TODO
     end
     function cbECPOT(hObject,evt)
         %Chart predictions over time
+                                                                                                                 %TODO
     end
     function cbED(hObject,evt)
         %Debug
@@ -354,106 +325,108 @@ function run_htm()
                     regionid = str2num(val);
                     if regionid > 0 && regionid < 5
                         %display the configuration of the regions with labels
-                        nextline = ['Synapse threshold: ', num2str(currentConfig(1,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Synapse increment: ', num2str(currentConfig(2,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Synapse decrement: ', num2str(currentConfig(3,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Dendrites per column: ', num2str(currentConfig(4,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Number of columns in the region: ', num2str(currentConfig(6,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Desired local activity: ', num2str(currentConfig(7,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Neighborhood size: ', num2str(currentConfig(8,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Input radius: ', num2str(currentConfig(9,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Boost increment: ', num2str(currentConfig(10,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Number of cells per column: ', num2str(currentConfig(13,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Cell learning radius: ', num2str(currentConfig(15,regionid))];
-                        updateDebugger(nextline);
-
-                        nextline = ['Minimum overlap: ', num2str(currentConfig(16,regionid))];
-                        updateDebugger(nextline);
+                                                                                                                        %TODO
+%                         nextline = ['Synapse threshold: ', num2str(currentConfig(1,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Synapse increment: ', num2str(currentConfig(2,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Synapse decrement: ', num2str(currentConfig(3,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Dendrites per column: ', num2str(currentConfig(4,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Number of columns in the region: ', num2str(currentConfig(6,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Desired local activity: ', num2str(currentConfig(7,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Neighborhood size: ', num2str(currentConfig(8,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Input radius: ', num2str(currentConfig(9,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Boost increment: ', num2str(currentConfig(10,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Number of cells per column: ', num2str(currentConfig(13,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Cell learning radius: ', num2str(currentConfig(15,regionid))];
+%                         updateDebugger(nextline);
+% 
+%                         nextline = ['Minimum overlap: ', num2str(currentConfig(16,regionid))];
+%                         updateDebugger(nextline);
                     end
                 else
                     %display the configuration of the regions with labels
-                    nextline = ['Synapse thresholds: ', num2str(currentConfig(1,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Synapse increments: ', num2str(currentConfig(2,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Synapse decrements: ', num2str(currentConfig(3,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Dendrites per column: ', num2str(currentConfig(4,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Number of columns in the region: ', num2str(currentConfig(6,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Desired local activity: ', num2str(currentConfig(7,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Neighborhood size: ', num2str(currentConfig(8,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Input radius: ', num2str(currentConfig(9,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Boost increment: ', num2str(currentConfig(10,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Number of cells per column: ', num2str(currentConfig(13,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Cell learning radius: ', num2str(currentConfig(15,:))];
-                    updateDebugger(nextline);
-
-                    nextline = ['Minimum overlap: ', num2str(currentConfig(16,:))];
-                    updateDebugger(nextline);
+                                                                                                            %TODO
+%                     nextline = ['Synapse thresholds: ', num2str(currentConfig(1,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Synapse increments: ', num2str(currentConfig(2,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Synapse decrements: ', num2str(currentConfig(3,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Dendrites per column: ', num2str(currentConfig(4,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Number of columns in the region: ', num2str(currentConfig(6,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Desired local activity: ', num2str(currentConfig(7,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Neighborhood size: ', num2str(currentConfig(8,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Input radius: ', num2str(currentConfig(9,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Boost increment: ', num2str(currentConfig(10,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Number of cells per column: ', num2str(currentConfig(13,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Cell learning radius: ', num2str(currentConfig(15,:))];
+%                     updateDebugger(nextline);
+% 
+%                     nextline = ['Minimum overlap: ', num2str(currentConfig(16,:))];
+%                     updateDebugger(nextline);
                 end
             elseif strcmp(instruct,'save')
-                dProjLoc = uigetdir();
+                dProjLoc = uigetdir(region_config(1).lastDir);
                 updateDebugger('Saving to file log.txt ...');
                 if exist([dProjLoc,'\log.txt']) > 0
                     fid = fopen([dProjLoc,'\log.txt'],'wt');
@@ -468,8 +441,16 @@ function run_htm()
                 fclose(savefile);
                 updateDebugger('Done.');
                 
+                
+                %add a command: 'pause' for coming out of the algorithm and
+                %seeing the state of things
+                                                                                                    %TODO
+            
+
             elseif exist(instruct) == 1
                 %if this is a variable, print its value
+                %Make this secure
+                                                                                                    %TODO
                 updateDebugger([instruct ' = ']);
                 updateDebugger( eval(instruct) );
             else
@@ -491,68 +472,67 @@ function run_htm()
     end
 %DATA MENU CALLBACKS
     function cbDIDANF(hObject, evt)
-        %Import data file
+        
+        %Import data file as next frame
                 
-            [dFileName dFileLoc] = uigetfile('*.*');
-            dataFilePath = [dFileLoc dFileName];
-            %Determine what type of file it is
-            %Run the proper function
-            %Acceptable files:
-            %   jpg
-            if strcmp(dFileName(find(dFileName == '.'):end),'.jpg')
-                waitbox = waitbar(0,'Formatting image.. (this could take a while)');
-                imData = imread(dataFilePath);
-                send = [send convert_image(imData)];
-                close(waitbox);
-
-                send_sz = size(send);
-                send_img = vec2mat( send(:,1)+1,floor(sqrt(send_sz(1))) );
-                send_img = rot90(send_img);
-                h.img = image(send_img,'Parent',h.mainWindow);
-                hold on;
-            else
-
-                %   png
-                %   txt
-                %   mpg?
-                %   mp3
-                %   xml
-
-                %For now, this will open text files and store them as a
-                %vector
-                if (dataFilePath(2) ~= 0)
-                    send = load(dataFilePath);
-
+            [dFileName dFileLoc] = uigetfile('*.*','Select data file',region_config(1).lastDir);
+                dataFilePath = [dFileLoc dFileName];
+               region_config(1).lastDir = dataFilePath;
+                
+                %Determine what type of file it is
+                %Run the proper function
+                %Acceptable files:
+                %   jpg
+                if strcmp(dFileName(find(dFileName == '.'):end),'.jpg')
+                    waitbox = waitbar(0,'Formatting image.. (this could take a while)');
+                    imData = imread(dataFilePath);
+                    send = [send, convert_image(imData)];
+                    close(waitbox);
+                    
                     send_sz = size(send);
-                    send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz(1)) ) );
+                    send_img = vec2mat( send(:,1)+1,floor(sqrt(send_sz(1))) );
                     send_img = rot90(send_img);
                     h.img = image(send_img,'Parent',h.mainWindow);
                     hold on;
-                    h.mainWindow.XTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
-                    h.mainWindow.YTick = (0:floor(sqrt( send_sz(1) )) )+0.5;
-                    h.mainWindow.XTickLabel = [];
-                    h.mainWindow.YTickLabel = [];
-                    h.mainWindow.XGrid = 'on';
-                    h.mainWindow.YGrid = 'on';
+                else
+                    
+                    %   png
+                    %   txt
+                    %   mpg?
+                    %   mp3
+                    %   bin
+
+                    %If not jpg, this will open text files and store them as a
+                    %vector
+                    if (dataFilePath(2) ~= 0)
+                        send = load(dataFilePath);
+
+                        send_sz = size(send,1);
+                        send_img = vec2mat( send(:,1)+1, floor( sqrt(send_sz) ) );
+                        send_img = rot90(send_img);
+                        h.img = image(send_img,'Parent',h.mainWindow);
+                        hold on;
+                        h.mainWindow.XTick = (0:floor(sqrt( send_sz )) )+0.5;
+                        h.mainWindow.YTick = (0:floor(sqrt( send_sz )) )+0.5;
+                        h.mainWindow.XTickLabel = [];
+                        h.mainWindow.YTickLabel = [];
+                        h.mainWindow.XGrid = 'on';
+                        h.mainWindow.YGrid = 'on';
+                    end
                 end
-            end
-            if ~isempty(send)
-                hRunItem.Enable = 'off';
-                data_size = size(send);
-                data_size = data_size(1);
-                allN(1).dendrites = floor(allN(1).dendrites*data_size);
-                allN(1).cols = floor(allN(1).cols*data_size);
-                %update percentages in currentConfig (NOT config file)
-                currentConfig(4,:) = currentConfig(4,:)*data_size;
-                currentConfig(6,:) = currentConfig(6,:)*data_size;
-                cbPTS(hObject,evt);
-                cbPEH(hObject,evt);
-            end
+                if ~isempty(send)
+                    hRunItem.Enable = 'off';
+                    region_config(1) = updateConfigPercentages(region_config(1));
+                    cbPTS(hObject,evt);
+                    cbPEH(hObject,evt);
+                end
     end
     function cbSC(hObject,evt)
         %Save current data sequence
-        [dFileName dFileLoc] = uiputfile('*.*');
+        [dFileName dFileLoc] = uiputfile('*.*',region_config(1).lastDir); 
         dataFilePath = [dFileLoc dFileName];
+        region_config(1).lastDir = dataFileLoc;
+        
         save(dataFilePath,'send','-ascii');
     end
     function cbDCCDS(hObject,evt)
@@ -565,104 +545,74 @@ function run_htm()
             h.img = image(ones(12),'Parent',h.mainWindow);
             hold on;
             %quickly update the 't=' text
-            timeString = ['total time = ' num2str(htm_time) ',   seq time = 0'];
+            timeString = ['total time = ' num2str(region_config(1).htm_time) ',   seq time = 0'];
             hTimeText.String = timeString;
         end
     end
         
     function cbVD(hObject,evt)
         %View data frames
-        show_input_sequence(allN(1),send);
+        show_input_sequence(region_config(1),send);                                                  %TODO
     end
 %PROPERTIES MENU CALLBACKS
     function cbPEH(hObject,evt)
         %Edit hierarchy
+        
         if isempty(send)
             error = msgbox('Warning: No input data. Deciding on parameters for regions will not be able to set data appropriately.');
             waitfor(error);
-            [hierarchy_regions tempConfig] = hierarchy_ui(hierarchy_regions,send,currentConfig, false);
-            if ~isempty(tempConfig)
-                currentConfig = tempConfig;
-                %update percentages of the config
+            [hierarchy_regions, c] = hierarchy_ui(hierarchy_regions,region_config, false);
+            %The c being returned is ALL FIVE region configuration objects
+            if ~isempty(c)
+                region_config = c;
             end
-            for j = 1:5
-                [regionConfig, n] = set_config( regions(j),n,currentConfig(:,j));
-                regions(j) = regionConfig;
-                allN(j) = n;
-                allN(j).dendrites = floor(allN(j).dendrites*data_size);
-                allN(j).cols = floor(allN(j).cols*data_size);
-            end 
         else
-            if exist('inputConfig') ~= 0
-                [hierarchy_regions tempConfig] = hierarchy_ui(hierarchy_regions,send,inputConfig, true);
-                if ~isempty(tempConfig)
-                    currentConfig = tempConfig;
-                    hRunItem.Enable = 'on';
-                    hFileSaveDataSeq.Enable = 'on';
-                    hDataSaveDataSeq.Enable = 'on';
-                end
-            else
-                [hierarchy_regions tempConfig] = hierarchy_ui(hierarchy_regions,send,defaultConfig, true);
-                if ~isempty(tempConfig)
-                    currentConfig = tempConfig;
-                    hRunItem.Enable = 'on';
-                    hFileSaveDataSeq.Enable = 'on';
-                    hDataSaveDataSeq.Enable = 'on';
-                end
-            end
-            for j = 1:5
-                [regionConfig, n] = set_config( regions(j),n,currentConfig(:,j));
-                if spatial_pooler == false
-                    regions(j) = regionConfig;
-                    allN(j) = n;
-                    if allN(j).cols ~= data_size
-                        if j == 1
-                            error = msgbox('Note: With spatial pooler OFF, the number of columns must match the data size. Appropriate changes will be made.','Warning','warn');
-                            waitfor(error);
-                        end
-                        allN(j).cols = data_size;
-                        currentConfig(6,:) = 1.0;
-                        allN(j).dendrites = 0;
-                    end
-                else
-                    regions(j) = regionConfig;
-                    allN(j) = n;
-                    allN(j).dendrites = floor(allN(j).dendrites*data_size);
-                    allN(j).cols = floor(allN(j).cols*data_size);
-                end
-            end 
+            [hierarchy_regions, c] = hierarchy_ui(hierarchy_regions,region_config, true);
+            region_config = c;
         end
+        
+        for r = 1:5
+            %update the config XML file. 
+            %Note that this happens every time the hierarchy is changed
+            %right now, and it saves five times over due to lack of access.
+            %A fix is in order, once problems become apparent.
+            saveXML(region_config(r),region_config(1).configFile,r);
+        end
+        
     end
     function cbPF(hObject,evt)
         %Files...
-        [dFileName, dFileLoc] = uiputfile('config.htm');
+        [dFileName, dFileLoc] = uiputfile('config.xml','Config file',region_config(1).configFile);%Change this to configFile          TODO
         dFilePath = [dFileLoc, dFileName];
-        save(dFilePath,'currentConfig','-ascii');
-        
+        %update configFile 
+        region_config(1).configFile = dFilePath; %Save the ENTIRE path
     end
 
     function cbPTS(hObject,evt)
         %Training settings
-        [temporal_memory,spatial_pooler,TM_delay, reps] = train_settings(temporal_memory,spatial_pooler,TM_delay, reps);
+        region_config(1) = train_settings(region_config(1));
     end
 %RUN MENU CALLBACKS
     function cbRR(hObject,evt)
         %Run
-        id = 1;
-        %show a wait screen
-        [columns, activeColumns, cells, prediction, output] = region(send,currentConfig(:,id),id,columns,cells,hierarchy_regions,currentConfig( :,(id+1):hierarchy_regions ),temporal_memory,spatial_pooler,TM_delay,update_dbg,reps);
-        hColStates.Enable = 'on';
-        hCellStates.Enable = 'on';
-        hRegionOut.Enable = 'on';
-
-        %update time information
-        seqTimeElapsed = size(send,2);
-        allN(1).time = seqTimeElapsed;
-        htm_time = htm_time+allN(1).time*reps;
-
-        %quickly update the 't=' text
-        timeString = ['total time = ' num2str(htm_time) ',   seq time = ' num2str(allN(1).time)];
-        hTimeText.String = timeString;
+        %Another method changed because of config update. Work on this
+        %after everything else is right.
+        
+%         id = 1;
+%         %show a wait screen
+%         [columns, activeColumns, cells, prediction, output] = region(send,currentConfig(:,id),id,columns,cells,hierarchy_regions,currentConfig( :,(id+1):hierarchy_regions ),temporal_memory,spatial_pooler,TM_delay,update_dbg,reps);
+%         hColStates.Enable = 'on';
+%         hCellStates.Enable = 'on';
+%         hRegionOut.Enable = 'on';
+% 
+%         %update time information
+%         seqTimeElapsed = size(send,2);
+%         sz(1).time = seqTimeElapsed;
+%         htm_time = htm_time+sz(1).time*reps;
+% 
+%         %quickly update the 't=' text
+%         timeString = ['total time = ' num2str(htm_time) ',   seq time = ' num2str(sz(1).time)];
+%         hTimeText.String = timeString;
     end
 %VIEW MENU CALLBACKS
     function cbVCoSc(hObject,evt)
@@ -672,7 +622,7 @@ function run_htm()
     function cbVCoSt(hObject,evt)
         %Column states
         if spatial_pooler
-            column_visualizer(send, columns, allN(1).cols,htm_time,allN(1).time,reps); %TODO Make these more clear about what they are for the user
+            %column_visualizer(send, columns, sz(1).cols,htm_time,sz(1).time,reps); %TODO Make these more clear about what they are for the user; also update config stuff
         end
     end
     function cbVCeSt(hObject,evt)
@@ -680,7 +630,9 @@ function run_htm()
     end
     function cbVRO(hObject,evt)
         %Region output
-        show_active_columns(allN(1),activeColumns,prediction,allN(1).time,htm_time);
+        %Update for new config
+                                                                                                                                    %TODO
+        %show_active_columns(sz(1),activeColumns,prediction,sz(1).time,htm_time);
     end
 %HELP MENU CALLBACKS
     function cbHHTMWP(hObject,evt)

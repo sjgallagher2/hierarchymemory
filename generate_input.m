@@ -4,7 +4,7 @@
 %
 %This UI module prompts the user for drawing details
 
-function in = generate_input()
+function in = generate_input(dataSz)
     f = figure('Visible','off','Position',[500,300,280,180]);
     
     hInputSzEdit = uicontrol('style','edit','String','12','position',[180,100,30,20]);
@@ -27,13 +27,17 @@ function in = generate_input()
         timeSz = str2num(get(hTimeSzEdit,'String'));
         rep = str2num(get(hSeqNum,'String'));
         close();
-        in = blackandwhiteimage(inputSz,timeSz);
-        
-        if rep > 1
-            s = in;
-            for i = 1:rep-1
-                in = [s in];
+        if (inputSz^2) == dataSz
+            in = blackandwhiteimage(inputSz,timeSz);
+            if rep > 1
+                s = in;
+                for i = 1:rep-1
+                    in = [s in];
+                end
             end
+        else
+            msgbox('Error: Data size has to stay consistent in order for the columns to be properly assigned.','warn','Error');
+            in = [];
         end
         
     end

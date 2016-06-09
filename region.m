@@ -70,7 +70,7 @@ function [columns,activeColumns,cells,prediction,output] = region(dInput,inputCo
     n.cells = nCells*n.cols;
     n.segments = nSegs;
     n.neighborhood = Neighborhood;
-    n.hoods = ceil(n.cols/n.neighborhood);
+    hoods = ceil(n.cols/n.neighborhood);
     
     if isempty(cells)
         cell.col = 0;     %cell column

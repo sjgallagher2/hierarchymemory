@@ -9,16 +9,20 @@
 %   -Temporal memory delay (edit/slider) and text
 %   -Apply (pushbutton)
 %   -Cancel (pushbutton)
-%
-%REMOVE, ADD TO TAB IN OTHER SETTINGS
 
-function [temporal_memory, spatial_pooler, tmdelay, rep] = train_settings(tm,sp,tmd,reps)
+
+function c = train_settings(c)
     f = figure('Visible','off','Position',[500,300,280,200]);
     
-    hTM = uicontrol('style','checkbox','position',[30,170,15,15],'value',tm,'Callback',@tmCB);
-    hSP = uicontrol('style','checkbox','position',[30,130,15,15],'value',sp,'Callback',@tmCB);
-    hTMdelay = uicontrol('style','edit','position',[24,95,30,20],'String',num2str(tmd));
-    hRep = uicontrol('style','edit','position',[24,60,30,20],'String',num2str(reps));
+    tm_init = c.temporal_memory;
+    sp_init = c.spatial_pooler;
+    tmdelay_init = c.TM_delay;
+    reps_init = c.reps;
+    
+    hTM = uicontrol('style','checkbox','position',[30,170,15,15],'value',c.temporal_memory,'Callback',@tmCB);
+    hSP = uicontrol('style','checkbox','position',[30,130,15,15],'value',c.spatial_pooler,'Callback',@tmCB);
+    hTMdelay = uicontrol('style','edit','position',[24,95,30,20],'String',num2str(c.TM_delay));
+    hRep = uicontrol('style','edit','position',[24,60,30,20],'String',num2str(c.reps));
     
     hTMtext = uicontrol('style','text','position',[60,170,150,20],'String','Run temporal memory');
     hSPtext = uicontrol('style','text','position',[60,130,150,20],'String','Run spatial pooler');
@@ -28,7 +32,7 @@ function [temporal_memory, spatial_pooler, tmdelay, rep] = train_settings(tm,sp,
     hOkayButton = uicontrol('style','pushbutton','String','Okay','position',[90,10,40,20],'Callback',@okayCB);
     hCancelButton = uicontrol('style','pushbutton','String','Cancel','position',[140,10,40,20],'Callback',@cancelCB);
     
-    if ~tm
+    if ~c.temporal_memory
         hTMdelay.Enable = 'off';
     end
     
@@ -37,24 +41,26 @@ function [temporal_memory, spatial_pooler, tmdelay, rep] = train_settings(tm,sp,
     
     function okayCB(hObject,evt)
         if get(hTM,'value') == 1
-            temporal_memory = true;
+            c.temporal_memory = true;
         else
-            temporal_memory = false;
+            c.temporal_memory = false;
         end
         if get(hSP,'value') == 1
-            spatial_pooler = true;
+            c.spatial_pooler = true;
         else
-            spatial_pooler = false;
+            c.spatial_pooler = false;
         end
-        tmdelay = floor( str2num(get(hTMdelay,'string')) );
-        rep = floor( str2num(get(hRep,'string')) );
+        c.TM_delay = floor( str2num(get(hTMdelay,'string')) );
+        c.reps = floor( str2num(get(hRep,'string')) );
         
         close();
     end
     function cancelCB(hObject,evt)
-        temporal_memory = true;
-        spatial_pooler = true;
-        tmdelay = 0;
+        c.temporal_memory = tm_init;
+        c.spatial_pooler= sp_init;
+        c.TM_delay = tmdelay_init;
+        c.reps = reps_init;
+        
         close();
     end
     function tmCB(hObject,evt)
