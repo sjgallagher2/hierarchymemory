@@ -90,12 +90,7 @@ classdef config
             obj.LearningRadius = 200;
             obj.minOverlap = 2;
             obj.data_size = 0;
-            obj.htm_time = 0;
-            obj.seq_time = 0;
-            obj.reps = 1;
-            obj.TM_delay = 0;
-            obj.spatial_pooler = false;
-            obj.temporal_memory = false;
+            obj.
         end
         
         function obj = updateConfigPercentages(obj)

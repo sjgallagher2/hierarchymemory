@@ -5,14 +5,14 @@
 %Returns the cell in a column with the best segment, the fewest segments,
 %or in 1-2-3 order if none have segments
 
-function [bestcell, newSeg] = getBestMatchingCell(column, cells, n, t)
+function [bestcell, newSeg] = getBestMatchingCell(column, cells, c, t)
     bestcell = -1;
     bestcellsegs = -1;
     bestcell_segment = 0;
     newSeg = false;
     %fprintf('Finding best matching cell for column %d\n',column)
-    for i = 1:n.cellpercol
-        mycell = getcell_loc(i,column,n);
+    for i = 1:c.cellsPerCol
+        mycell = getcell_loc(i,column,c);
         mycell = cells(mycell);
 %        fprintf('Cell %d has %d segment(s).\n',mycell.layer,numel(mycell.segs) )
         %Find the cell with the best segment
@@ -39,8 +39,8 @@ function [bestcell, newSeg] = getBestMatchingCell(column, cells, n, t)
     %if you haven't found one, choose one with the fewest segments
     if bestcell == -1
         newSeg = true;
-        for i = 1:n.cellpercol
-            mycell = getcell_loc(i,column,n);
+        for i = 1:c.cellsPerCol
+            mycell = getcell_loc(i,column,c);
             mycell = cells(mycell);
             if bestcellsegs > 0
                 if numel(mycell.segs) < bestcellsegs

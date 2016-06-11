@@ -13,7 +13,7 @@
 
 function [columns,activeColumns,cells,prediction,output] = region(data,id,columns,cells,nRegions,c, dbg)
     %% To begin, get our data straight.
-    c(id).seq_time = size(data,2); %the time this is going to take
+    c.seq_time = length(data);
     
     segment.locations = [];
     segment.perm = [];
@@ -81,7 +81,7 @@ function [columns,activeColumns,cells,prediction,output] = region(data,id,column
             close(waitbox);
         end
     else
-        for iter = 1:c(id).columns
+        for iter = 1:c.columns
             columns = [columns col];
         end
     end
@@ -110,28 +110,37 @@ function [columns,activeColumns,cells,prediction,output] = region(data,id,column
     for R = 1:c(id).reps
         for t = 1:c(id).seq_time
             if id == 1
-                waitbar((t+c(id).seq_time*(R-1))/(c(id).seq_time*c(id).reps));
+                waitbar((t+c(id).seq_time*R-1)/(c(id).seq_time*c(id).reps));
             end
             if c(id).TM_delay > 0
-                %If there is a delay on the temporal memory, run it without
-                %the TM
-                c(id).temporal_memory = false;
                 [columns,cells,tempPrediction,output,tempActiveColumns] = ...
-                    update_region(columns, cells, segment,data(:,t),c(id),t,hoods,dbg); 
+                    update_region(columns, cells, [],data(:,t),c(id),t,dbg); 
                 
                 activeColumns(1:nActive,t) = tempActiveColumns;
                 prediction(1:c(id).columns,t) = tempPrediction;
+                %send the information on to the next region if it exists
+    %             if numel(nextConfig(1,:)) > 1
+    %                 %output, inputConfig, id, columns, cells, nRegions, nextConfig,
+    %                 %temporal, spatial, delay
+    %                 [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,nextConfig(:,(id+1):nRegions),spatial_pooler,temporal_memory, TM_delay);
+    %             elseif numel(nextConfig(1,:)) == 1
+    %                 [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,[],spatial_pooler,temporal_memory,TM_delay);
+    %             end
                 c(id).TM_delay = c(id).TM_delay-1;
-                if c(id).TM_delay == 0
-                    c(id).temporal_memory = true;
-                end
             else
-                %Otherwise run like normal
                 [columns,cells,tempPrediction,nActive,output,tempActiveColumns] = ...
-                    update_region(columns, cells, segment,data(:,t),c(id),t,hoods,dbg); 
-                %update active columns and the prediction
+                    update_region(columns, cells, [],data(:,t),c(id),t,dbg); 
+                
                 activeColumns(1:nActive,t) = tempActiveColumns;
                 prediction(1:c(id).columns,t) = tempPrediction;
+                %send the information on to the next region if it exists
+%                 if numel(nextConfig(1,:)) > 1
+%                     [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,nextConfig(:,(id+1):nRegions),spatial_pooler,temporal_memory,TM_delay,dbg);
+%                 elseif numel(nextConfig(1,:)) == 1
+%                     [columns2, activeColumns2, cells2, output2] = region(output,nextConfig(:,1),id+1,[],[],nRegions,[],spatial_pooler,temporal_memory,TM_delay,dbg);
+%                 end
+
+                c(id).TM_delay = c(id).TM_delay-1;
             end
         end
     end

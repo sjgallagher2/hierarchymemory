@@ -7,7 +7,7 @@
 %so it can be active or inactive, depending on the overlap of the segment,
 %but this will be implemented elsewhere. 
 
-function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius, syn_thresh, n, cell_col, c, cells, t)
+function [segLocations, segPerms, segCons] = make_distal_segment(c, cell_col, cells, ncells,t)
     %learning_radius is the max distance a cell can connect to, in terms of
     %columns. 
     %dendrite_ratio is the ratio of the number of columns to the number of
@@ -21,16 +21,16 @@ function [segLocations, segPerms, segCons] = make_distal_segment(learning_radius
     rng('shuffle');
     
     %Set locations bounds
-    maxLoc = min(cell_col+learning_radius, n.cols);
-    minLoc = max(cell_col-learning_radius, 1);
+    maxLoc = min(cell_col+c.LearningRadius, c.columns);
+    minLoc = max(cell_col-c.LearningRadius, 1);
     
     %the segment has locations, synapses perm, and synapse connection (0 or 1)
     segLocations = [];
     segPerms = [];
     segCons = [];
     
-    if n.dendrites <= (maxLoc-minLoc)*n.cells
-        for i = 1:n.cells
+    if c.nDendrites <= (maxLoc-minLoc)*ncells
+        for i = 1:ncells
             if cells(i).active(t) == 1
                 %Add cells that were previously active to the segment as long as they're
                 %within the location bounds

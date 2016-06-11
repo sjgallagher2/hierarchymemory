@@ -10,21 +10,20 @@
 
 %% TODO: Complete debug implementation
 
-function [columns, cells, prediction,n, output,activeColumns] = update_region(columns,cells,segments,data,n,synThreshold,...
-    synInc,synDec,minSegOverlap,desiredLocalActivity,boostInc, minActiveDuty, ...
-    minOverlapDuty, minOverlap, LearningRadius,segment,t,queue,temporal_memory,spatial_pooler,dbg)
-
+function [columns, cells, prediction,nActive, output,activeColumns] = update_region(columns,cells,segment,data,c,t,hoods,dbg)
+    
     dbg(['Time = ',num2str(t)]);
-    if spatial_pooler == true
+    
+    if c.spatial_pooler == true
         dbg('Starting spatial pooler...');
         %For each timestep, find overlaps for the columns and reset
         %activity and sums
         dbg('Calculating overlaps...');
-        for c = 1:n.cols
-            columns(c).active = 0;
-            columns(c).overlap = compute_overlap(data,columns(c),minOverlap);
-            if columns(c).overlap > 0
-                columns(c).overlapSum = columns(c).overlapSum + 1; %update rolling sum
+        for n = 1:c.columns
+            columns(n).active = 0;
+            columns(n).overlap = compute_overlap(data,columns(n),c.minOverlap);
+            if columns(n).overlap > 0
+                columns(n).overlapSum = columns(n).overlapSum + 1; %update rolling sum
             end
         end
 
@@ -40,22 +39,22 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %a bad thing, as long as a column is not selected to 'win' more
         %than once.
         dbg('Selecting active columns...');
-        for iter = 0:n.hoods-1
-            start = n.neighborhood*(iter)+1;
-            stop = min(start+(n.neighborhood-1),n.cols); %make sure it doesn't go over the max ncols
+        for iter = 0:hoods-1
+            start = c.Neighborhood*(iter)+1;
+            stop = min(start+(c.Neighborhood-1),c.columns); %make sure it doesn't go over the max ncols
             o = [ columns(start:stop).overlap ];
 
-            w = inhibit_cols(o,desiredLocalActivity);
+            w = inhibit_cols(o,c.desiredLocalActivity);
             if w == -1
                 tempA = -1;
             else
                 tempA = transpose(w+start-1);
             end
 
-            for c = 1:n.cols
-                if(any( c == tempA ))
-                    columns(c).active = 1;
-                    columns(c).activeSum = columns(c).activeSum+1;%update rolling sum
+            for n = 1:c.columns
+                if(any( n == tempA ))
+                    columns(n).active = 1;
+                    columns(n).activeSum = columns(n).activeSum+1;%update rolling sum
                 end
             end
         end
@@ -64,9 +63,9 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %point? What change in the total number of active columns selected
         %will we see?
         %activeColumns2 = 0;
-        %for colCenter = 1:n.cols
+        %for colCenter = 1:c.columns
         %    start = max(colCenter - Neighborhood/2, 1);
-        %    stop = min(colCenter + Neighborhood/2, n.cols);
+        %    stop = min(colCenter + Neighborhood/2, c.columns);
         %    n = columnOverlaps(t,start:stop);
         %    activeColumns2 = [inhibit_cols(n,desiredLocalActivity)+start, activeColumns2];
         %end
@@ -79,66 +78,65 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %based on whether or not it is, for every position in the
         %column c
         dbg('Updating synapses...');
-        for c = 1:n.cols
-            if columns(c).active
-                for i = 1:n.dendrites
-                    if columns(c).synCon(i) == 1
-                        if data(columns(c).locations(i)) == 1
+        for n = 1:c.columns
+            if columns(n).active
+                for i = 1:c.nDendrites
+                    if columns(n).synCon(i) == 1
+                        if data(columns(n).locations(i)) == 1
                             %There were assignment issues here, replacing
                             %synCon
-                            [columns(c).perm(i) columns(c).synCon(i)] = update_s(columns(c).perm(i),columns(c).synCon(i), synThreshold,synInc);
+                            [columns(n).perm(i) columns(n).synCon(i)] = update_s(columns(n).perm(i),columns(n).synCon(i), c.synThreshold,c.synInc);
                         else
-                            [columns(c).perm(i) columns(c).synCon(i)] = update_s(columns(c).perm(i),columns(c).synCon(i), synThreshold,synDec);
+                            [columns(n).perm(i) columns(n).synCon(i)] = update_s(columns(n).perm(i),columns(n).synCon(i), c.synThreshold,c.synDec);
                         end
                     end
                 end
             end
             %Update the minimum active duty cycle to meet before being
             %boosted. 1% of the max active duty cycle in the neighborhood
-            minActiveDuty = 0.01*max( [columns( max(1,(c-n.neighborhood/2)):min(n.cols,(c+n.neighborhood/2)) ).actDuty] );
+            minActiveDuty = 0.01*max( [columns( max(1,(n-c.Neighborhood/2)):min(c.columns,(n+c.Neighborhood/2)) ).actDuty] );
 
             %update the duty cycles for activity and overlaps-above-minimum
-            columns(c).actDuty = columns(c).activeSum / t;
-            columns(c).oDuty = columns(c).overlapSum / t;
+            columns(n).actDuty = columns(n).activeSum / t;
+            columns(n).oDuty = columns(n).overlapSum / t;
 
-            if columns(c).actDuty < minActiveDuty
-                columns(c).boost = columns(c).boost + boostInc;
+            if columns(n).actDuty < c.minActiveDuty
+                columns(n).boost = columns(n).boost + c.boostInc;
             end
 
-            if columns(c).oDuty < minOverlapDuty
+            if columns(n).oDuty < c.minOverlapDuty
                 %increase all synapse permanences by 0.1*synapse threshold
-                for i = 1:n.dendrites
-                    columns(c).perm(i) = columns(c).perm(i)+0.1*synThreshold;
+                for i = 1:c.nDendrites
+                    columns(n).perm(i) = columns(n).perm(i)+0.1*c.synThreshold;
                 end
             end
         end
-        w = find_active_columns(columns,n.cols);
+        w = find_active_columns(columns,c.columns);
         nActive = size(w);
         nActive = nActive(2);
         if ~(isempty(w))
             activeColumns(1:nActive,1) = w;
         end
-        n.active = nActive;
         dbg('Active columns: ');
         dbg(activeColumns(:,1));
         dbg('Done.');
     else
         %If NO spatial pooler
         dbg('Spatial pooler is OFF, skipping...');
-        n.active = 0;
+        nActive = 0;
         activeColumns = [];
-        for i = 1:n.data
+        for i = 1:c.data_size
             if data(i) == 1
                 activeColumns = [activeColumns, i];
                 columns(i).active = true;
-                n.active = n.active + 1;
+                nActive = nActive + 1;
             else
                 columns(i).active = false;
             end
         end
         activeColumns = activeColumns';
         dbg('Active columns: ');
-        for j = 1:n.active
+        for j = 1:nActive
             dbg(num2str(activeColumns(j)));
         end
         dbg('Done.');
@@ -153,11 +151,12 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
     
     %Finally, update synapses
     
-    if temporal_memory == true
+    if c.temporal_memory == true
         dbg('Starting temporal memory...');
-        for i = 1:n.cols
-            for j = 1:n.cellpercol
-                c_loc = getcell_loc(j,i,n);
+        queue = [];
+        for i = 1:c.columns
+            for j = 1:c.cellsPerCol
+                c_loc = getcell_loc(j,i,c);
                 mycell = cells(c_loc);
                 mycell.active(t) = 0;
                 mycell.state(t) = 0;
@@ -165,17 +164,18 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
             end
         end
         dbg('Selecting active cells...');
-        for i = 1:n.cols %for ALL columns, active and inactive
+        for i = 1:c.columns %for ALL columns, active and inactive
             celloutput = [];
+            ncells = c.cellsPerCol*c.columns;
             columns(i).burst = false;
             
             if isempty( find(activeColumns == i) )
                 %% Inactive column process
                 %Just tie up loose ends, update cells
                 columns(i).learning_cell = -1;
-                for j = 1:n.cellpercol
+                for j = 1:c.cellsPerCol
                     %for all cells in the inactive column
-                    loc = getcell_loc(j,i,n); %j is the cell layer, i is the cell column
+                    loc = getcell_loc(j,i,c); %j is the cell layer, i is the cell column
                     mycell = cells( loc );
                     mycell.state(t) = 0; %the cell must be inactive
                     mycell.active(t) = 0;
@@ -196,8 +196,8 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                 %Select a learning cell
                 
                 columns(i).active_cell = -1;
-                for j = 1:n.cellpercol
-                    loc = getcell_loc(j,i,n);
+                for j = 1:c.cellsPerCol
+                    loc = getcell_loc(j,i,c);
                     mycell = cells( loc );
                     if t > 1
                         if mycell.state(t-1) == 2 %if cell was predicting, and is now in an active column
@@ -229,8 +229,8 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                 if columns(i).active_cell == -1
                     %burst
                     dbg(['Column ',num2str(i),' is bursting.']);
-                    for j = 1:n.cellpercol
-                        loc = getcell_loc(j,i,n);
+                    for j = 1:c.cellsPerCol
+                        loc = getcell_loc(j,i,c);
                         mycell = cells( loc );
                         mycell.state(t) = 1;
                         mycell.active(t) = 1;
@@ -243,14 +243,14 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
             end
         end
             
-        for i = 1:n.cols
+        for i = 1:c.columns
             if ~isempty( find(activeColumns == i) )
                 if t > 1
                     if columns(i).learning_cell == -1
                         %select most active cell, or one that has the fewest
                         %segments
-                        [columns(i).learning_cell, fewestSegs] = getBestMatchingCell(i,cells,n,t);
-                        loc = getcell_loc(columns(i).learning_cell, i, n);
+                        [columns(i).learning_cell, fewestSegs] = getBestMatchingCell(i,cells,c,t); 
+                        loc = getcell_loc(columns(i).learning_cell, i, c);
                         mycell = cells( loc );
                         dbg(['Best cell is cell ',num2str(mycell.layer),' for column ',num2str(mycell.col),'. It is the learning cell.']);
                         mycell.mknewseg = fewestSegs; %fewestSegs is a boolean indicating whether or not 
@@ -258,7 +258,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                         % number of segments if no cell had a segment that
                         % matched
                         
-                        if numel(mycell.segs) == n.segments
+                        if numel(mycell.segs) == c.maxSegs
                             mycell.mknewseg = false; %Make sure the cell can only add as many segments as allowed
                         end
 
@@ -277,7 +277,9 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
                             mycell.segs( mycell.nseg ).index = mycell.nseg;
                             %give that cell a segment with the active cells from
                             %the previous timestep.
-                            [mycell.segs( mycell.nseg ).locations mycell.segs( mycell.nseg ).perm mycell.segs( mycell.nseg ).synCon] = make_distal_segment(LearningRadius,synThreshold,n,i,columns(i).learning_cell, cells, t - mycell.nseg);
+                            [mycell.segs( mycell.nseg ).locations mycell.segs( mycell.nseg ).perm mycell.segs( mycell.nseg ).synCon]...
+                                = make_distal_segment(c,i,cells, ncells,t - mycell.nseg);
+                            
                             mycell.mknewseg = false;
                             
                             %A new segment will reach back more time steps
@@ -309,7 +311,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         
         %Check cells segments, set active segment
         dbg('Finding predictive cells...');
-        for i = 1:n.cells
+        for i = 1:ncells
             activeSeg = getActiveSeg(cells(i), cells,t);
             if activeSeg > 0
                 cells(i).segs(activeSeg).active = 1;
@@ -343,15 +345,15 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         if t > 1
             dbg('Updating synapses...');
             if ~( isempty(queue) )
-                for i = 1:n.cells
+                for i = 1:ncells
                     if cells(i).learn(t) == true
                         %update this location in the queue
                         if numel(queue(1).synCon) > 0
                             for j = 1:numel(queue(1).synCon)
                                 if cells(queue(1).locations(j)).active(t-queue(1).index) == true
-                                    [queue(1).perm(j), queue(1).synCon(j)] = update_s( queue(1).perm(j), queue(1).synCon(j), synThreshold, synInc );
+                                    [queue(1).perm(j), queue(1).synCon(j)] = update_s( queue(1).perm(j), queue(1).synCon(j), c.synThreshold, c.synInc );
                                 else
-                                    [queue(1).perm(j), queue(1).synCon(j)] = update_s( queue(1).perm(j), queue(1).synCon(j), synThreshold, synDec );
+                                    [queue(1).perm(j), queue(1).synCon(j)] = update_s( queue(1).perm(j), queue(1).synCon(j), c.synThreshold, c.synDec );
                                 end
                             end
                            %adapt the old segment
@@ -379,10 +381,10 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
     end
     %% Create output
     dbg('Creating output...');
-    if n.cols > 0   %If columns were created
+    if c.columns > 0   %If columns were created
         %Make output, make sure to OR with the cells predicting
         output = [];
-        for i = 1:n.cols
+        for i = 1:c.columns
             if columns(i).active == true
                 output = [output 1];
             else
@@ -393,14 +395,14 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         prediction_loc = [];
         prediction = [];
         
-        for i = 1:n.cells
-            if temporal_memory
+        for i = 1:c.columns*c.cellsPerCol
+            if c.temporal_memory
                 if cells(i).state(t) == 2 %if the cell is predicting
                         prediction_loc = [prediction_loc,cells(i).col];
                 end
             end
         end
-        for i = 1:n.cols
+        for i = 1:c.columns
             if any(prediction_loc == i) == 1
                 prediction(i) = 1;
             else
@@ -411,7 +413,7 @@ function [columns, cells, prediction,n, output,activeColumns] = update_region(co
         %if there are no columns, the output is a -1
         output = -1;
     end
-    segments = [];
+    segment = [];
     dbg('Time step complete.');
     dbg('');
 end

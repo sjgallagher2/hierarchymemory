@@ -24,8 +24,8 @@
 		<Neighborhood>20</Neighborhood>
 		<inputRadius>100</inputRadius>
 		<boostInc>0.5</boostInc>
-		<minActiveDuty>0.1</minActiveDuty>
-		<minOverlapDuty>0.1</minOverlapDuty>
+		<minActiveDuty>0.01</minActiveDuty>
+		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
 		<LearningRadius>200</LearningRadius>
 		<minOverlap>2</minOverlap>

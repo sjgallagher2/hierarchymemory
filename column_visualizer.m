@@ -6,13 +6,13 @@
 %highlighted in yellow, the active connected synapses in red, and inactive
 %connected synapses in grey. Prediction will be shown in green.
 
-function column_visualizer(input, columns, nCols, htm_time,seq_time)
+function column_visualizer(input, columns, config)
     %% Define a struct to hold data easily
     columnControl.c = 1;
-    columnControl.n = nCols;
+    columnControl.n = config.columns;
     columnControl.in = input;
-    columnControl.t = seq_time;
-    columnControl.htmt = htm_time;
+    columnControl.t = config.seq_time;
+    columnControl.htmt = config.htm_time;
     columnControl.d = columns;
     columnControl.title = ['t = ', num2str(columnControl.htmt-columnControl.t+1), ',  c = ', num2str(columnControl.c)];
     
@@ -40,7 +40,7 @@ function column_visualizer(input, columns, nCols, htm_time,seq_time)
     
 %% Create an image matrix from the data
  function v = create_visual(visualVec, testColumn, input, time)
-    testColumnSize = numel(testColumn.locations);2
+    testColumnSize = numel(testColumn.locations);
     data_size = size(input);
     visualVec(testColumn.center) = 4;
     

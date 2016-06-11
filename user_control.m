@@ -148,10 +148,12 @@ function c = user_control(c)
     %If spatial pooling is off, disable these parameters
     if c.spatial_pooler == false
         nCols_slidehandle.Enable = 'off';
+        nCols_slidehandle.String = '100';
         boostInc_slidehandle.Enable = 'off';
         minActiveDuty_slidehandle.Enable = 'off';
         minOverlapDuty_slidehandle.Enable = 'off';
         handlecolcurrentvalue.Enable = 'off';
+        handlecolcurrentvalue.String = '100';
         handleboostinccurrentvalue.Enable = 'off';
         handleminactivecurrentvalue.Enable = 'off';
         handleminoverlapcurrentvalue.Enable = 'off';

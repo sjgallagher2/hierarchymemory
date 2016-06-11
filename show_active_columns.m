@@ -5,16 +5,16 @@
 %This module visualizes the active columns over time, using the left and
 %right arrow buttons for control. Input active_columns is a column vector, over time (rows).
 
-function show_active_columns(n,active_columns,pred,tInitial,htm_time)
+function show_active_columns(c,active_columns,pred,t_initial)
     
     myMap = [[0,0,0];[1,1,0];[0,1,0];[0,0,1]];
-    hActive.n = n.cols;
+    hActive.n = c.columns;
     hActive.a = active_columns;
     hActive.pr = pred;
-    hActive.t = tInitial; %Start the time at tInitial
-    hActive.htmt = htm_time;
-    hActive.tMax = n.time;
-    hActive.delT = hActive.tMax - tInitial;
+    hActive.t = t_initial; %Start the time at tInitial
+    hActive.htmt = c.htm_time;
+    hActive.tMax = c.seq_time;
+    hActive.delT = hActive.tMax - t_initial;
     hActive.title = ['Column array at t = ' num2str(hActive.htmt-hActive.tMax+hActive.t)];
 
     %% Create the image

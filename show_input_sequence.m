@@ -5,7 +5,7 @@
 %This module visualizes the active columns over time, using the left and
 %right arrow buttons for control. Input active_columns is a column vector, over time (rows).
 
-function show_input_sequence(n,input_data)
+function show_input_sequence(input_data)
     if numel(input_data) > 0
         active_input = zeros(size(input_data,1),size(input_data,2));
         for j = 1:size(input_data,2)
