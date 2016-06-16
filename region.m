@@ -11,9 +11,17 @@
 %and the n structure (number of columns, cells, etc), the columns
 %structure, and the cells structure
 
-function [columns,activeColumns,cells,prediction,output] = region(data,id,columns,cells,nRegions,c, dbg)
+function [columns,activeColumns,cells,prediction,output,columns2,cells2,prediction2,activecolumns2,output2] = region(data,id,columns,cells,nRegions,c, dbg)
     %% To begin, get our data straight.
     c(id).seq_time = size(data,2); %the time this is going to take
+    
+    if id == 1
+        columns2 = [];
+        cells2 = [];
+        prediction2 = [];
+        activecolumns2 = [];
+        output2 = [];
+    end
     
     segment.locations = [];
     segment.perm = [];
@@ -27,22 +35,20 @@ function [columns,activeColumns,cells,prediction,output] = region(data,id,column
     queue = []; %segment queue
     %The queue is FIFO
     
-    if isempty(columns)
-        col.center = 0;
-        col.perm = [];
-        col.synCon = [];
-        col.overlap = 0;
-        col.overlapSum = 0; %used for rolling avg
-        col.active = 0;
-        col.activeSum = 0; %used for rolling avg
-        col.locations = [];
-        col.boost = 1;
-        col.actDuty = 1.0;
-        col.oDuty = 1.0;
-        col.burst = false;
-        col.learning_cell = -1;
-        col.active_cell = -1;
-    end
+    col.center = 0;
+    col.perm = [];
+    col.synCon = [];
+    col.overlap = 0;
+    col.overlapSum = 0; %used for rolling avg
+    col.active = 0;
+    col.activeSum = 0; %used for rolling avg
+    col.locations = [];
+    col.boost = 1;
+    col.actDuty = 1.0;
+    col.oDuty = 1.0;
+    col.burst = false;
+    col.learning_cell = -1;
+    col.active_cell = -1;
     
     hoods = ceil(c(id).columns/c(id).Neighborhood);
     
@@ -74,15 +80,17 @@ function [columns,activeColumns,cells,prediction,output] = region(data,id,column
                 %100*(1/30), and taking the floor.
 
                 col.center = floor(c(id).data_size*(iter/c(id).columns));
-                [col.locations col.perm col.synCon] = make_proximal_segment(c(id), col.center); %TODO
+                [col.locations col.perm col.synCon] = make_proximal_segment(c(id), col.center);
 
                 columns = [columns col];
             end
             close(waitbox);
         end
     else
-        for iter = 1:c(id).columns
-            columns = [columns col];
+        if isempty(columns)
+            for iter = 1:c(id).columns
+                columns = [columns col];
+            end
         end
     end
     
@@ -116,7 +124,7 @@ function [columns,activeColumns,cells,prediction,output] = region(data,id,column
                 %If there is a delay on the temporal memory, run it without
                 %the TM
                 c(id).temporal_memory = false;
-                [columns,cells,tempPrediction,output,tempActiveColumns] = ...
+                [columns,cells,tempPrediction,nActive,output,tempActiveColumns] = ...
                     update_region(columns, cells, segment,data(:,t),c(id),t,hoods,dbg); 
                 
                 activeColumns(1:nActive,t) = tempActiveColumns;
@@ -132,9 +140,18 @@ function [columns,activeColumns,cells,prediction,output] = region(data,id,column
                 %update active columns and the prediction
                 activeColumns(1:nActive,t) = tempActiveColumns;
                 prediction(1:c(id).columns,t) = tempPrediction;
+                
+                %run the next region
+                %TODO: how to store the next columns, cells, prediction,
+                %etc? 
+                if nRegions > id 
+                    [columns2,activecolumns2,cells2,prediction2,output2] = ...
+                        region(transpose(output),id+1,columns2,cells2,nRegions,c,dbg);
+                end
             end
         end
     end
-    close(waitbox);
-    
+    if id == 1
+        close(waitbox);
+    end
 end

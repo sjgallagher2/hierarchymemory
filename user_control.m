@@ -21,12 +21,13 @@
 %nSegs                      edit box
 %LearningRadius             edit box
 %
+%The variable c is a SINGLE config object, for only this region.
+%
 %Constraints:
 %The input radius must be > nDendrites
-%The variable c is a SINGLE config object, for only this region.
 
 function c = user_control(c)
-    f = figure('Visible','off','color','white','Position',[360,500,600,300]);
+    f = figure('Visible','off','color','white','Position',[360,650,600,360]);
     
     %min and max values for sliders
     minOverlapDutyMin = 0;
@@ -115,9 +116,9 @@ function c = user_control(c)
     handleDecLabel = uicontrol('Style','text','BackgroundColor','white',...
         'Position',[170,210,100,15],'String','Synapse Dec');
     handlenDendriteLabel = uicontrol('Style','text','BackgroundColor','white',...
-        'Position',[170,180,100,15],'String','N of Dendrites(%)');
+        'Position',[170,180,120,15],'String',['N of Dendrites(%) = ',num2str(floor(c.dendritePercent*c.data_size))]);
     handlenColsLabel = uicontrol('Style','text','BackgroundColor','white',...
-        'Position',[170,150,100,15],'String','N of Cols (%)');
+        'Position',[170,150,100,15],'String',['N of Cols (%) = ',num2str(floor(c.columnPercent*c.data_size))]);
     handleboostIncLabel = uicontrol('Style','text','BackgroundColor','white',...
         'Position',[170,120,100,15],'String','Boost Inc');
     handleminActiveLabel = uicontrol('Style','text','BackgroundColor','white',...
@@ -145,6 +146,9 @@ function c = user_control(c)
     handleapply = uicontrol('Style','pushbutton','String','Apply','Position',...
         [420,20,70,20],'Callback',@applycallback);
     
+    %show the size of the current input
+    uicontrol('Style','text','BackgroundColor','white','Position',[50,300,200,40],'String',['Input size: ',num2str(c.data_size)],'FontSize',15);
+    
     %If spatial pooling is off, disable these parameters
     if c.spatial_pooler == false
         nCols_slidehandle.Enable = 'off';
@@ -162,7 +166,6 @@ function c = user_control(c)
     end
     %If temporal memory is off, disable these parameters
     if c.temporal_memory == false
-        handleinputradiuscurrentvalue.Enable = 'off';
         handlecellscurrentvalue.Enable = 'off';
         handlesegscurrentvalue.Enable = 'off';
         handlelearningradiuscurrentvalue.Enable = 'off';
@@ -216,34 +219,38 @@ function c = user_control(c)
         %set the editbox to the slider value
         num = get(nDendrites_slidehandle,'Value');
         set(handledendritecurrentvalue,'String',num2str(num));
+        ndencalc = num2str(floor(num*c.data_size/100));
+        set(handlenDendriteLabel,'String',['N of Dendrites (%) = ',ndencalc]);
         
         num = str2num( get(handledendritecurrentvalue,'String') );
-        c.nDendrites = c.data_size*num*0.01;
+        c.dendritePercent = c.data_size*num*0.01;
         c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        if c.inputRadius < c.nDendrites
+        if c.inputRadius < c.dendritePercent
             %error: the column must be able to find enough potential
             %connections to the input, so either the number of dendrites or the
             %input radius must increase
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            c.inputRadius = c.nDendrites;
-            set(handleinputradiuscurrentvalue,'String',num2str(c.nDendrites) );
+            c.inputRadius = c.dendritePercent;
+            set(handleinputradiuscurrentvalue,'String',num2str(c.dendritePercent) ); %dendrite percent?
         end
     end
     function dendriteeditcallback(hObject,eventdata)
         %set the slider value to the editbox
         num = get(handledendritecurrentvalue,'String');
-        set(c.nDendrites_slidehandle,'Value',str2double(num));
+        ndencalc = num2str(floor(num*c.data_size/100));
+        set(handlenDendriteLabel,'String',['N of Dendrites (%) = ',ndencalc]);
+        set(nDendrites_slidehandle,'Value',str2double(num));
         c.nDendrites = c.data_size*num*0.01;
         c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        if c.inputRadius < c.nDendrites
+        if c.inputRadius < c.dendritePercent
             %error: the column must be able to find enough potential
             %connections to the input, so either the number of dendrites or the
             %input radius must increase
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            c.inputRadius = c.nDendrites;
-            set(handleinputradiuscurrentvalue,'String',num2str(c.nDendrites) );
+            c.inputRadius = c.dendritePercent;
+            set(handleinputradiuscurrentvalue,'String',num2str(c.dendritePercent) );
         end
     end
 
@@ -251,12 +258,16 @@ function c = user_control(c)
     function ncolslidecallback(hObject,eventdata)
         %set the editbox to the slider value
         num = get(nCols_slidehandle,'Value');
-        set(handlecolcurrentvalue,'String',num2str(num));
+        ncolcalculated = ['N of Cols (%) = ',num2str(num2str(floor(num*c.data_size/100)))];
+        set(handlecolcurrentvalue,'String', num);
+        set(handlenColsLabel,'String',ncolcalculated);
     end
     function ncolseditcallback(hObject,eventdata)
         %set the slider value to the editbox
         num = get(handlecolcurrentvalue,'String');
+        ncolcalculated = ['N of Cols (%) = ',num2str(num2str(floor(num*c.data_size/100)))];
         set(nCols_slidehandle,'Value',str2double(num));
+        set(handlenColsLabel,'String',ncolcalculated);
     end
 
     %Callbacks for boostInc

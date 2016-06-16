@@ -24,7 +24,7 @@
 %The main display of the program is the input-to-be-sent, in a black and
 %white image format subplot of sorts.
 
-%% TODO: Store region states, create buffers for regions, for adapting higher region settings
+%% TODO: adapting higher regions, excel file importing (.xls, .csv, etc), fix debugger
 %% Main Program
 function run_htm()
 %% Initialize window and variables
@@ -41,9 +41,15 @@ function run_htm()
     prediction = [];
     output = [];
     
+    columns2 = [];
+    cells2 = [];
+    activeColumns2 = [];
+    prediction2 = [];
+    output2 = [];
+    
    %Create config files
     region_config = [config, config, config, config, config];
-    hierarchy_regions = 1;
+    hierarchy_regions = 2;
     for r = 1:numel(region_config)
         region_config(r) = readXMLConfig(region_config(r), 'config\\config.xml',r);
     end
@@ -65,7 +71,9 @@ function run_htm()
     h.toolBar = subplot(4,4,[1:4]);%This just takes up space
     h.toolBar.Visible = 'off';
     %Now create a text showing the time, which will be updated
-    region_config(1).seq_time = 0;
+    for i = 1:5
+        region_config(i).seq_time = 0;
+    end
     timeString = ['total time = ' num2str(region_config(1).htm_time) ',   seq length = ' num2str(region_config(1).seq_time)];
     hTimeText = uicontrol(h.fig, 'Style','text','String',timeString,'Position',[20,600,350,40],'FontSize',20);
     
@@ -150,8 +158,14 @@ function run_htm()
                 %Update percentage in configuration
                 if region_config(1).data_size == 0
                     region_config(1).data_size = data_size;
+                    %udpate other regions
                 end
                 region_config(1) = updateConfigPercentages(region_config(1));
+                for i = 2:5
+                        region_config(i).data_size = region_config(i-1).columns;
+                        region_config(i) = updateConfigPercentages(region_config(i));
+                    end
+                %
                 
                 %run the settings windows
                 cbPTS(hObject,evt);
@@ -181,6 +195,13 @@ function run_htm()
                     data_size = size(send,1);
                     send_img = vec2mat( send(:,1)+1,floor(sqrt(data_size)) );
                     send_img = rot90(send_img);
+                    h.img = image(send_img,'Parent',h.mainWindow);
+                    hold on;
+                elseif strcmp(dFileName(find(dFileName == '.'):end),'.csv')
+                    send = csvread(dataFilePath);
+                    
+                    data_size = size(send,1);
+                    send_img = vec2mat(send(:,1)+1,floor(sqrt(data_size)) );
                     h.img = image(send_img,'Parent',h.mainWindow);
                     hold on;
                 else
@@ -224,23 +245,31 @@ function run_htm()
                     data_size = size(send,1);
                     region_config(1).data_size = data_size;
                     region_config(1) = updateConfigPercentages(region_config(1));
-                    
+                    for i = 2:5
+                        region_config(i).data_size = region_config(i-1).columns;
+                        region_config(i) = updateConfigPercentages(region_config(i));
+                    end
                     cbPTS(hObject,evt);
                     cbPEH(hObject,evt);
                 end
             end
             function cbFNFDCRD(hObject,evt)
                 %Create random data
-                
-                %Update this to handle spatial pooling on/off
+                %Not implemented yet
                 if ~isempty(send)
                     hRunItem.Enable = 'off';
                     hClearMem.Enable = 'on';
                     if region_config(1).data_size == 0
                         region_config.data_size = size(send,1);
+                        %
                     end
                     %update percentages in currentConfig (NOT config file)
-                    region_config(1).data_size = updateConfigPercentages(region_config(1));
+                    region_config(1) = updateConfigPercentages(region_config(1));
+                    for i = 2:5
+                        region_config(i).data_size = region_config(i-1).columns;
+                        region_config(i) = updateConfigPercentages(region_config(i));
+                    end
+                    %
                     cbPTS(hObject,evt);
                     cbPEH(hObject,evt);
                 end
@@ -314,6 +343,8 @@ function run_htm()
     end
     function cbED(hObject,evt)
         %Debug
+        %TODO: debugger does not like it when the window is closed by the
+        %user
         nextline = 'Starting debugger...';
         dbg_f = figure('color','white','Position',[30,200,600,300],'MenuBar','none');
         dbg_f.SizeChangedFcn = @cbSizeChange;
@@ -604,19 +635,21 @@ function run_htm()
                 region_config = c;
                 for i = 1:hierarchy_regions
                     if region_config(i).data_size > 0
-                        region_config(i) = updateConfigPercentages(region_config(1));
+                        region_config(i) = updateConfigPercentages(region_config(i));
                     end
                 end
             end
         else
             [hierarchy_regions, c] = hierarchy_ui(hierarchy_regions,region_config, true);
-            region_config = c;
-            for i = 1:hierarchy_regions
-                if region_config(i).data_size > 0
-                    region_config(i) = updateConfigPercentages(region_config(1));
+            if ~isempty(c)
+                region_config = c;
+                for i = 1:hierarchy_regions
+                    if region_config(i).data_size > 0
+                        region_config(i) = updateConfigPercentages(region_config(i));
+                    end
                 end
+                hRunItem.Enable = 'on';
             end
-            hRunItem.Enable = 'on';
         end
         
         for r = 1:5
@@ -639,6 +672,16 @@ function run_htm()
     function cbPTS(hObject,evt)
         %Training settings
         region_config(1) = train_settings(region_config(1));
+        if region_config(1).spatial_pooler == true
+            for i = 1:5
+                region_config(i).spatial_pooler = true;
+            end
+        end
+        if region_config(1).temporal_memory == true
+            for i = 1:5
+                region_config(i).temporal_memory = true;
+            end
+        end
     end
 %RUN MENU CALLBACKS
     function cbRR(hObject,evt)
@@ -646,7 +689,7 @@ function run_htm()
         
         %Note seq_time will be set within the region function because
         %send can come form a number of places but all goes here!
-         [columns, activeColumns, cells, prediction, output] = region(send,1,columns,cells,hierarchy_regions,region_config,update_dbg);
+         [columns, activeColumns, cells, prediction, output, columns2,cells2,prediction2,activeColumns2,output2] = region(send,1,columns,cells,hierarchy_regions,region_config,update_dbg);
         hColStates.Enable = 'on';
         hCellStates.Enable = 'on';
         hRegionOut.Enable = 'on';
@@ -676,6 +719,7 @@ function run_htm()
     function cbVRO(hObject,evt)
         %Region output
         show_active_columns(region_config(1),activeColumns,prediction,region_config(1).seq_time);
+        show_active_columns(region_config(2),activeColumns2, prediction2, region_config(2).seq_time);
     end
 %HELP MENU CALLBACKS
     function cbHHTMWP(hObject,evt)
@@ -695,37 +739,39 @@ function run_htm()
         hAboutDialog = uicontrol('Parent',a,'Style','text','String',about_string,'Position',[10,50,280,150],'FontSize',15,'BackgroundColor',[0.9,1,1]);
     end
     function updateDebugger(nextline)
-        if isstr(nextline)
-            db_lines = db_lines+1;
-            db_str{db_lines} = nextline;
-            textspace.String = db_str;
-        elseif isnumeric(nextline)
-                
-            if iscolumn(nextline)
-                nextline = nextline';
-                nextline = num2str(nextline);
+        if exist('textspace') > 0
+            if isstr(nextline)
                 db_lines = db_lines+1;
                 db_str{db_lines} = nextline;
                 textspace.String = db_str;
-            elseif isrow(nextline)
-                nextline = num2str(nextline);
-                db_lines = db_lines+1;
-                db_str{db_lines} = nextline;
-                textspace.String = db_str;
-            elseif ismatrix(nextline)
-                matsize = size(nextline);
-                mat_height = matsize(1);
-                
-                for i = 1:mat_height
-                    updateDebugger(nextline(i,:));
+            elseif isnumeric(nextline)
+
+                if iscolumn(nextline)
+                    nextline = nextline';
+                    nextline = num2str(nextline);
+                    db_lines = db_lines+1;
+                    db_str{db_lines} = nextline;
+                    textspace.String = db_str;
+                elseif isrow(nextline)
+                    nextline = num2str(nextline);
+                    db_lines = db_lines+1;
+                    db_str{db_lines} = nextline;
+                    textspace.String = db_str;
+                elseif ismatrix(nextline)
+                    matsize = size(nextline);
+                    mat_height = matsize(1);
+
+                    for i = 1:mat_height
+                        updateDebugger(nextline(i,:));
+                    end
                 end
+            elseif isstruct(nextline)
+                %Try to print the structure out properly...
+            else
+                db_lines = db_lines+1;
+                db_str{db_lines} = 'Unknown data type, display unsuccessful.';
+                textspace.String = db_str;
             end
-        elseif isstruct(nextline)
-            %Try to print the structure out properly...
-        else
-            db_lines = db_lines+1;
-            db_str{db_lines} = 'Unknown data type, display unsuccessful.';
-            textspace.String = db_str;
         end
     end
 end

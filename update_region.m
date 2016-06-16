@@ -8,11 +8,12 @@
 %structure, the active columns list, a list of segment structures, and the region output
 %Runs through a time-step of the CLA using a given
 
-%% TODO: Complete debug implementation
-
 function [columns, cells, prediction,nActive, output,activeColumns] = update_region(columns,cells,segment,data,c,t,hoods,dbg)
     
-    dbg(['Time = ',num2str(t)]);
+    if c.region == 1
+        dbg(['Time = ',num2str(t)]);
+    end
+    dbg(['Region: ',num2str(c.region)]);
     
     if c.spatial_pooler == true
         dbg('Starting spatial pooler...');
@@ -414,6 +415,8 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
         output = -1;
     end
     segment = [];
-    dbg('Time step complete.');
-    dbg('');
+    if c.region == 2
+        dbg('Time step complete.');
+        dbg('');
+    end
 end
