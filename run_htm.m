@@ -55,6 +55,7 @@ function run_htm()
     commandline = [];
     textspace = [];
     update_dbg = @updateDebugger;
+    pauseTime = 0;
     
     %Create a window and menu
     h.fig = figure();
@@ -387,105 +388,54 @@ function run_htm()
                     regionid = str2num(val);
                     if regionid > 0 && regionid < 5
                         %display the configuration of the regions with labels
-                                                                                                                        %TODO
-%                         nextline = ['Synapse threshold: ', num2str(currentConfig(1,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Synapse increment: ', num2str(currentConfig(2,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Synapse decrement: ', num2str(currentConfig(3,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Dendrites per column: ', num2str(currentConfig(4,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Number of columns in the region: ', num2str(currentConfig(6,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Desired local activity: ', num2str(currentConfig(7,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Neighborhood size: ', num2str(currentConfig(8,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Input radius: ', num2str(currentConfig(9,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Boost increment: ', num2str(currentConfig(10,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Number of cells per column: ', num2str(currentConfig(13,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Cell learning radius: ', num2str(currentConfig(15,regionid))];
-%                         updateDebugger(nextline);
-% 
-%                         nextline = ['Minimum overlap: ', num2str(currentConfig(16,regionid))];
-%                         updateDebugger(nextline);
+                        nextline = ['Synapse threshold: ', num2str(region_config(regionid).synThreshold)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Synapse increment: ', num2str(region_config(regionid).synInc)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Synapse decrement: ', num2str(region_config(regionid).synDec)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Dendrites per column: ', num2str(region_config(regionid).nDendrites)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum segment overlap: ', num2str(region_config(regionid).minSegOverlap)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Number of columns in the region: ', num2str(region_config(regionid).columns)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Desired local activity: ', num2str(region_config(regionid).desiredLocalActivity)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Neighborhood size: ', num2str(region_config(regionid).Neighborhood)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Input radius: ', num2str(region_config(regionid).inputRadius)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Boost increment: ', num2str(region_config(regionid).boostInc)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum active duty cycle: ', num2str(region_config(regionid).minActiveDuty)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum overlap duty cycle: ', num2str(region_config(regionid).minOverlapDuty)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Number of cells per column: ', num2str(region_config(regionid).cellsPerCol)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Max number of segments per cell: ', num2str(region_config(regionid).maxSegs)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Cell learning radius: ', num2str(region_config(regionid).LearningRadius)];
+                        updateDebugger(nextline);
+
+                        nextline = ['Minimum overlap: ', num2str(region_config(regionid).minOverlap)];
+                        updateDebugger(nextline);
                     end
-                else
-                    %display the configuration of the regions with labels
-                                                                                                            %TODO
-%                     nextline = ['Synapse thresholds: ', num2str(currentConfig(1,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Synapse increments: ', num2str(currentConfig(2,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Synapse decrements: ', num2str(currentConfig(3,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Dendrites per column: ', num2str(currentConfig(4,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Minimum segment overlap: ', num2str(currentConfig(5,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Number of columns in the region: ', num2str(currentConfig(6,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Desired local activity: ', num2str(currentConfig(7,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Neighborhood size: ', num2str(currentConfig(8,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Input radius: ', num2str(currentConfig(9,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Boost increment: ', num2str(currentConfig(10,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Minimum active duty cycle: ', num2str(currentConfig(11,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Minimum overlap duty cycle: ', num2str(currentConfig(12,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Number of cells per column: ', num2str(currentConfig(13,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Max number of segments per cell: ', num2str(currentConfig(14,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Cell learning radius: ', num2str(currentConfig(15,:))];
-%                     updateDebugger(nextline);
-% 
-%                     nextline = ['Minimum overlap: ', num2str(currentConfig(16,:))];
-%                     updateDebugger(nextline);
                 end
             elseif strcmp(instruct,'save')
                 dProjLoc = uigetdir(region_config(1).lastDir);
@@ -503,16 +453,14 @@ function run_htm()
                 fclose(savefile);
                 updateDebugger('Done.');
                 
-                
-                %add a command: 'pause' for coming out of the algorithm and
-                %seeing the state of things
-                                                                                                    %TODO
-            
-
+            elseif strcmp(instruct,'pause')
+                if length(val) > 0
+                    pauseTime = str2num(val);
+                end
+                updateDebugger(['Pause set for t = ',val]);
             elseif exist(instruct) == 1
                 %if this is a variable, print its value
-                %(Make this secure)
-                                                                                                    %TODO
+                
                 updateDebugger([instruct ' = ']);
                 updateDebugger( eval(instruct) );
             else
@@ -685,7 +633,7 @@ function run_htm()
         %Run
         
         %Note seq_time will be set within the region function
-        region_data = region(send,region_data,hierarchy_regions,region_config,update_dbg);
+        region_data = region(send,region_data,hierarchy_regions,region_config,update_dbg,pauseTime);
         hColStates.Enable = 'on';
         hCellStates.Enable = 'on';
         hRegionOut.Enable = 'on';

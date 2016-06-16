@@ -15,7 +15,7 @@
 %run all the timesteps for a sequence of one region. It has since been
 %updated to run all the regions (as defined by nRegions). 
 
-function rdata = region(data,rdata,nRegions,c, dbg)
+function rdata = region(data,rdata,nRegions,c, dbg, pauseTime)
     %% To begin, get our data straight.
     c(1).seq_time = size(data,2); %the time this is going to take
     
@@ -128,7 +128,12 @@ function rdata = region(data,rdata,nRegions,c, dbg)
                     bottomup_in = rdata(regid-1).output;
                     bottomup_in = transpose(bottomup_in);
                 end
-                
+                if t == pauseTime
+                    d = msgbox('Stopped...','Debugging message','warn');
+                    dbg(['Stopped at t = ',num2str(t)]);
+                    dbg('');
+                    waitfor(d);
+                end
                 if c(regid).TM_delay == 0
                     %Run like normal
                     [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns] = ...
@@ -149,7 +154,6 @@ function rdata = region(data,rdata,nRegions,c, dbg)
                     if c(regid).TM_delay == 0
                         c(regid).temporal_memory = true;
                     end
-                    
                 end
             end
         end

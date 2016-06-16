@@ -12,12 +12,14 @@
 %structure, and the cells structure
 %
 %Notes on region structure: Originally, the region() method was designed to
-%run all the timesteps for a sequence of a region. It has since been
-%updated to 
+%run all the timesteps for a sequence of one region. It has since been
+%updated to run all the regions (as defined by nRegions). 
 
-function rdata = region(data,rdata,nRegions,c, dbg)
+function rdata = region(data,rdata,nRegions,c, dbg, pauseTime)
     %% To begin, get our data straight.
     c(1).seq_time = size(data,2); %the time this is going to take
+    
+    hoods = [];
     
     segment.locations = [];
     segment.perm = [];
@@ -47,7 +49,7 @@ function rdata = region(data,rdata,nRegions,c, dbg)
     col.active_cell = -1;
     
     for i = 1:nRegions
-        hoods = ceil(c(i).columns/c(i).Neighborhood);
+        hoods(i) = ceil(c(i).columns/c(i).Neighborhood);
     end
     
     if isempty(rdata(1).cells)
@@ -109,7 +111,7 @@ function rdata = region(data,rdata,nRegions,c, dbg)
         end
     end
     for i = 1:nRegions
-        rdata(i).activeColumns = zeros(c(i).desiredLocalActivity*hoods,c(i).seq_time);
+        rdata(i).activeColumns = zeros(c(i).desiredLocalActivity*hoods(i),c(i).seq_time);
     end
     %Main loop
     waitbox = waitbar(0,'Running HTM...');
@@ -126,11 +128,22 @@ function rdata = region(data,rdata,nRegions,c, dbg)
                     bottomup_in = rdata(regid-1).output;
                     bottomup_in = transpose(bottomup_in);
                 end
-                
+                if t == pauseTime
+                    d = msgbox('Stopped...','Debugging message','warn');
+                    dbg(['Stopped at t = ',num2str(t)]);
+                    for colcheck = 1:c.columns
+                        dbg(['Column ', num2str(colcheck),' locations and connections: ']);
+                        for syncheck = 1:c(1).nDendrites
+                            dbg([num2str(rdata(1).columns(colcheck).locations(syncheck)),'      ',num2str(rdata(1).columns(colcheck).synCon(syncheck))]);
+                        end
+                    end
+                    dbg('');
+                    waitfor(d);
+                end
                 if c(regid).TM_delay == 0
                     %Run like normal
                     [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns] = ...
-                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods,dbg);
+                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods(regid),dbg);
                     %update active columns and the prediction
                     rdata(regid).activeColumns(1:nActive,t) = tempActiveColumns;
                     rdata(regid).prediction(1:c(regid).columns,t) = tempPrediction;
@@ -140,7 +153,7 @@ function rdata = region(data,rdata,nRegions,c, dbg)
                     %the TM
                     c(regid).temporal_memory = false;
                     [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns] = ...
-                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods,dbg); 
+                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods(regid),dbg); 
                     rdata(regid).activeColumns(1:nActive,t) = tempActiveColumns;
                     rdata(regid).prediction(1:c(regid).columns,t) = tempPrediction;
                     c(regid).TM_delay = c(regid).TM_delay-1;
