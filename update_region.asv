@@ -9,11 +9,12 @@
 %Runs through a time-step of the CLA using a given
 
 function [columns, cells, prediction,nActive, output,activeColumns] = update_region(columns,cells,segment,data,c,t,hoods,dbg)
-    activeColumns = [];
+    
     if c.region == 1
         dbg(['Time = ',num2str(t)]);
     end
     dbg(['Region: ',num2str(c.region)]);
+    
     if c.spatial_pooler == true
         dbg('Starting spatial pooler...');
         %For each timestep, find overlaps for the columns and reset
@@ -117,11 +118,10 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
         if ~(isempty(w))
             activeColumns(1:nActive,1) = w;
         end
-        if ~isempty(activeColumns)
-            dbg('Active columns: ');
-            dbg(activeColumns(:,1));
-            dbg('Done.');
-        end
+        if ~
+        dbg('Active columns: ');
+        dbg(activeColumns(:,1));
+        dbg('Done.');
     else
         %If NO spatial pooler
         dbg('Spatial pooler is OFF, skipping...');

@@ -54,6 +54,9 @@ function c = user_control(c)
     decMinValue = 0.01;
     decMaxValue = 0.30;
     
+    c.LearningRadius = c.data_size;
+    c.inputRadius = c.data_size;
+    
     %slider handles
     perm_slidehandle = uicontrol('Style','slider','Position',[10,270,100,15],'Min',threshMin,'Max',threshMax,'Callback',@permslidecallback,'Value',c.synThreshold);
     inc_slidehandle = uicontrol('Style','slider','Position',[10,240,100,15],'Min',incMinValue,'Max',incMaxValue,'Callback',@incslidecallback,'Value',c.synInc);
@@ -237,10 +240,10 @@ function c = user_control(c)
     end
     function dendriteeditcallback(hObject,eventdata)
         %set the slider value to the editbox
-        num = get(handledendritecurrentvalue,'String');
+        num = str2num(get(handledendritecurrentvalue,'String'));
         ndencalc = num2str(floor(num*c.data_size/100));
         set(handlenDendriteLabel,'String',['N of Dendrites (%) = ',ndencalc]);
-        set(nDendrites_slidehandle,'Value',str2double(num));
+        set(nDendrites_slidehandle,'Value',num);
         c.nDendrites = c.data_size*num*0.01;
         c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
         if c.inputRadius < c.dendritePercent
@@ -258,14 +261,14 @@ function c = user_control(c)
     function ncolslidecallback(hObject,eventdata)
         %set the editbox to the slider value
         num = get(nCols_slidehandle,'Value');
-        ncolcalculated = ['N of Cols (%) = ',num2str(num2str(floor(num*c.data_size/100)))];
+        ncolcalculated = ['N of Cols (%) = ',num2str(floor(num*c.data_size/100))];
         set(handlecolcurrentvalue,'String', num);
         set(handlenColsLabel,'String',ncolcalculated);
     end
     function ncolseditcallback(hObject,eventdata)
         %set the slider value to the editbox
         num = get(handlecolcurrentvalue,'String');
-        ncolcalculated = ['N of Cols (%) = ',num2str(num2str(floor(num*c.data_size/100)))];
+        ncolcalculated = ['N of Cols (%) = ',num2str(floor(str2double(num)*c.data_size/100))];
         set(nCols_slidehandle,'Value',str2double(num));
         set(handlenColsLabel,'String',ncolcalculated);
     end
@@ -308,8 +311,8 @@ function c = user_control(c)
     end
 
     function desiredlocaleditcallback(hObject,eventdata)
-        desiredLocalActivity = str2double( get(handledesiredlocalcurrentvalue, 'String') );
-        if desiredLocalActivity > Neighborhood
+        c.desiredLocalActivity = str2double( get(handledesiredlocalcurrentvalue, 'String') );
+        if c.desiredLocalActivity > c.Neighborhood
             error = msgbox('Error: Desired local activity is too large. The desired local activity should be less than the size of the neighborhood. A maximum desired local activity equal to the neighborhood size has been selected. This is not recommended.','Error','warn');
             waitfor(error);
             c.desiredLocalActivity = c.Neighborhood;

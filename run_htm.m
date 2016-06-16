@@ -34,22 +34,15 @@ function run_htm()
     
     send = []; %This is the data to-be-sent
     
-    %initialize global collections of data
-    columns = [];
-    cells = [];
-    activeColumns = [];
-    prediction = [];
-    output = [];
-    
-    columns2 = [];
-    cells2 = [];
-    activeColumns2 = [];
-    prediction2 = [];
-    output2 = [];
+    %initialize region data objects, which contain columns, cells, etc
+    region_data = [regobj regobj regobj regobj regobj];
+    for i = 1:5
+        region_data(i) = reg_init(region_data(i),i);
+    end
     
    %Create config files
     region_config = [config, config, config, config, config];
-    hierarchy_regions = 2;
+    hierarchy_regions = 1;
     for r = 1:numel(region_config)
         region_config(r) = readXMLConfig(region_config(r), 'config\\config.xml',r);
     end
@@ -318,10 +311,14 @@ function run_htm()
         if strcmp(cl_bool,'Yes')
             
             send = [];
-            columns = [];
-            cells = [];
-            prediction = [];
-            output = [];
+            for i = 1:5
+                region_data(i).columns = [];
+                region_data(i).cells = [];
+                region_data(i).activeColumns = [];
+                region_data(i).prediction = [];
+                region_data(i).output = [];
+            end
+            
             for i =1:5
                 region_config(i) = setToDefault(region_config(i));
             end
@@ -687,17 +684,18 @@ function run_htm()
     function cbRR(hObject,evt)
         %Run
         
-        %Note seq_time will be set within the region function because
-        %send can come form a number of places but all goes here!
-         [columns, activeColumns, cells, prediction, output, columns2,cells2,prediction2,activeColumns2,output2] = region(send,1,columns,cells,hierarchy_regions,region_config,update_dbg);
+        %Note seq_time will be set within the region function
+        region_data = region(send,region_data,hierarchy_regions,region_config,update_dbg);
         hColStates.Enable = 'on';
         hCellStates.Enable = 'on';
         hRegionOut.Enable = 'on';
 
         %update time information
         seqTimeElapsed = size(send,2);
-        region_config(1).seq_time = seqTimeElapsed;
-        region_config(1).htm_time = region_config(1).htm_time+region_config(1).seq_time*region_config(1).reps;
+        for i = 1:5
+            region_config(i).seq_time = seqTimeElapsed;
+            region_config(i).htm_time = region_config(i).htm_time+region_config(i).seq_time*region_config(i).reps;
+        end
         %quickly update the 't=' text
         timeString = ['total time = ' num2str(region_config(1).htm_time) ',   seq time = ' num2str(region_config(1).seq_time)];
         hTimeText.String = timeString;
@@ -718,8 +716,8 @@ function run_htm()
     end
     function cbVRO(hObject,evt)
         %Region output
-        show_active_columns(region_config(1),activeColumns,prediction,region_config(1).seq_time);
-        show_active_columns(region_config(2),activeColumns2, prediction2, region_config(2).seq_time);
+        show_active_columns(region_config(1),region_data(1).activeColumns,region_data(1).prediction,region_config(1).seq_time);
+        show_active_columns(region_config(2),region_data(2).activeColumns,region_data(2).prediction,region_config(2).seq_time);
     end
 %HELP MENU CALLBACKS
     function cbHHTMWP(hObject,evt)

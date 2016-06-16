@@ -47,18 +47,18 @@
 		<synThreshold>0.2</synThreshold>
 		<synInc>0.015</synInc>
 		<synDec>-0.05</synDec>
-		<dendritePercent>0.5</dendritePercent>
+		<dendritePercent>0.7</dendritePercent>
 		<nDendrites>0</nDendrites>
 		<minSegOverlap>4</minSegOverlap>
-		<columnPercent>0.3</columnPercent>
+		<columnPercent>0.38</columnPercent>
 		<columns>0</columns>
 		<cellsPerCol>3</cellsPerCol>
 		<desiredLocalActivity>2</desiredLocalActivity>
 		<Neighborhood>20</Neighborhood>
 		<inputRadius>100</inputRadius>
 		<boostInc>0.5</boostInc>
-		<minActiveDuty>0.1</minActiveDuty>
-		<minOverlapDuty>0.1</minOverlapDuty>
+		<minActiveDuty>0.01</minActiveDuty>
+		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
 		<LearningRadius>200</LearningRadius>
 		<minOverlap>2</minOverlap>
@@ -90,8 +90,8 @@
 		<Neighborhood>20</Neighborhood>
 		<inputRadius>100</inputRadius>
 		<boostInc>0.5</boostInc>
-		<minActiveDuty>0.1</minActiveDuty>
-		<minOverlapDuty>0.1</minOverlapDuty>
+		<minActiveDuty>0.01</minActiveDuty>
+		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
 		<LearningRadius>200</LearningRadius>
 		<minOverlap>2</minOverlap>
@@ -123,8 +123,8 @@
 		<Neighborhood>20</Neighborhood>
 		<inputRadius>100</inputRadius>
 		<boostInc>0.5</boostInc>
-		<minActiveDuty>0.1</minActiveDuty>
-		<minOverlapDuty>0.1</minOverlapDuty>
+		<minActiveDuty>0.01</minActiveDuty>
+		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
 		<LearningRadius>200</LearningRadius>
 		<minOverlap>2</minOverlap>
@@ -156,8 +156,8 @@
 		<Neighborhood>20</Neighborhood>
 		<inputRadius>100</inputRadius>
 		<boostInc>0.5</boostInc>
-		<minActiveDuty>0.1</minActiveDuty>
-		<minOverlapDuty>0.1</minOverlapDuty>
+		<minActiveDuty>0.01</minActiveDuty>
+		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
 		<LearningRadius>200</LearningRadius>
 		<minOverlap>2</minOverlap>

@@ -80,14 +80,14 @@ classdef config
             obj.columnPercent = 0.3;
             obj.columns = 0;
             obj.cellsPerCol =3;
-            obj.desiredLocalActivity = 5;
+            obj.desiredLocalActivity = 2;
             obj.Neighborhood = 20;
-            obj.inputRadius = 120;
+            obj.inputRadius = 0;
             obj.boostInc = 0.5;
             obj.minActiveDuty = 0.01;
             obj.minOverlapDuty = 0.01;
             obj.maxSegs = 1;
-            obj.LearningRadius = 200;
+            obj.LearningRadius = 0;
             obj.minOverlap = 2;
             obj.data_size = 0;
             obj.htm_time = 0;

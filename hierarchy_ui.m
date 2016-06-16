@@ -14,7 +14,7 @@ function [hierarchy,c] = hierarchy_ui(nRegions,c, en)
     hierarchy = nRegions; %hierarchy is the output number of regions,
     %nRegions is the number of regions we started with
     
-    hHierarchyLayers = uicontrol('style','popup','String',{'1','2','3','4','5'}, 'Position',[80,350,100,50],'Callback',@cbHLay);
+    hHierarchyLayers = uicontrol('style','popup','String',{'1','2','3','4','5'}, 'Position',[80,350,100,50],'Callback',@cbHLay,'Value',nRegions);
     hHierarchyLabel = uicontrol('style','text','String','Hierarchy Layers ','Position',[20,353,50,50]);
     hLayerOne = uicontrol('style','pushbutton','String','Layer 1','Position',[50,30,450,40],'Callback',@cbOne);
     hLayerTwo = uicontrol('style','pushbutton','String','Layer 2','Position',[100,100,350,40],'Visible','off','Callback',@cbTwo);
