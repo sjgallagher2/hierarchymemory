@@ -192,10 +192,30 @@ function run_htm()
                     h.img = image(send_img,'Parent',h.mainWindow);
                     hold on;
                 elseif strcmp(dFileName(find(dFileName == '.'):end),'.csv')
-                    send = csvread(dataFilePath);
-                    
+                    csvdata = csvread(dataFilePath);
+                    maxD = max(csvdata);
+                    minD = min(csvdata);
+                    if maxD == 1 && minD == 0
+                        %binary data, convert to a single frame
+                    else
+                        %we'll need to know what size to encode the data
+                        
+                        %then go about encoding each bit of data into a
+                        %time frame
+                        for iter = 1:size(csvdata,1)
+                            %temporarily use a constant size of 144 and
+                            %neighborhood of 5
+                                                                                                %TODO
+                            if csvdata(iter) < 0
+                                send(:,iter) = convert_scalar(0,144,minD,maxD,5);
+                            else
+                                send(:,iter) = convert_scalar(csvdata(iter),144,minD,maxD,5);
+                            end
+                        end
+                    end
                     data_size = size(send,1);
                     send_img = vec2mat(send(:,1)+1,floor(sqrt(data_size)) );
+                    send_img = rot90(send_img);
                     h.img = image(send_img,'Parent',h.mainWindow);
                     hold on;
                 else
@@ -272,7 +292,8 @@ function run_htm()
         %Open
         dProjLoc= uigetdir(region_config(1).lastDir); 
         hClearMem.Enable = 'on';
-        %Open the relevant project data
+        %Open the relevant project data; region_data, region_config and
+        %send
                                                                                                                 %TODO
         
     end
@@ -280,7 +301,7 @@ function run_htm()
         %Save memory
         dProjLoc = uigetdir(region_config(1).lastDir); 
         
-        %create a way to save all the important HTM state data
+        %Save region_data and region_config in a readable format
                                                                                                                 %TODO
         
         all_out = 0;
@@ -485,60 +506,7 @@ function run_htm()
         
         %Import data file as next frame
                 
-            [dFileName dFileLoc] = uigetfile('*.*','Select data file',region_config(1).lastDir);
-                dataFilePath = [dFileLoc dFileName];
-               region_config(1).lastDir = dataFilePath;
-                
-                %Determine what type of file it is
-                %Run the proper function
-                %Acceptable files:
-                %   jpg
-                if strcmp(dFileName(find(dFileName == '.'):end),'.jpg')
-                    waitbox = waitbar(0,'Formatting image.. (this could take a while)');
-                    imData = imread(dataFilePath);
-                    send = [send, convert_image(imData)];
-                    close(waitbox);
-                    
-                    data_size = size(send,1);
-                    region_config(1).data_size = data_size;
-                    send_img = vec2mat( send(:,1)+1,floor(sqrt(data_size)) );
-                    send_img = rot90(send_img);
-                    h.img = image(send_img,'Parent',h.mainWindow);
-                    hold on;
-                else
-                    
-                    %   png
-                    %   txt
-                    %   mpg?
-                    %   mp3
-                    %   bin
-
-                    %If not jpg, this will open text files and store them as a
-                    %vector
-                    if (dataFilePath(2) ~= 0)
-                        send = load(dataFilePath);
-
-                        data_size = size(send,1);
-                        region_config(1).data_size = data_size;
-                        send_img = vec2mat( send(:,1)+1, floor( sqrt(data_size) ) );
-                        send_img = rot90(send_img);
-                        h.img = image(send_img,'Parent',h.mainWindow);
-                        hold on;
-                        h.mainWindow.XTick = (0:floor(sqrt( data_size )) )+0.5;
-                        h.mainWindow.YTick = (0:floor(sqrt( data_size )) )+0.5;
-                        h.mainWindow.XTickLabel = [];
-                        h.mainWindow.YTickLabel = [];
-                        h.mainWindow.XGrid = 'on';
-                        h.mainWindow.YGrid = 'on';
-                    end
-                end
-                if ~isempty(send)
-                    hRunItem.Enable = 'off';
-                    hClearMem.Enable = 'on';
-                    region_config(1) = updateConfigPercentages(region_config(1));
-                    cbPTS(hObject,evt);
-                    cbPEH(hObject,evt);
-                end
+            
     end
     function cbSC(hObject,evt)
         %Save current data sequence

@@ -27,7 +27,20 @@ function in = generate_input(dataSz)
         timeSz = str2num(get(hTimeSzEdit,'String'));
         rep = str2num(get(hSeqNum,'String'));
         close();
-        if (inputSz^2) == dataSz
+        if dataSz > 0
+            if (inputSz^2) == dataSz
+                in = blackandwhiteimage(inputSz,timeSz);
+                if rep > 1
+                    s = in;
+                    for i = 1:rep-1
+                        in = [s in];
+                    end
+                end
+            else
+                msgbox('Error: Data size has to stay consistent in order for the columns to be properly assigned.','warn','Error');
+                in = [];
+            end
+        else
             in = blackandwhiteimage(inputSz,timeSz);
             if rep > 1
                 s = in;
@@ -35,11 +48,7 @@ function in = generate_input(dataSz)
                     in = [s in];
                 end
             end
-        else
-            msgbox('Error: Data size has to stay consistent in order for the columns to be properly assigned.','warn','Error');
-            in = [];
         end
-        
     end
     function cancelCB(hOBject,evt)
         in = 0;
