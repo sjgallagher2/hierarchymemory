@@ -69,7 +69,7 @@ function run_htm()
         region_config(i).seq_time = 0;
     end
     timeString = ['total time = ' num2str(region_config(1).htm_time) ',   seq length = ' num2str(region_config(1).seq_time)];
-    hTimeText = uicontrol(h.fig, 'Style','text','String',timeString,'Position',[20,600,350,40],'FontSize',20);
+    hTimeText = uicontrol(h.fig, 'Style','text','String',timeString,'Position',[20,600,450,40],'FontSize',20);
     
     %Show the current input
     h.mainWindow = subplot(4,4,[5:16]);
@@ -150,7 +150,7 @@ function run_htm()
             
             if ~isempty(send)
                 %Update percentage in configuration
-                if region_config(1).data_size == 0
+                if isempty(region_config(1).data_size)
                     region_config(1).data_size = data_size;
                     %udpate other regions
                 end

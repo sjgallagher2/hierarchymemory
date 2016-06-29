@@ -19,6 +19,9 @@ function out = convert_scalar(decin,sz,min,max,neighborhood_size)
     %give the increment we need for every corresponsing number. We multiply
     %this increment by the input number and take the floor. 
     start_loc = floor(decin*(maxElements/range));
+    if start_loc == 0
+        start_loc = 1;
+    end
     for i = start_loc:start_loc+neighborhood_size
         out(i) = 1;
     end
