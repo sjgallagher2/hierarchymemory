@@ -80,20 +80,27 @@ classdef config
             obj.columnPercent = 0.3;
             obj.columns = 0;
             obj.cellsPerCol =3;
-            obj.desiredLocalActivity = 5;
+            obj.desiredLocalActivity = 2;
             obj.Neighborhood = 20;
-            obj.inputRadius = 120;
+            obj.inputRadius = 0;
             obj.boostInc = 0.5;
-            obj.minActiveDuty = 0.1;
-            obj.minOverlapDuty = 0.1;
+            obj.minActiveDuty = 0.01;
+            obj.minOverlapDuty = 0.01;
             obj.maxSegs = 1;
-            obj.LearningRadius = 200;
+            obj.LearningRadius = 0;
             obj.minOverlap = 2;
+            obj.data_size = 0;
+            obj.htm_time = 0;
+            obj.seq_time = 0;
+            obj.reps = 1;
+            obj.TM_delay = 0;
+            obj.spatial_pooler = false;
+            obj.temporal_memory = false;
         end
         
         function obj = updateConfigPercentages(obj)
-            obj.columns = obj.columnPercent*obj.data_size;
-            obj.nDendrites = obj.dendritePercent*obj.data_size;
+            obj.columns = floor(obj.columnPercent*obj.data_size);
+            obj.nDendrites = floor(obj.dendritePercent*obj.data_size);
         end
         
         function obj = readFormattedConfig(obj,settings)
@@ -125,13 +132,13 @@ classdef config
             obj.minOverlap = settings(24);
         end
         
-        function obj = readXMLConfig(obj,filename)
+        function obj = readXMLConfig(obj,filename, r)
             configDOM = xmlread(filename);
             cElement = configDOM.getDocumentElement;
             cNodes = cElement.getChildNodes;
-            cRegion = cNodes.item(1);
-            cAlgorithm = cNodes.item(3);
-            cFiles = cNodes.item(5);
+            cRegion = cNodes.item(1+6*(r-1));
+            cAlgorithm = cNodes.item(3+6*(r-1));
+            cFiles = cNodes.item(5+6*(r-1));
             
             %read in region settings
             cRegNodes = cRegion.getChildNodes;
@@ -154,6 +161,9 @@ classdef config
                     node = node.getNextSibling;
                 elseif strcmpi(node.getNodeName,'TM_delay')
                     obj.TM_delay = str2num(char(node.getTextContent));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'reps')
+                    obj.reps = str2num(char(node.getTextContent));
                     node = node.getNextSibling;
                 else
                     node = node.getNextSibling;
@@ -238,6 +248,130 @@ classdef config
                 end
             end
             
+        end
+        
+        function saveXML(obj,filename,r)
+            %Update the XML file
+            configDOM = xmlread(filename);
+            cElement = configDOM.getDocumentElement;
+            cNodes = cElement.getChildNodes;
+            cRegion = cNodes.item(1+6*(r-1));
+            cAlgorithm = cNodes.item(3+6*(r-1));
+            cFiles = cNodes.item(5+6*(r-1));
+
+            %read in region settings
+            cRegNodes = cRegion.getChildNodes;
+            node = cRegNodes.getFirstChild;
+            while ~isempty(node)
+                if strcmpi(node.getNodeName,'region')
+                    node.setTextContent(num2str(obj.region));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'htm_time')
+                    node.setTextContent(num2str(obj.htm_time));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'seq_time')
+                    node.setTextContent(num2str(obj.seq_time));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'temporal_memory')
+                    node.setTextContent(num2str(obj.temporal_memory));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'spatial_pooler')
+                    node.setTextContent(num2str(obj.spatial_pooler));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'TM_delay')
+                    node.setTextContent(num2str(obj.TM_delay));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'reps')
+                    node.setTextContent(num2str(obj.reps));
+                    node = node.getNextSibling;
+                else
+                    node = node.getNextSibling;
+                end
+            end
+
+            %read in algorithm settings
+            cAlgNodes = cAlgorithm.getChildNodes;
+            node = cAlgNodes.getFirstChild;
+            while~isempty(node)
+                if strcmpi(node.getNodeName,'synThreshold')
+                    node.setTextContent(num2str(obj.synThreshold));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'synInc')
+                    node.setTextContent(num2str(obj.synInc));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'synDec')
+                    node.setTextContent(num2str(obj.synDec));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'dendritePercent')
+                    node.setTextContent(num2str(obj.dendritePercent));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'dendrites')
+                    node.setTextContent(num2str(obj.nDendrites));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'minSegOverlap')
+                    node.setTextContent(num2str(obj.minSegOverlap));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'columnPercent')
+                    node.setTextContent(num2str(obj.columnPercent));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'columns')
+                    node.setTextContent(num2str(obj.columns));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'cellsPerCol')
+                    node.setTextContent(num2str(obj.cellsPerCol));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'desiredLocalActivity')
+                    node.setTextContent(num2str(obj.desiredLocalActivity));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'Neighborhood')
+                    node.setTextContent(num2str(obj.Neighborhood));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'inputRadius')
+                    node.setTextContent(num2str(obj.inputRadius));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'boostInc')
+                    node.setTextContent(num2str(obj.boostInc));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'minActiveDuty')
+                    node.setTextContent(num2str(obj.minActiveDuty));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'minOverlapDuty')
+                    node.setTextContent(num2str(obj.minOverlapDuty));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'maxSegs')
+                    node.setTextContent(num2str(obj.maxSegs));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'LearningRadius')
+                    node.setTextContent(num2str(obj.LearningRadius));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'minOverlap')
+                    node.setTextContent(num2str(obj.minOverlap));
+                    node = node.getNextSibling;
+                else
+                    node = node.getNextSibling;
+                end
+            end
+
+            %read in file settings
+            cFileNodes = cFiles.getChildNodes;
+            node = cFileNodes.getFirstChild;
+            while~isempty(node)
+                if strcmpi(node.getNodeName,'configfile')
+                    node.setTextContent(num2str(obj.configFile));
+                    node = node.getNextSibling;
+                elseif strcmpi(node.getNodeName,'lastDir')
+                    node.setTextContent(num2str(obj.lastDir));
+                    node = node.getNextSibling;
+                else
+                    node = node.getNextSibling;
+                end
+            end
+            %Save the XML file
+            %xmlwrite(configDOM, java.lang.String(filename));
+            %For now, NO saving to the XML file. The xmlwrite function is
+            %adds whitespace and is giving a lot of problems with the
+            %string for some reason. Work around might be saving directly
+            %through matlab with a .xml at the end, but I don't know.
         end
     end
 end

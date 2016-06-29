@@ -19,8 +19,10 @@ function bestSegs = getBestMatchingSeg(mycell, cells, t)
             nSyn = numel(mycell.segs(i).synCon);
             for j = 1:nSyn
                 %check if synapses are connected to an active cell
-                if cells( mycell.segs(i).locations(j) ).active(t-mycell.segs(i).index) == 1
-                    mycell.segs(i).overlap = mycell.segs(i).overlap+1;
+                if (t-mycell.segs(i).index) > 0
+                    if cells( mycell.segs(i).locations(j) ).active(t-mycell.segs(i).index) == 1
+                        mycell.segs(i).overlap = mycell.segs(i).overlap+1;
+                    end
                 end
             end
             %compute active segment

@@ -21,15 +21,13 @@
 %nSegs                      edit box
 %LearningRadius             edit box
 %
-%The output is a 15 element vector with the above order.
+%The variable c is a SINGLE config object, for only this region.
 %
 %Constraints:
 %The input radius must be > nDendrites
 
-function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocalActivity,Neighborhood,inputRadius,boostInc,minActiveDuty,minOverlapDuty,nCells,nSegs,LearningRadius,minOverlap] = user_control(input_size, id)
-    f = figure('Visible','off','color','white','Position',[360,500,600,300]);
-    
-    input_size = input_size(1);
+function c = user_control(c)
+    f = figure('Visible','off','color','white','Position',[360,650,600,360]);
     
     %min and max values for sliders
     minOverlapDutyMin = 0;
@@ -56,36 +54,18 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     decMinValue = 0.01;
     decMaxValue = 0.30;
     
-    %Default initial values
-    inputConfig = load('config/config.htm');
-    inputConfig = inputConfig(:,id);
-    
-    synThreshold = inputConfig(1);
-    synInc = inputConfig(2);
-    synDec = -inputConfig(3); %Negative to compensate for user
-    nDendrites = inputConfig(4)*100; %A percentage compensated for the user
-    minSegOverlap = inputConfig(5);
-    nCols = inputConfig(6)*100; %A percentage compensated for the user
-    desiredLocalActivity = inputConfig(7);
-    Neighborhood = inputConfig(8);
-    inputRadius = inputConfig(9);
-    boostInc = inputConfig(10);
-    minActiveDuty = inputConfig(11);
-    minOverlapDuty = inputConfig(12);
-    nCells = inputConfig(13);
-    nSegs = inputConfig(14);
-    LearningRadius = inputConfig(15);
-    minOverlap = inputConfig(16);
+    c.LearningRadius = c.data_size;
+    c.inputRadius = c.data_size;
     
     %slider handles
-    perm_slidehandle = uicontrol('Style','slider','Position',[10,270,100,15],'Min',threshMin,'Max',threshMax,'Callback',@permslidecallback,'Value',synThreshold);
-    inc_slidehandle = uicontrol('Style','slider','Position',[10,240,100,15],'Min',incMinValue,'Max',incMaxValue,'Callback',@incslidecallback,'Value',synInc);
-    dec_slidehandle = uicontrol('Style','slider','Position',[10,210,100,15],'Min',decMinValue,'Max',decMaxValue,'Callback',@decslidecallback,'Value',synDec);
-    nDendrites_slidehandle = uicontrol('Style','slider','Min',nDendritesMin,'Max',nDendritesMax,'Value',nDendrites,'Position',[10,180,100,15],'Callback',@dendriteslidecallback);
-    nCols_slidehandle = uicontrol('Style','slider','Min',nColsMin,'Max',nColsMax,'Value',nCols,'Position',[10,150,100,15],'Callback',@ncolslidecallback);
-    boostInc_slidehandle = uicontrol('Style','slider','Min',boostIncMin,'Max',boostIncMax,'Value',boostInc,'Position',[10,120,100,15],'Callback',@boostincslidecallback);
-    minActiveDuty_slidehandle = uicontrol('Style','slider','Min',minActiveDutyMin,'Max',minActiveDutyMax,'Value',minActiveDuty,'Position',[10,90,100,15],'Callback',@minactiveslidecallback);
-    minOverlapDuty_slidehandle = uicontrol('Style','slider','Min',minOverlapDutyMin,'Max',minOverlapDutyMax,'Value',minOverlapDuty,'Position',[10,60,100,15],'Callback',@minoverslidecallback);
+    perm_slidehandle = uicontrol('Style','slider','Position',[10,270,100,15],'Min',threshMin,'Max',threshMax,'Callback',@permslidecallback,'Value',c.synThreshold);
+    inc_slidehandle = uicontrol('Style','slider','Position',[10,240,100,15],'Min',incMinValue,'Max',incMaxValue,'Callback',@incslidecallback,'Value',c.synInc);
+    dec_slidehandle = uicontrol('Style','slider','Position',[10,210,100,15],'Min',decMinValue,'Max',decMaxValue,'Callback',@decslidecallback,'Value',-c.synDec);
+    nDendrites_slidehandle = uicontrol('Style','slider','Min',nDendritesMin,'Max',nDendritesMax,'Value',c.dendritePercent*100,'Position',[10,180,100,15],'Callback',@dendriteslidecallback);
+    nCols_slidehandle = uicontrol('Style','slider','Min',nColsMin,'Max',nColsMax,'Value',c.columnPercent*100,'Position',[10,150,100,15],'Callback',@ncolslidecallback);
+    boostInc_slidehandle = uicontrol('Style','slider','Min',boostIncMin,'Max',boostIncMax,'Value',c.boostInc,'Position',[10,120,100,15],'Callback',@boostincslidecallback);
+    minActiveDuty_slidehandle = uicontrol('Style','slider','Min',minActiveDutyMin,'Max',minActiveDutyMax*100,'Value',c.minActiveDuty,'Position',[10,90,100,15],'Callback',@minactiveslidecallback);
+    minOverlapDuty_slidehandle = uicontrol('Style','slider','Min',minOverlapDutyMin,'Max',minOverlapDutyMax*100,'Value',c.minOverlapDuty,'Position',[10,60,100,15],'Callback',@minoverslidecallback);
     
     %Min and max text handles
     handlepermmintext = uicontrol('Style','text','BackgroundColor','white','Position',[1,285,30,15],'String',num2str(threshMin));
@@ -113,23 +93,23 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     handleminOverlapmaxtext = uicontrol('Style','text','BackgroundColor','white','Position',[100,75,30,15],'String',num2str(minOverlapDutyMax));
     
     %Edit box handles
-    handlepermcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,270,50,15],'Visible','on','String',num2str(synThreshold),'Callback',@permeditcallback);
-    handleinccurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,240,50,15],'Visible','on','String',num2str(synInc),'Callback',@inceditcallback);
-    handledeccurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,210,50,15],'Visible','on','String',num2str(synDec),'Callback',@deceditcallback);
-    handledendritecurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,180,50,15],'Visible','on','String',num2str(nDendrites),'Callback',@dendriteeditcallback);
-    handlecolcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,150,50,15],'Visible','on','String',num2str(nCols),'Callback',@ncolseditcallback);
-    handleboostinccurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,120,50,15],'Visible','on','String',num2str(boostInc),'Callback',@boostinceditcallback);
-    handleminactivecurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,90,50,15],'Visible','on','String',num2str(minActiveDuty),'Callback',@minactiveeditcallback);
-    handleminoverlapcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,60,50,15],'Visible','on','String',num2str(minOverlapDuty),'Callback',@minoverlapeditcallback);
-    handleminsegcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,30,50,15],'Visible','on','String',num2str(minSegOverlap));
-    handledesiredlocalcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,270,50,15],'Visible','on','String',num2str(desiredLocalActivity),'Callback',@desiredlocaleditcallback);
-    handleneighborhoodcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,240,50,15],'Visible','on','String',num2str(Neighborhood),'Callback',@neighborhoodeditcallback);
-    handleinputradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,210,50,15],'Visible','on','String',num2str(inputRadius), 'Callback',@inputradiuseditcallback);
-    handlecellscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,180,50,15],'Visible','on','String',num2str(nCells),'Callback',@ncellseditcallback);
-    handlesegscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,150,50,15],'Visible','on','String',num2str(nSegs));
-    handlelearningradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,120,50,15],'Visible','on','String',num2str(LearningRadius),'Callback',@learningradiuseditcallback);
+    handlepermcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,270,50,15],'Visible','on','String',num2str(c.synThreshold),'Callback',@permeditcallback);
+    handleinccurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,240,50,15],'Visible','on','String',num2str(c.synInc),'Callback',@inceditcallback);
+    handledeccurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,210,50,15],'Visible','on','String',num2str(-c.synDec),'Callback',@deceditcallback);
+    handledendritecurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,180,50,15],'Visible','on','String',num2str(c.dendritePercent*100),'Callback',@dendriteeditcallback);
+    handlecolcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,150,50,15],'Visible','on','String',num2str(c.columnPercent*100),'Callback',@ncolseditcallback);
+    handleboostinccurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,120,50,15],'Visible','on','String',num2str(c.boostInc),'Callback',@boostinceditcallback);
+    handleminactivecurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,90,50,15],'Visible','on','String',num2str(c.minActiveDuty*100),'Callback',@minactiveeditcallback);
+    handleminoverlapcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,60,50,15],'Visible','on','String',num2str(c.minOverlapDuty*100),'Callback',@minoverlapeditcallback);
+    handleminsegcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[120,30,50,15],'Visible','on','String',num2str(c.minSegOverlap));
+    handledesiredlocalcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,270,50,15],'Visible','on','String',num2str(c.desiredLocalActivity),'Callback',@desiredlocaleditcallback);
+    handleneighborhoodcurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,240,50,15],'Visible','on','String',num2str(c.Neighborhood),'Callback',@neighborhoodeditcallback);
+    handleinputradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,210,50,15],'Visible','on','String',num2str(c.inputRadius), 'Callback',@inputradiuseditcallback);
+    handlecellscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,180,50,15],'Visible','on','String',num2str(c.cellsPerCol),'Callback',@ncellseditcallback);
+    handlesegscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,150,50,15],'Visible','on','String',num2str(c.maxSegs));
+    handlelearningradiuscurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',[320,120,50,15],'Visible','on','String',num2str(c.LearningRadius),'Callback',@learningradiuseditcallback);
     handleminocurrentvalue = uicontrol('Style','edit','BackgroundColor','white','Position',...
-        [320,90,50,15],'String',num2str(minOverlap));
+        [320,90,50,15],'String',num2str(c.minOverlap));
     
     %Label box handles
     handlepermLabel = uicontrol('Style','text','BackgroundColor','white',...
@@ -139,9 +119,9 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     handleDecLabel = uicontrol('Style','text','BackgroundColor','white',...
         'Position',[170,210,100,15],'String','Synapse Dec');
     handlenDendriteLabel = uicontrol('Style','text','BackgroundColor','white',...
-        'Position',[170,180,100,15],'String','N of Dendrites(%)');
+        'Position',[170,180,120,15],'String',['N of Dendrites(%) = ',num2str(floor(c.dendritePercent*c.data_size))]);
     handlenColsLabel = uicontrol('Style','text','BackgroundColor','white',...
-        'Position',[170,150,100,15],'String','N of Cols (%)');
+        'Position',[170,150,100,15],'String',['N of Cols (%) = ',num2str(floor(c.columnPercent*c.data_size))]);
     handleboostIncLabel = uicontrol('Style','text','BackgroundColor','white',...
         'Position',[170,120,100,15],'String','Boost Inc');
     handleminActiveLabel = uicontrol('Style','text','BackgroundColor','white',...
@@ -168,6 +148,32 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     %make an APPLY button
     handleapply = uicontrol('Style','pushbutton','String','Apply','Position',...
         [420,20,70,20],'Callback',@applycallback);
+    
+    %show the size of the current input
+    uicontrol('Style','text','BackgroundColor','white','Position',[50,300,200,40],'String',['Input size: ',num2str(c.data_size)],'FontSize',15);
+    
+    %If spatial pooling is off, disable these parameters
+    if c.spatial_pooler == false
+        nCols_slidehandle.Enable = 'off';
+        nCols_slidehandle.String = '100';
+        boostInc_slidehandle.Enable = 'off';
+        minActiveDuty_slidehandle.Enable = 'off';
+        minOverlapDuty_slidehandle.Enable = 'off';
+        handlecolcurrentvalue.Enable = 'off';
+        handlecolcurrentvalue.String = '100';
+        handleboostinccurrentvalue.Enable = 'off';
+        handleminactivecurrentvalue.Enable = 'off';
+        handleminoverlapcurrentvalue.Enable = 'off';
+        handledesiredlocalcurrentvalue.Enable = 'off';
+        handleminocurrentvalue.Enable = 'off';
+    end
+    %If temporal memory is off, disable these parameters
+    if c.temporal_memory == false
+        handlecellscurrentvalue.Enable = 'off';
+        handlesegscurrentvalue.Enable = 'off';
+        handlelearningradiuscurrentvalue.Enable = 'off';
+        handleminsegcurrentvalue.Enable = 'off';
+    end
     
     %Finalize the box on display
     set(f,'Name','Properties')
@@ -216,34 +222,38 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
         %set the editbox to the slider value
         num = get(nDendrites_slidehandle,'Value');
         set(handledendritecurrentvalue,'String',num2str(num));
+        ndencalc = num2str(floor(num*c.data_size/100));
+        set(handlenDendriteLabel,'String',['N of Dendrites (%) = ',ndencalc]);
         
         num = str2num( get(handledendritecurrentvalue,'String') );
-        nDendrites = input_size*num*0.01;
-        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        if inputRadius < nDendrites
+        c.dendritePercent = c.data_size*num*0.01;
+        c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        if c.inputRadius < c.dendritePercent
             %error: the column must be able to find enough potential
             %connections to the input, so either the number of dendrites or the
             %input radius must increase
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            inputRadius = nDendrites;
-            set(handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+            c.inputRadius = c.dendritePercent;
+            set(handleinputradiuscurrentvalue,'String',num2str(c.dendritePercent) ); %dendrite percent?
         end
     end
     function dendriteeditcallback(hObject,eventdata)
         %set the slider value to the editbox
-        num = get(handledendritecurrentvalue,'String');
-        set(nDendrites_slidehandle,'Value',str2double(num));
-        nDendrites = input_size*num*0.01;
-        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        if inputRadius < nDendrites
+        num = str2num(get(handledendritecurrentvalue,'String'));
+        ndencalc = num2str(floor(num*c.data_size/100));
+        set(handlenDendriteLabel,'String',['N of Dendrites (%) = ',ndencalc]);
+        set(nDendrites_slidehandle,'Value',num);
+        c.nDendrites = c.data_size*num*0.01;
+        c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        if c.inputRadius < c.dendritePercent
             %error: the column must be able to find enough potential
             %connections to the input, so either the number of dendrites or the
             %input radius must increase
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            inputRadius = nDendrites;
-            set(handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+            c.inputRadius = c.dendritePercent;
+            set(handleinputradiuscurrentvalue,'String',num2str(c.dendritePercent) );
         end
     end
 
@@ -251,12 +261,16 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     function ncolslidecallback(hObject,eventdata)
         %set the editbox to the slider value
         num = get(nCols_slidehandle,'Value');
-        set(handlecolcurrentvalue,'String',num2str(num));
+        ncolcalculated = ['N of Cols (%) = ',num2str(floor(num*c.data_size/100))];
+        set(handlecolcurrentvalue,'String', num);
+        set(handlenColsLabel,'String',ncolcalculated);
     end
     function ncolseditcallback(hObject,eventdata)
         %set the slider value to the editbox
         num = get(handlecolcurrentvalue,'String');
+        ncolcalculated = ['N of Cols (%) = ',num2str(floor(str2double(num)*c.data_size/100))];
         set(nCols_slidehandle,'Value',str2double(num));
+        set(handlenColsLabel,'String',ncolcalculated);
     end
 
     %Callbacks for boostInc
@@ -297,97 +311,80 @@ function [synThreshold,synInc,synDec,nDendrites,minSegOverlap,nCols,desiredLocal
     end
 
     function desiredlocaleditcallback(hObject,eventdata)
-        desiredLocalActivity = str2double( get(handledesiredlocalcurrentvalue, 'String') );
-        if desiredLocalActivity > Neighborhood
+        c.desiredLocalActivity = str2double( get(handledesiredlocalcurrentvalue, 'String') );
+        if c.desiredLocalActivity > c.Neighborhood
             error = msgbox('Error: Desired local activity is too large. The desired local activity should be less than the size of the neighborhood. A maximum desired local activity equal to the neighborhood size has been selected. This is not recommended.','Error','warn');
             waitfor(error);
-            desiredLocalActivity = Neighborhood;
+            c.desiredLocalActivity = c.Neighborhood;
         end
     end
 
     function neighborhoodeditcallback(hObject,eventdata)
-        Neighborhood = str2double( get(handleneighborhoodcurrentvalue,'String') );
+        c.Neighborhood = str2double( get(handleneighborhoodcurrentvalue,'String') );
     end
 
     function inputradiuseditcallback(hObject,eventdata)
-        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
-        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        if inputRadius < nDendrites
+        c.nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
+        c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        if c.inputRadius < c.nDendrites
             %error: the column must be able to find enough potential
             %connections to the input, so either the number of dendrites or the
             %input radius must increase
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the input radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            inputRadius = nDendrites;
-            set( handleinputradiuscurrentvalue,'String',num2str(nDendrites) );
+            c.inputRadius = c.nDendrites;
+            set( handleinputradiuscurrentvalue,'String',num2str(c.nDendrites) );
         end
     end
     
     %Callback for LearningRadius
     function learningradiuseditcallback(hObject,eventdata)
-        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
-        LearningRadius = str2double( get(handlelearningradiuscurrentvalue,'String') );
-        nCells = str2double( get(handlecellscurrentvalue,'String') );
+        c.nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
+        c.LearningRadius = str2double( get(handlelearningradiuscurrentvalue,'String') );
+        c.cellsPerCol = str2double( get(handlecellscurrentvalue,'String') );
         
-        if LearningRadius*nCells < nDendrites*input_size
+        if c.LearningRadius*c.cellsPerCol < c.nDendrites*c.data_size;
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the learning radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            LearningRadius = ceil(nDendrites*input_size/nCells);
-            set( handlelearningradiuscurrentvalue,'String',num2str(LearningRadius) );
+            c.LearningRadius = ceil(c.nDendrites*c.data_size/c.cellsPerCol);
+            set( handlelearningradiuscurrentvalue,'String',num2str(c.LearningRadius) );
         end
     end
 
     function ncellseditcallback(hObject,eventdata)
-        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
-        LearningRadius = str2double( get(handlelearningradiuscurrentvalue,'String') );
-        nCells = str2double( get(handlecellscurrentvalue,'String') );
+        c.nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
+        c.LearningRadius = str2double( get(handlelearningradiuscurrentvalue,'String') );
+        c.cellsPerCol = str2double( get(handlecellscurrentvalue,'String') );
         
-        if LearningRadius*nCells < nDendrites*input_size
+        if c.LearningRadius*c.cellsPerCol < c.nDendrites*c.data_size
             error = msgbox('Error: Not enough dendrite space. The column must be able to find enough potential synapses to the input. Either the number of dendrites or the learning radius must increase. A minimum input radius has been selected, but this is not recommended.','Error','warn');
             waitfor(error);
-            LearningRadius = ceil(nDendrites*input_size/nCells);
-            set( handlelearningradiuscurrentvalue,'String',num2str(LearningRadius) );
+            c.LearningRadius = ceil(c.nDendrites*c.data_size/c.cellsPerCol);
+            set( handlelearningradiuscurrentvalue,'String',num2str(c.LearningRadius) );
         end
     end
     
     function cancelcallback(hObject,eventdata)
-        synThreshold = str2double(get(handlepermcurrentvalue,'String'));
-        synInc = str2double(get(handleinccurrentvalue,'String'));
-        synDec = -1*str2double(get(handledeccurrentvalue,'String'));
-        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String'));
-        nCols = 0;
-        boostInc = str2double(get(handleboostinccurrentvalue,'String'));
-        minActiveDuty = 0.01*str2double(get(handleminactivecurrentvalue,'String'));
-        minOverlapDuty = 0.01*str2double(get(handleminoverlapcurrentvalue,'String'));
-        minSegOverlap = str2double(get(handleminsegcurrentvalue,'String'));
-        desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
-        Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));
-        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        nCells = str2double(get(handlecellscurrentvalue,'String'));
-        nSegs = str2double(get(handlesegscurrentvalue,'String'));
-        LearningRadius = str2double(get(handlelearningradiuscurrentvalue,'String'));
-        minOverlap = str2double(get(handleminocurrentvalue,'String'));
-        
         delete(f);
     end
     %Callback for the apply button
     function applycallback(hObject,eventdata)
-        synThreshold = str2double(get(handlepermcurrentvalue,'String'));
-        synInc = str2double(get(handleinccurrentvalue,'String'));
-        synDec = -1*str2double(get(handledeccurrentvalue,'String')); %Reverse compensation
-        nDendrites = 0.01*str2double(get(handledendritecurrentvalue,'String')); %Reverse compensation
-        nCols = 0.01*str2double(get(handlecolcurrentvalue,'String'));   %Reverse compensations
-        boostInc = str2double(get(handleboostinccurrentvalue,'String'));
-        minActiveDuty = str2double(get(handleminactivecurrentvalue,'String'));
-        minOverlapDuty = str2double(get(handleminoverlapcurrentvalue,'String'));
-        minSegOverlap = str2double(get(handleminsegcurrentvalue,'String'));
-        desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
-        Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));
-        inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
-        nCells = str2double(get(handlecellscurrentvalue,'String'));
-        nSegs = str2double(get(handlesegscurrentvalue,'String'));
-        LearningRadius = str2double(get(handlelearningradiuscurrentvalue,'String'));
-        minOverlap = str2double(get(handleminocurrentvalue,'String'));
+        c.synThreshold = str2double(get(handlepermcurrentvalue,'String'));
+        c.synInc = str2double(get(handleinccurrentvalue,'String'));
+        c.synDec = -1*str2double(get(handledeccurrentvalue,'String')); %Reverse compensation
+        c.dendritePercent = 0.01*str2double(get(handledendritecurrentvalue,'String')); %Reverse compensation
+        c.columnPercent = 0.01*str2double(get(handlecolcurrentvalue,'String'));   %Reverse compensations
+        c.boostInc = str2double(get(handleboostinccurrentvalue,'String'));
+        c.minActiveDuty = str2double(get(handleminactivecurrentvalue,'String'));
+        c.minOverlapDuty = 0.01*str2double(get(handleminoverlapcurrentvalue,'String'));
+        c.minSegOverlap = 0.01*str2double(get(handleminsegcurrentvalue,'String'));
+        c.desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
+        c.Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));
+        c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));
+        c.cellsPerCol = str2double(get(handlecellscurrentvalue,'String'));
+        c.maxSegs = str2double(get(handlesegscurrentvalue,'String'));
+        c.LearningRadius = str2double(get(handlelearningradiuscurrentvalue,'String'));
+        c.minOverlap = str2double(get(handleminocurrentvalue,'String'));
         
         delete(f);
     end
