@@ -22,6 +22,9 @@ function show_cells(c, cells, t_initial)
         if cells(i).active(H.t) == true
             vis(1,i) = 2;
         end
+        if cells(i).state(H.t) == 2
+            vis(1,i) = 3;
+        end
     end
     vis = vec2mat(vis,ceil( sqrt(H.n) ));
     vis = transpose(vis);
@@ -89,11 +92,14 @@ function Mouseclick_callback(hObj, evt)
             cellPos = (prevSelY-1)*yLim+prevSelX;
             if cells(cellPos).active(t) == 1
                 vis(prevSelX,prevSelY) = 2;
+            elseif cells(cellPos).state(t) == 2
+                vis(prevSelX,prevSelY) = 3;
             else
                 vis(prevSelX,prevSelY) = 1;
             end
         end
         
+        vis(find(vis == 6)) = 1;
         vis(find(vis == 7)) = 1;
         vis(find(vis == 8)) = 1;
         
@@ -152,11 +158,18 @@ function updateImage(hObj,inc,H,S)
     else
         H.t = H.t + inc;
     end
-    
+    visOld = get(S.img, 'CData');
+    visOld = reshape(visOld, 1, size(visOld,1)^2);
     vis = ones(1,H.n);
     for i = 1:H.n
         if H.cells(i).active(H.t) == true
             vis(1,i) = 2;
+        end
+        if H.cells(i).state(H.t) == 2
+            vis(1,i) = 3;
+        end
+        if visOld(i) == 5
+            vis(1,i) = 5;
         end
     end
     vis = vec2mat(vis,ceil( sqrt(H.n) ));

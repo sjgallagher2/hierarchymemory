@@ -358,19 +358,7 @@ function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds
         end
         
         for i = 1:ncells
-            activeSeg = getActiveSeg(cells(i),cells,t,true);
-            if activeSeg > 0
-                cells(i).segs(activeSeg).active(t) = 1;
-                cells(i).state(t) = 2;
-                dbg(['    Segment ',num2str(activeSeg),' is active on cell ', num2str(cells(i).layer),' in column ', num2str(cells(i).col)]);
-                queue = [queue, cells(i).segs(activeSeg)];
-                %update the segment in the queue
-                for j = 1:numel(queue)
-                    if queue(j).cell == i
-                        queue(j) = cells(i).segs(activeSeg);
-                    end
-                end
-            end
+            
         end
         %Now comes the final stage of temporal memory
         %Update synapses

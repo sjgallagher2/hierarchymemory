@@ -94,7 +94,9 @@ function Mouseclick_callback(hObj, evt)
             end
         end
         
-        
+        vis(find(vis == 6)) = 1;
+        vis(find(vis == 7)) = 1;
+        vis(find(vis == 8)) = 1;
         
         %Highlight this cell (conditional)
         if numel(prevSelX) > 0
@@ -135,6 +137,7 @@ function Keypress_callback(hObj,evt,H,S)
             inc = +1;
         case 'leftarrow'
             inc = -1;
+        case 
         otherwise
             return;
     end
@@ -151,11 +154,15 @@ function updateImage(hObj,inc,H,S)
     else
         H.t = H.t + inc;
     end
-    
+    visOld = get(S.img, 'CData');
+    visOld = reshape(visOld, 1, size(visOld,1)^2);
     vis = ones(1,H.n);
     for i = 1:H.n
         if H.cells(i).active(H.t) == true
             vis(1,i) = 2;
+        end
+        if visOld(i) == 5
+            vis(1,i) = 5;
         end
     end
     vis = vec2mat(vis,ceil( sqrt(H.n) ));
@@ -203,7 +210,11 @@ function highlightCell(H,S,cells,myCell,t)
                 end
                 
                 if seg.synCon(i) == 0
-                    vis(highlightLoc(2),highlightLoc(1)) = 6;
+                    if cells(seg.locations(i)).active(t) == 1
+                        vis(highlightLoc(2),highlightLoc(1)) = 8;
+                    else
+                        vis(highlightLoc(2),highlightLoc(1)) = 6;
+                    end
                 else
                     if cells(seg.locations(i)).active(t) == 1
                         vis(highlightLoc(2),highlightLoc(1)) = 8;
