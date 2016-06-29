@@ -24,7 +24,7 @@
 %The main display of the program is the input-to-be-sent, in a black and
 %white image format subplot of sorts.
 
-%% TODO: adapting higher regions, excel file importing (.xls, .csv, etc), fix debugger
+%% TODO: fix debugger
 %% Main Program
 function run_htm()
 %% Initialize window and variables
@@ -358,7 +358,7 @@ function run_htm()
     end
     function cbECPOT(hObject,evt)
         %Chart predictions over time
-                                                                                                                 %TODO
+        
     end
     function cbED(hObject,evt)
         %Debug
@@ -605,6 +605,11 @@ function run_htm()
         hColStates.Enable = 'on';
         hCellStates.Enable = 'on';
         hRegionOut.Enable = 'on';
+        
+        cPredsFig = figure();
+        cPredsPlot = plot(region_data(1).correctPredictions);
+        hold on;
+        title('Accurate predictions over time');
 
         %update time information
         seqTimeElapsed = size(send,2);
@@ -629,6 +634,7 @@ function run_htm()
     end
     function cbVCeSt(hObject,evt)
         %Cell states
+        show_cells(region_config(1),region_data(1).cells,region_config(1).seq_time);
     end
     function cbVRO(hObject,evt)
         %Region output

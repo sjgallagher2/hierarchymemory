@@ -8,8 +8,9 @@
 %structure, the active columns list, a list of segment structures, and the region output
 %Runs through a time-step of the CLA using a given
 
-function [columns, cells, prediction,nActive, output,activeColumns] = update_region(columns,cells,segment,data,c,t,hoods,dbg)
+function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds] = update_region(columns,cells,segment,data,c,t,hoods,queue,dbg)
     activeColumns = [];
+    cPreds = 0;
     if c.region == 1
         dbg(['Time = ',num2str(t)]);
     end
@@ -155,7 +156,7 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
     
     if c.temporal_memory == true
         dbg('Starting temporal memory...');
-        queue = [];
+        
         for i = 1:c.columns
             for j = 1:c.cellsPerCol
                 c_loc = getcell_loc(j,i,c);
@@ -205,6 +206,16 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
                         if mycell.state(t-1) == 2 %if cell was predicting, and is now in an active column
                             mycell.state(t) = 1;
                             mycell.active(t) = 1;
+                            
+                            %record accurate predictions
+                            for s = 1:numel(mycell.segs)
+                                if mycell.segs(s).active(t-1) == true
+                                    cPreds = cPreds+1;
+                                    mycell.segs(s).correct(t) = true;
+                                    dbg(['Cell ',num2str(mycell.layer),' in column ',num2str(mycell.col),' made an accurate prediction.']);
+                                end
+                            end
+                            
                             columns(i).active_cell = j;
                             dbg(['Cell ',num2str(mycell.layer),' in column ',num2str(mycell.col),' is active.']);
                             if mycell.learn(t-1) == true
@@ -271,16 +282,17 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
                         %well matched segment
                         
                         if mycell.mknewseg == true
-                            dbg(['Adding a new segment to cell ', num2str(mycell.layer),' in column ', num2str(mycell.nseg),' to time t-', num2str(mycell.nseg)]);
+                            dbg(['Adding a new segment to cell ', num2str(mycell.layer),' in column ', num2str(mycell.col),' to time t-', num2str(mycell.nseg+1)]);
                             mycell.segs = [mycell.segs, segment]; %add a blank segment
                             %label its index and cell
                             mycell.nseg = mycell.nseg + 1;
+                            
                             mycell.segs( mycell.nseg ).cell = loc;
                             mycell.segs( mycell.nseg ).index = mycell.nseg;
                             %give that cell a segment with the active cells from
                             %the previous timestep.
                             [mycell.segs( mycell.nseg ).locations mycell.segs( mycell.nseg ).perm mycell.segs( mycell.nseg ).synCon]...
-                                = make_distal_segment(c,i,cells, ncells,t - mycell.nseg);
+                                = make_distal_segment(c,i,cells, ncells,t - 1);
                             
                             mycell.mknewseg = false;
                             
@@ -297,7 +309,11 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
                 %We will now select cells who must predict the next time
                 %step. 
         end
-        
+        for i = 1:ncells
+            if cells(i).nseg == 2
+                %disp('break');
+            end
+        end
         %A cell will check any segment it has to see if one has an
         %overlap > 0, and then it will compare the segment overlaps
         %it has. If it has enough, the segment is active, and if it
@@ -316,13 +332,19 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
         for i = 1:ncells
             activeSeg = getActiveSeg(cells(i), cells,t);
             if activeSeg > 0
-                cells(i).segs(activeSeg).active = 1;
+                cells(i).segs(activeSeg).active(t) = 1;
+                
+                %uncomment these lines if you want to ONLY see predictions
+                %a certain number of time steps ahead, while still making
+                %segments for other predictions
+                
+                %if cells(i).segs(activeSeg).index == 1
+                    %cells(i).state(t) = 2;
+                %end
                 cells(i).state(t) = 2;
+                
                 dbg(['    Segment ',num2str(activeSeg),' is active on cell ', num2str(cells(i).layer),' in column ', num2str(cells(i).col)]);
-                if cells(i).learn(t) == true
-                    %if the cell is learning, copy it to the queue
-                    queue = [queue, cells(i).segs(activeSeg)];
-                end
+                queue = [queue, cells(i).segs(activeSeg)];
             end
             %add the best match from last time step too for this cell
             if cells(i).active(t) == true
@@ -330,9 +352,14 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
                 if numel(bestSeg) > 0
                     dbg(['Best matching segment(s) for cell ',num2str(cells(i).layer), ' in column ',num2str(cells(i).col), ' could have been: ']);
                     dbg(bestSeg);
-                    
                     queue = [queue, cells(i).segs(bestSeg)];
                 end
+            end
+        end
+        
+        for i = 1:ncells
+            if cells(i).nseg == 2
+                %disp('break');
             end
         end
         %Now comes the final stage of temporal memory
@@ -344,33 +371,49 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
         %First two options are memory intensive, last option is
         %computationally expensive.
         %This uses the queue of segments
+        
+        %This is not working at the moment. The queue must last multiple
+        %time steps, and the 'remove the first' concept is not working
+        %properly. Fix to come. 
         if t > 1
             dbg('Updating synapses...');
             if ~( isempty(queue) )
                 for i = 1:ncells
                     if cells(i).learn(t) == true
                         %update this location in the queue
-                        if numel(queue(1).synCon) > 0
-                            for j = 1:numel(queue(1).synCon)
-                                if cells(queue(1).locations(j)).active(t-queue(1).index) == true
-                                    [queue(1).perm(j), queue(1).synCon(j)] = update_s( queue(1).perm(j), queue(1).synCon(j), c.synThreshold, c.synInc );
-                                else
-                                    [queue(1).perm(j), queue(1).synCon(j)] = update_s( queue(1).perm(j), queue(1).synCon(j), c.synThreshold, c.synDec );
+                        for j = 1:numel(queue)
+                            if j <= numel(queue)
+                                if queue(j).cell == i
+                                    for s = 1:numel(queue(j).synCon)
+                                        if cells(queue(j).locations(s)).active(t-1) == true
+                                            %if cell is active, update +
+                                            [queue(j).perm(s), queue(j).synCon(s)] = update_s( queue(j).perm(s), queue(j).synCon(s), c.synThreshold, c.synInc );
+                                        %else
+                                            %[queue(j).perm(s), queue(j).synCon(s)] = update_s( queue(j).perm(s), queue(j).synCon(s), c.synThreshold, c.synDec );
+                                        end
+                                    end
+                                    cells(queue(j).cell).segs(queue(j).index).perm = queue(j).perm;
+                                    cells(queue(j).cell).segs(queue(j).index).synCon = queue(j).synCon;
+                                    %delete the segment from the queue
+                                    queue(j) = [];
                                 end
                             end
-                           %adapt the old segment
-                            cells(queue(1).cell).segs(queue(1).index).perm = queue(1).perm;
-                            cells(queue(1).cell).segs(queue(1).index).synCon = queue(1).synCon;
-                            %delete the segment from the queue
-                            queue(1) = [];
-                        elseif cells(i).state(t) == 0 && cells(i).state(t-1) == 2
-                            %negatively reinforce the synapses for this loc in queue
-                            [queue(1).perm, queue(1).synCon] = update_s( queue(1).perm, queue(1).synCon, synThreshold, synDec );
-                           %adapt the old segment
-                            cells(queue(1).cell).segs(queue(1).index).perm = queue(1).perm;
-                            cells(queue(1).cell).segs(queue(1).index).synCon = queue(1).synCon;
-                            %delete the segment from the queue
-                            queue(1) = [];
+                        end
+                    elseif cells(i).state(t) == 0 && cells(i).state(t-1) == 2
+                        %negatively reinforce the synapses for this loc in queue
+                        for j = 1:numel(queue)
+                            if j <= numel(queue)
+                                if queue(j).cell == i
+                                    for s = 1:numel(queue(j).synCon)
+                                        [queue(j).perm(s), queue(j).synCon(s)] = update_s( queue(j).perm(s), queue(j).synCon(s), c.synThreshold, c.synDec );
+                                    end
+                                   %adapt the old segment
+                                    cells(queue(j).cell).segs(queue(j).index).perm = queue(j).perm;
+                                    cells(queue(j).cell).segs(queue(j).index).synCon = queue(j).synCon;
+                                    %delete the segment from the queue
+                                    queue(j) = [];
+                                end
+                            end
                         end
                     end
                 end
@@ -380,6 +423,11 @@ function [columns, cells, prediction,nActive, output,activeColumns] = update_reg
     else
         %If NO temporal memory
         dbg('Temporal memory is OFF, skipping...');
+    end
+    for i = 1:ncells
+        if cells(i).nseg == 2
+            %disp('break');
+        end
     end
     %% Create output
     dbg('Creating output...');

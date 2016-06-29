@@ -29,9 +29,7 @@ function rdata = region(data,rdata,nRegions,c, dbg, pauseTime)
     segment.sequence = false;
     segment.cell = -1;
     segment.index = -1;
-    
-    queue = []; %segment queue
-    %The queue is FIFO
+    segment.correct = []; % a vector of booleans showing if the segment predicted correctly
     
     col.center = 0;
     col.perm = [];
@@ -136,8 +134,8 @@ function rdata = region(data,rdata,nRegions,c, dbg, pauseTime)
                 end
                 if c(regid).TM_delay == 0
                     %Run like normal
-                    [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns] = ...
-                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods(regid),dbg);
+                    [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns, rdata(regid).queue,rdata(regid).correctPredictions(t+c(1).htm_time)] = ...
+                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods(regid),rdata(regid).queue,dbg);
                     %update active columns and the prediction
                     rdata(regid).activeColumns(1:nActive,t) = tempActiveColumns;
                     rdata(regid).prediction(1:c(regid).columns,t) = tempPrediction;
@@ -146,8 +144,8 @@ function rdata = region(data,rdata,nRegions,c, dbg, pauseTime)
                     %If there is a delay on the temporal memory, run it without
                     %the TM
                     c(regid).temporal_memory = false;
-                    [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns] = ...
-                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods(regid),dbg); 
+                    [rdata(regid).columns,rdata(regid).cells,tempPrediction,nActive,rdata(regid).output,tempActiveColumns, rdata(regid).queue, rdata(regid).correctPredictions(t+c(1).htm_time)] = ...
+                        update_region(rdata(regid).columns, rdata(regid).cells, segment,bottomup_in,c(regid),t,hoods(regid),rdata(regid).queue,dbg); 
                     rdata(regid).activeColumns(1:nActive,t) = tempActiveColumns;
                     rdata(regid).prediction(1:c(regid).columns,t) = tempPrediction;
                     c(regid).TM_delay = c(regid).TM_delay-1;

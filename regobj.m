@@ -13,6 +13,8 @@ classdef regobj
         activeColumns
         prediction
         output
+        queue
+        correctPredictions
     end
     methods
         function obj = reg_init(obj,id)
@@ -22,6 +24,7 @@ classdef regobj
             obj.activeColumns = [];
             obj.prediction = [];
             obj.output = [];
+            queue = [];
         end
     end
 end

@@ -31,7 +31,7 @@ function [segLocations, segPerms, segCons] = make_distal_segment(c, cell_col, ce
     
     if c.nDendrites <= (maxLoc-minLoc)*ncells
         for i = 1:ncells
-            if cells(i).active(t) == 1
+            if (cells(i).active(t) == 1) || (cells(i).state(t) == 2)
                 %Add cells that were previously active to the segment as long as they're
                 %within the location bounds
                 if cells(i).col >= minLoc
@@ -39,7 +39,7 @@ function [segLocations, segPerms, segCons] = make_distal_segment(c, cell_col, ce
                         segLocations = [segLocations i];
 
                         %Initial permanence will be 0.15 for all (for now)
-                        segPerms = [segPerms 0.15];
+                        segPerms = [segPerms 0.15];                                   %TODO: Set this back
                         segCons = [segCons 0];
 
                         %It might be better or worse to start all at different
@@ -47,7 +47,7 @@ function [segLocations, segPerms, segCons] = make_distal_segment(c, cell_col, ce
                         %the threshold
                     end
                 end
-
+                
             end
         end
     else

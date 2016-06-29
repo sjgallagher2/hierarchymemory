@@ -21,6 +21,13 @@ function activeSegment = getActiveSeg(mycell, cells,t)
                     %check if synapses are connected to an active cell
                     if cells( mycell.segs(i).locations(j) ).active(t) == 1
                         mycell.segs(i).overlap = mycell.segs(i).overlap+1;
+                    elseif cells( mycell.segs(i).locations(j) ).state(t) == 2
+                        pos = mycell.segs(i).locations(j);
+                        for s = 1:numel(cells(pos).segs)
+                            if any(cells( pos ).segs(s).correct == true)
+                                mycell.segs(i).overlap = mycell.segs(i).overlap + 1;
+                            end
+                        end
                     end
                 end
             end
