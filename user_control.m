@@ -166,6 +166,7 @@ function c = user_control(c)
         handleminoverlapcurrentvalue.Enable = 'off';
         handledesiredlocalcurrentvalue.Enable = 'off';
         handleminocurrentvalue.Enable = 'off';
+        handleinputradiuscurrentvalue.Enable = 'off';
     end
     %If temporal memory is off, disable these parameters
     if c.temporal_memory == false
@@ -375,9 +376,9 @@ function c = user_control(c)
         c.dendritePercent = 0.01*str2double(get(handledendritecurrentvalue,'String')); %Reverse compensation
         c.columnPercent = 0.01*str2double(get(handlecolcurrentvalue,'String'));   %Reverse compensations
         c.boostInc = str2double(get(handleboostinccurrentvalue,'String'));
-        c.minActiveDuty = str2double(get(handleminactivecurrentvalue,'String'));
+        c.minActiveDuty = 0.01*str2double(get(handleminactivecurrentvalue,'String'));
         c.minOverlapDuty = 0.01*str2double(get(handleminoverlapcurrentvalue,'String'));
-        c.minSegOverlap = 0.01*str2double(get(handleminsegcurrentvalue,'String'));
+        c.minSegOverlap = str2double(get(handleminsegcurrentvalue,'String'));
         c.desiredLocalActivity = str2double(get(handledesiredlocalcurrentvalue,'String'));
         c.Neighborhood = str2double(get(handleneighborhoodcurrentvalue,'String'));
         c.inputRadius = str2double(get(handleinputradiuscurrentvalue,'String'));

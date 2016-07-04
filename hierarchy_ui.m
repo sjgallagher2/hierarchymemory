@@ -10,7 +10,18 @@ function [hierarchy,c] = hierarchy_ui(nRegions,c, en)
     f = figure();
     f.Visible = 'off';
     f.MenuBar = 'none';
-    
+    if c(1).inputRadius == 0 && en
+        c(1).inputRadius = c(1).data_size;
+    end
+    if c(1).LearningRadius == 0 && en
+        c(1).LearningRadius = c(1).data_size;
+    end
+    if ~c(1).spatial_pooler
+        c(1).columnPercent = 1;
+    end
+    if ~c(1).temporal_memory
+        
+    end
     hierarchy = nRegions; %hierarchy is the output number of regions,
     %nRegions is the number of regions we started with
     

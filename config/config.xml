@@ -22,12 +22,12 @@
 		<cellsPerCol>3</cellsPerCol>
 		<desiredLocalActivity>2</desiredLocalActivity>
 		<Neighborhood>20</Neighborhood>
-		<inputRadius>100</inputRadius>
+		<inputRadius>0</inputRadius>
 		<boostInc>0.5</boostInc>
 		<minActiveDuty>0.01</minActiveDuty>
 		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
-		<LearningRadius>200</LearningRadius>
+		<LearningRadius>0</LearningRadius>
 		<minOverlap>2</minOverlap>
 	</algorithmsettings>
 	<filesettings>
@@ -55,12 +55,12 @@
 		<cellsPerCol>3</cellsPerCol>
 		<desiredLocalActivity>2</desiredLocalActivity>
 		<Neighborhood>20</Neighborhood>
-		<inputRadius>100</inputRadius>
+		<inputRadius>0</inputRadius>
 		<boostInc>0.5</boostInc>
 		<minActiveDuty>0.01</minActiveDuty>
 		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
-		<LearningRadius>200</LearningRadius>
+		<LearningRadius>0</LearningRadius>
 		<minOverlap>2</minOverlap>
 	</algorithmsettings>
 	<filesettings>
@@ -88,12 +88,12 @@
 		<cellsPerCol>3</cellsPerCol>
 		<desiredLocalActivity>2</desiredLocalActivity>
 		<Neighborhood>20</Neighborhood>
-		<inputRadius>100</inputRadius>
+		<inputRadius>0</inputRadius>
 		<boostInc>0.5</boostInc>
 		<minActiveDuty>0.01</minActiveDuty>
 		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
-		<LearningRadius>200</LearningRadius>
+		<LearningRadius>0</LearningRadius>
 		<minOverlap>2</minOverlap>
 	</algorithmsettings>
 	<filesettings>
@@ -121,12 +121,12 @@
 		<cellsPerCol>3</cellsPerCol>
 		<desiredLocalActivity>2</desiredLocalActivity>
 		<Neighborhood>20</Neighborhood>
-		<inputRadius>100</inputRadius>
+		<inputRadius>0</inputRadius>
 		<boostInc>0.5</boostInc>
 		<minActiveDuty>0.01</minActiveDuty>
 		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
-		<LearningRadius>200</LearningRadius>
+		<LearningRadius>0</LearningRadius>
 		<minOverlap>2</minOverlap>
 	</algorithmsettings>
 	<filesettings>
@@ -154,12 +154,12 @@
 		<cellsPerCol>3</cellsPerCol>
 		<desiredLocalActivity>2</desiredLocalActivity>
 		<Neighborhood>20</Neighborhood>
-		<inputRadius>100</inputRadius>
+		<inputRadius>0</inputRadius>
 		<boostInc>0.5</boostInc>
 		<minActiveDuty>0.01</minActiveDuty>
 		<minOverlapDuty>0.01</minOverlapDuty>
 		<maxSegs>1</maxSegs>
-		<LearningRadius>200</LearningRadius>
+		<LearningRadius>0</LearningRadius>
 		<minOverlap>2</minOverlap>
 	</algorithmsettings>
 	<filesettings>

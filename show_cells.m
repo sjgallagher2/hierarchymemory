@@ -159,7 +159,7 @@ function updateImage(hObj,inc,H,S)
         H.t = H.t + inc;
     end
     visOld = get(S.img, 'CData');
-    visOld = reshape(visOld, 1, size(visOld,1)^2);
+    %visOld = reshape(visOld, 1, size(visOld,1)^2);
     vis = ones(1,H.n);
     for i = 1:H.n
         if H.cells(i).active(H.t) == true

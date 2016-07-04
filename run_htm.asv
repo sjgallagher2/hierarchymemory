@@ -36,7 +36,7 @@ function run_htm()
     
     dProjFile = ''; %this holds the project file name for saving (not saving as)
     dProjLoc = '';
-    projSaved = true;
+    projSaved = false;
     
     %initialize region data objects, which contain columns, cells, etc
     region_data = [regobj regobj regobj regobj regobj];
@@ -306,12 +306,9 @@ function run_htm()
             end
     function cbFO(hObject,evt)
         %Open
-        if projSaved == false
+        if projSaved == false && strcmp('
             %Save before opening new file?
-            resp = questdlg('Save before opening new file?');
-            if strcmp(resp, 'Yes') == true
-                cbFSM(hObject, evt);
-            end
+            questdlg('Save before opening new file?');
         end
         region_data = guidata(h.fig);
         [dProjFile, dProjLoc]= uigetfile({'*.htm', 'HTM Project Files (*.htm)'},'Open Project',region_config(1).lastDir); 
@@ -332,6 +329,7 @@ function run_htm()
             region_config = A.region_config;
             A = load(char(tempPaths(3)));
             send = A.send;
+            %TODO
             %Set the home screen display image etc
             if ~isempty(send)
                 hRunItem.Enable = 'on';
@@ -355,7 +353,6 @@ function run_htm()
             timeString = ['total time = ', num2str(region_config(1).htm_time),',   seq time = ',num2str(region_config(1).seq_time)];
             hTimeText.String = timeString;
         end
-        projSaved = true;
         guidata(h.fig,region_data);
     end
     function cbFSM(hObject,evt)
@@ -382,7 +379,6 @@ function run_htm()
             FID = fopen([dProjLoc,dProjFile],'w');
                 fprintf(FID,'%s\n',proj{:});
             fclose(FID);
-            projSaved = true;
             
             for r = 1:5
                 %update the config XML file. 
@@ -419,7 +415,7 @@ function run_htm()
             FID = fopen([dProjLoc,dProjFile],'w');
                 fprintf(FID,'%s\n',proj{:});
             fclose(FID);
-            projSaved = true;
+            
             for r = 1:5
                 %update the config XML file. 
                 %Note that this happens every time the hierarchy is changed
@@ -435,18 +431,9 @@ function run_htm()
     end
     function cbFC(hObject,evt)
         %Close
-        if projSaved == false
-            A = questdlg('Closing window. Save before quitting?');
-            if strcmp(A,'Yes') == true
-                cbFSM;
-                close();
-            elseif strcmp(A,'No') == true
-                close();
-            end
-        else
-            close();
-        end
-         
+        close(); %This is temporary
+        %prompt a "quit without saving?"
+                                                                                                                %TODO
     end
 %EDIT MENU CALLBACKS
     function cbECM(hObject,evt)
@@ -475,7 +462,6 @@ function run_htm()
             timeString = ['total time = 0,   seq time = 0'];
             hTimeText.String = timeString;
         end
-        projSaved = false;
         guidata(h.fig,region_data);
     end
     function cbECPOT(hObject,evt)
@@ -628,7 +614,7 @@ function run_htm()
 %DATA MENU CALLBACKS
     function cbDIDANF(hObject, evt)
         %Import data file as next frame
-        projSaved = false;
+        
     end
     function cbSC(hObject,evt)
         %Save current data sequence
@@ -655,7 +641,6 @@ function run_htm()
             hTimeText.String = timeString;
         end
         guidata(h.fig,region_data);
-        projSaved = false;
     end
         
     function cbVD(hObject,evt)
@@ -682,7 +667,6 @@ function run_htm()
         else
             [hierarchy_regions, c] = hierarchy_ui(hierarchy_regions,region_config, true);
             if ~isempty(c)
-                projSaved = false;
                 region_config = c;
                 for i = 1:hierarchy_regions
                     if region_config(i).data_size > 0
@@ -709,7 +693,6 @@ function run_htm()
         dFilePath = [dFileLoc, dFileName];
         %update configFile 
         region_config(1).configFile = dFilePath; %Save the ENTIRE path
-        projSaved = false;
         guidata(h.fig,region_data);
     end
 
@@ -727,7 +710,6 @@ function run_htm()
                 region_config(i).temporal_memory = true;
             end
         end
-        projSaved = false;
         guidata(h.fig,region_data);
     end
 %RUN MENU CALLBACKS
@@ -754,7 +736,6 @@ function run_htm()
         %quickly update the 't=' text
         timeString = ['total time = ' num2str(region_config(1).htm_time) ',   seq time = ' num2str(region_config(1).seq_time)];
         hTimeText.String = timeString;
-        projSaved = false;
         guidata(h.fig,region_data);
     end
 %VIEW MENU CALLBACKS
@@ -762,7 +743,6 @@ function run_htm()
         %Color scheme
         region_data = guidata(h.fig);
         scheme = uisetcolor();
-        projSaved = false;
         guidata(h.fig,region_data);
     end
     function cbVCoSt(hObject,evt)

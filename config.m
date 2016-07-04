@@ -72,7 +72,7 @@ classdef config
         function obj = setToDefault(obj)
             %sets SP and TM settings to default values
             obj.synThreshold = 0.2;
-            obj.synInc = 0.075;
+            obj.synInc = 0.01;
             obj.synDec = -0.05;
             obj.dendritePercent = 0.5;
             obj.nDendrites = 0;
@@ -89,7 +89,7 @@ classdef config
             obj.maxSegs = 1;
             obj.LearningRadius = 0;
             obj.minOverlap = 2;
-            obj.data_size = 0;
+            obj.data_size = [];
             obj.htm_time = 0;
             obj.seq_time = 0;
             obj.reps = 1;

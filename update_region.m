@@ -309,11 +309,6 @@ function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds
                 %We will now select cells who must predict the next time
                 %step. 
         end
-        for i = 1:ncells
-            if cells(i).nseg == 2
-                %disp('break');
-            end
-        end
         %A cell will check any segment it has to see if one has an
         %overlap > 0, and then it will compare the segment overlaps
         %it has. If it has enough, the segment is active, and if it
@@ -356,18 +351,25 @@ function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds
                 end
             end
         end
-        
+        %Predictions from predictions
+        %This part uses the calculated predictions to attempt to calculate
+        %many steps ahead. This can get confusing when some connections are
+        %changing or flipping back and forth while others are strong,
+        %because you may see some cells predicting very far into the
+        %future, and others not even predicting the next time step.
         for i = 1:ncells
-            activeSeg = getActiveSeg(cells(i),cells,t,true);
-            if activeSeg > 0
-                cells(i).segs(activeSeg).active(t) = 1;
-                cells(i).state(t) = 2;
-                dbg(['    Segment ',num2str(activeSeg),' is active on cell ', num2str(cells(i).layer),' in column ', num2str(cells(i).col)]);
-                queue = [queue, cells(i).segs(activeSeg)];
-                %update the segment in the queue
-                for j = 1:numel(queue)
-                    if queue(j).cell == i
-                        queue(j) = cells(i).segs(activeSeg);
+            if false
+                activeSeg = getActiveSeg(cells(i),cells,t,true);
+                if activeSeg > 0
+                    cells(i).segs(activeSeg).active(t) = 1;
+                    cells(i).state(t) = 2;
+                    dbg(['    Segment ',num2str(activeSeg),' is active on cell ', num2str(cells(i).layer),' in column ', num2str(cells(i).col)]);
+                    queue = [queue, cells(i).segs(activeSeg)];
+                    %update the segment in the queue
+                    for j = 1:numel(queue)
+                        if queue(j).cell == i
+                            queue(j) = cells(i).segs(activeSeg);
+                        end
                     end
                 end
             end
@@ -433,11 +435,6 @@ function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds
     else
         %If NO temporal memory
         dbg('Temporal memory is OFF, skipping...');
-    end
-    for i = 1:ncells
-        if cells(i).nseg == 2
-            %disp('break');
-        end
     end
     %% Create output
     dbg('Creating output...');

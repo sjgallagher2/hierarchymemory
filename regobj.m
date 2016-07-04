@@ -24,7 +24,9 @@ classdef regobj
             obj.activeColumns = [];
             obj.prediction = [];
             obj.output = [];
-            queue = [];
+            obj.queue = [];
+            obj.correctPredictions = [];
         end
+        
     end
 end

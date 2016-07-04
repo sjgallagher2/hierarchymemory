@@ -12,8 +12,7 @@ function [segLocations, segPerms, segCons] = make_distal_segment(c, cell_col, ce
     %columns. 
     %dendrite_ratio is the ratio of the number of columns to the number of
     %dendrite connection.
-    %n_cols is the number of columns in the region
-    %n_cells is the number of cell layers per column
+    %ncells is the number of cell layers per column
     %cell_col is the column of the current cell
     %c is the cell number of the current cell
     
