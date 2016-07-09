@@ -18,16 +18,23 @@ function c = train_settings(c)
     sp_init = c.spatial_pooler;
     tmdelay_init = c.TM_delay;
     reps_init = c.reps;
+    if isempty(c.multiStep)
+        multi = false;
+    else
+        multi = c.multiStep;
+    end
     
     hTM = uicontrol('style','checkbox','position',[30,170,15,15],'value',c.temporal_memory,'Callback',@tmCB);
     hSP = uicontrol('style','checkbox','position',[30,130,15,15],'value',c.spatial_pooler,'Callback',@tmCB);
     hTMdelay = uicontrol('style','edit','position',[24,95,30,20],'String',num2str(c.TM_delay));
     hRep = uicontrol('style','edit','position',[24,60,30,20],'String',num2str(c.reps));
+    hStep = uicontrol('style','checkbox','position',[30,30,30,20],'value',multi);
     
     hTMtext = uicontrol('style','text','position',[60,170,150,20],'String','Run temporal memory');
     hSPtext = uicontrol('style','text','position',[60,130,150,20],'String','Run spatial pooler');
     hTMdelay_text = uicontrol('style','text','position',[80,95,150,20],'String','Temporal memory delay (steps)');
     hRepText = uicontrol('style','text','position',[80,60,150,20],'String','Reptitions of data sequence');
+    hStepText = uicontrol('style','text','position',[80,30,150,20],'String','Multiple step predictions?');
     
     hOkayButton = uicontrol('style','pushbutton','String','Okay','position',[90,10,40,20],'Callback',@okayCB);
     hCancelButton = uicontrol('style','pushbutton','String','Cancel','position',[140,10,40,20],'Callback',@cancelCB);
@@ -49,6 +56,11 @@ function c = train_settings(c)
             c.spatial_pooler = true;
         else
             c.spatial_pooler = false;
+        end
+        if get(hStep,'value') == 1
+            c.multiStep = true;
+        else
+            c.multiStep = false;
         end
         c.TM_delay = floor( str2num(get(hTMdelay,'string')) );
         c.reps = floor( str2num(get(hRep,'string')) );

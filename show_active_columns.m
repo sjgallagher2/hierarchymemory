@@ -74,7 +74,7 @@ function show_active_columns(c,active_columns,pred,t_initial)
     hcheck_in = uicontrol(h.fig,'Style','checkbox','position',[605,410,15,15],'Value',1,'Callback',{@in_callback,hActive,h});
     hcheck_pr = uicontrol(h.fig,'Style','checkbox','position',[605,375,15,15],'Value',1,'Callback',{@pr_callback,hActive,h});
     hcheck_back = uicontrol(h.fig,'Style','checkbox','position',[605,340,15,15],'Value',0,'Callback',{@back_callback,hActive,h});
-    hin_text = uicontrol(h.fig,'Style','text','position',[620,410,70,15],'String','Show input','BackgroundColor','White');
+    hin_text = uicontrol(h.fig,'Style','text','position',[620,410,70,15],'String','Show current','BackgroundColor','White');
     hpr_text = uicontrol(h.fig,'Style','text','String','Show prediction(s)','position',[620,375,100,15],'BackgroundColor','White');
     hback_text = uicontrol(h.fig,'Style','text','String','Show previous timestep','position',[620,330,100,30],'BackgroundColor','White');
     

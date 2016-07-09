@@ -24,7 +24,14 @@
 %The main display of the program is the input-to-be-sent, in a black and
 %white image format subplot of sorts.
 
-%% TODO: fix debugger, fix SP and TM working together (predictions don't change), implement project save
+%% TODO: fix debugger, clear states after 1000 steps and start shifting, editing of input data
+%Allow output data to be saved in certain formats (CSV, GIF, etc)
+%check running the algorithm several times in a row for deletion of prediction data or guidata,
+%Finish show_cells implementation of checkboxes,
+%Test multiple region predictions,
+%Allow viewing beyond current sequence
+%Rearrange menu so that 'new' goes to new HTM project, and put 'drawing'
+%and 'random data' in the Data menu
 %% Main Program
 function run_htm()
 %% Initialize window and variables
@@ -139,7 +146,7 @@ function run_htm()
         function cbFNFDr(hObject,evt)
             %New drawing
             region_data = guidata(h.fig);
-            send = generate_input(region_config(1).data_size);
+            send = generate_input(region_config(1).data_size,'draw');
             
             hClearMem.Enable = 'on';
             
@@ -163,9 +170,9 @@ function run_htm()
                 end
                 region_config(1) = updateConfigPercentages(region_config(1));
                 for i = 2:5
-                        region_config(i).data_size = region_config(i-1).columns;
-                        region_config(i) = updateConfigPercentages(region_config(i));
-                    end
+                    region_config(i).data_size = region_config(i-1).columns;
+                    region_config(i) = updateConfigPercentages(region_config(i));
+                end
                 %
                 hDataSaveDataSeq.Enable = 'on';
                 %run the settings windows
@@ -282,7 +289,21 @@ function run_htm()
             function cbFNFDCRD(hObject,evt)
                 %Create random data
                 region_data = guidata(h.fig);
-                %Not implemented yet
+                send = generate_input(region_config(1).data_size,'rand');
+                region_config(1).data_size = size(send,1);
+                
+                if ~isempty(send)
+                    send_img = vec2mat( send(:,1)+1, floor( sqrt(region_config(1).data_size) ) );
+                    send_img = rot90(send_img);
+                    h.img = image(send_img,'Parent',h.mainWindow);
+                    hold on;
+                    h.mainWindow.XTick = (0:floor(sqrt( region_config(1).data_size )) )+0.5;
+                    h.mainWindow.YTick = (0:floor(sqrt( region_config(1).data_size )) )+0.5;
+                    h.mainWindow.XTickLabel = [];
+                    h.mainWindow.YTickLabel = [];
+                    h.mainWindow.XGrid = 'on';
+                    h.mainWindow.YGrid = 'on';
+                end
                 if ~isempty(send)
                     hDataSaveDataSeq.Enable = 'on';
                     hRunItem.Enable = 'off';
@@ -769,7 +790,7 @@ function run_htm()
         %Column states
         region_data = guidata(h.fig);
         if region_config(1).spatial_pooler
-            column_visualizer(send, columns, region_config(1)); %TODO Make these more clear about what they are for the user; also update config stuff
+            column_visualizer(send, region_data(1).columns, region_config(1)); %TODO Make these more clear about what they are for the user; also update config stuff
         end
         guidata(h.fig,region_data);
     end
@@ -800,7 +821,7 @@ function run_htm()
     function cbHA(hObject,evt)
         %About
         about_string = ['This program was written by Sam Gallagher, based off of the CLA '...
-            ,'White Paper by Numenta. Last updated: 2 June 2016'];
+            ,'White Paper by Numenta. Last updated: 4 July 2016'];
         a = dialog('Position',[300,300,300,250],'Name','About');
         hAboutDialog = uicontrol('Parent',a,'Style','text','String',about_string,'Position',[10,50,280,150],'FontSize',15,'BackgroundColor',[0.9,1,1]);
     end

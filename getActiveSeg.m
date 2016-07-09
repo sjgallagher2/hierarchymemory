@@ -5,7 +5,7 @@
 %This module computes an active distal dendrite segment from a list of
 %segments. 
 
-function activeSegment = getActiveSeg(mycell, cells,t,pred)
+function activeSegment = getActiveSeg(mycell, cells,t,pred, minOverlap)
     %pred is a boolean that indicates whether or not to include
     %predictions from predictions.
     activeSegment = -1;
@@ -36,6 +36,10 @@ function activeSegment = getActiveSeg(mycell, cells,t,pred)
                         end
                     end
                 end
+            end
+            
+            if mycell.segs(i).overlap < minOverlap
+                mycell.segs(i).overlap = 0;
             end
             %compute active segment
             if activeSegment == -1

@@ -67,7 +67,7 @@ function Mouseclick_callback(hObj, evt)
     H = handle{1};
     cells =H.cells;
     handle = handle{2};
-    t = H.htmt-H.tMax+H.t;
+    t = H.t;
     
     %Get mouse position
     clickPoint = get(handle.img_space, 'CurrentPoint');
@@ -90,6 +90,9 @@ function Mouseclick_callback(hObj, evt)
         [prevSelX,prevSelY] = find(vis == 5);
         if numel(prevSelX > 0)
             cellPos = (prevSelY-1)*yLim+prevSelX;
+            if cellPos > numel(cells)
+                cellPos = numel(cells);
+            end
             if cells(cellPos).active(t) == 1
                 vis(prevSelX,prevSelY) = 2;
             elseif cells(cellPos).state(t) == 2
@@ -110,12 +113,18 @@ function Mouseclick_callback(hObj, evt)
                 %if something new was selected, highlight
                 vis(cpx,cpy) = 5;
                 cellPos = (cpy-1)*yLim+cpx;
+                if cellPos > numel(cells)
+                    cellPos = numel(cells);
+                end
                 highlightCell(H, handle,cells,cells(cellPos),t);
             end
         else
             %if this is the first thing to be selected, highlight
             vis(cpx,cpy) = 5;
             cellPos = (cpy-1)*yLim+cpx;
+            if cellPos > numel(cells)
+                cellPos = numel(cells);
+            end
             highlightCell(H, handle, cells,cells(cellPos),t);
         end
         

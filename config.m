@@ -15,6 +15,7 @@ classdef config
         spatial_pooler
         TM_delay
         data_size
+        multiStep
         
         %SP and TM settings
         synThreshold
@@ -96,6 +97,7 @@ classdef config
             obj.TM_delay = 0;
             obj.spatial_pooler = false;
             obj.temporal_memory = false;
+            obj.multiStep = false;
         end
         
         function obj = updateConfigPercentages(obj)

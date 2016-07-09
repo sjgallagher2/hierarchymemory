@@ -15,6 +15,7 @@ classdef regobj
         output
         queue
         correctPredictions
+        multiStep
     end
     methods
         function obj = reg_init(obj,id)
@@ -26,6 +27,7 @@ classdef regobj
             obj.output = [];
             obj.queue = [];
             obj.correctPredictions = [];
+            multiStep = false;
         end
         
     end

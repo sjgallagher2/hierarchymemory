@@ -325,7 +325,7 @@ function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds
         %Check cells segments, set active segment
         dbg('Finding predictive cells...');
         for i = 1:ncells
-            activeSeg = getActiveSeg(cells(i), cells,t,false);
+            activeSeg = getActiveSeg(cells(i), cells,t,false, c.minSegOverlap);
             if activeSeg > 0
                 cells(i).segs(activeSeg).active(t) = 1;
                 
@@ -358,8 +358,8 @@ function [columns, cells, prediction,nActive, output,activeColumns, queue,cPreds
         %because you may see some cells predicting very far into the
         %future, and others not even predicting the next time step.
         for i = 1:ncells
-            if false
-                activeSeg = getActiveSeg(cells(i),cells,t,true);
+            if c.multiStep
+                activeSeg = getActiveSeg(cells(i),cells,t,true, c.minSegOverlap);
                 if activeSeg > 0
                     cells(i).segs(activeSeg).active(t) = 1;
                     cells(i).state(t) = 2;
